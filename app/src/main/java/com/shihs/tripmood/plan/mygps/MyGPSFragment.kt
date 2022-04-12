@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 
@@ -31,6 +32,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
     lateinit var locationCallback: LocationCallback
+
+    
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,8 +53,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         checkPermission()
 
-        setUpLocationRequest()
-
 
 
         return binding.root
@@ -68,6 +69,14 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             //回傳GPS位置資料等待時間
             maxWaitTime = 1000
         }
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 if (p0.locations.isNotEmpty()) {
@@ -93,6 +102,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             updateGPS()
+            setUpLocationRequest()
             return true
 
         } else {
@@ -112,7 +122,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             )
             binding.latiTv.text = location?.latitude.toString()
             binding.longTv.text = location?.longitude.toString()
-            binding.addressTv.text = location?.accuracy.toString()
+            binding.addressTv.text = currentLocation?.first()?.subLocality
 
             Log.d(
                 "SSS",
