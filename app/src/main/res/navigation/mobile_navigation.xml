@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.shihs.tripmood.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.shihs.tripmood.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.shihs.tripmood.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <dialog
+        android:id="@+id/planModeDialog"
+        android:name="com.shihs.tripmood.dialog.PlanModeDialog"
+        android:label="PlanModeDialog" />
+    <action
+        android:id="@+id/action_global_planModeDialog"
+        app:destination="@id/planModeDialog" />
+    <action
+        android:id="@+id/action_global_navigation_home"
+        app:destination="@id/navigation_home" />
+    <fragment
+        android:id="@+id/myDesignFragment"
+        android:name="com.shihs.tripmood.plan.mydesign.MyDesignFragment"
+        android:label="MyDesignFragment" />
+    <fragment
+        android:id="@+id/myGPSFragment"
+        android:name="com.shihs.tripmood.plan.mygps.MyGPSFragment"
+        android:label="MyGPSFragment" />
+    <action
+        android:id="@+id/action_global_myDesignFragment"
+        app:destination="@id/myDesignFragment" />
+    <action
+        android:id="@+id/action_global_myGPSFragment"
+        app:destination="@id/myGPSFragment" />
+</navigation>
