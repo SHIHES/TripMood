@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TripMood</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+
+    <string name="map_key" translatable="false">AIzaSyD7BS2EfbcWKL0Jxw7gnuE7b8P28hqpO_g</string>
+</resources>
