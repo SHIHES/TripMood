@@ -2,6 +2,7 @@ package com.shihs.tripmood.plan.mygps
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
@@ -10,44 +11,45 @@ import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.activity.result.ActivityResultCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.gms.location.*
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.shihs.tripmood.BuildConfig
+import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
+
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
 
     // The entry point to the Places API.
     private lateinit var placesClient: PlacesClient
-
-    // The entry point to the Fused Location Provider.
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     private lateinit var binding: FragmentPlanMygpsBinding
+    private lateinit var  presenter : MapPresenter
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private val defaultLocation = LatLng(-33.8523341, 151.2106085)
     private var locationPermissionGranted = false
+
+
+
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
@@ -57,14 +59,20 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    // [START maps_current_place_on_create]
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPlanMygpsBinding.inflate(inflater, container, false)
+
+
+
 
         // [START_EXCLUDE silent]
         // Retrieve location and camera position from saved instance state.
@@ -83,9 +91,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         Places.initialize(requireActivity(), BuildConfig.MAPS_API_KEY)
         placesClient = Places.createClient(requireActivity())
 
-        // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
 
         // Build the map.
         // [START maps_current_place_map_fragment]
@@ -97,9 +102,28 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         setBtn()
 
+        presenter = MapPresenter(this)
+        presenter.onViewCreated()
+
         return binding.root
     }
-    // [END maps_current_place_on_create]
+
+
+
+    private fun startTracking() {
+//        binding.container.txtPace.text = ""
+//        binding.container.txtDistance.text = ""
+//        binding.container.txtTime.base = SystemClock.elapsedRealtime()
+//        binding.container.txtTime.start()
+        map?.clear()
+
+        presenter.startTracking()
+    }
+
+    private fun stopTracking() {
+        presenter.stopTracking()
+//        binding.container.txtTime.stop()
+    }
 
     /**
      * Saves the state of the map when the activity is paused.
@@ -122,14 +146,35 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         binding.button.setOnClickListener {
             showCurrentPlace()
         }
+        binding.recordBtn.setOnClickListener {
+
+            if(binding.recordBtn.text == getString(R.string.start_label)){
+                startTracking()
+                binding.recordBtn.text = getString(R.string.stop_label)
+            } else {
+                stopTracking()
+                binding.recordBtn.text = getString(R.string.start_label)
+            }
+        }
     }
+
+
     /**
      * Manipulates the map when it's available.
      * This callback is triggered when the map is ready to be used.
      */
     // [START maps_current_place_on_map_ready]
+    @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(map: GoogleMap) {
         this.map = map
+
+        presenter.ui.observe(this){ ui ->
+            updateUI(ui)
+        }
+        presenter.onMapLoaded()
+        map.uiSettings.isZoomControlsEnabled = true
+
+
 
         // [START_EXCLUDE]
         // [START map_current_place_set_info_window_adapter]
@@ -164,53 +209,27 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         updateLocationUI()
 
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation()
     }
-    // [END maps_current_place_on_map_ready]
 
-    /**
-     * Gets the current location of the device, and positions the map's camera.
-     */
-    // [START maps_current_place_get_device_location]
     @SuppressLint("MissingPermission")
-    private fun getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-        try {
-            if (locationPermissionGranted) {
-                val locationResult = fusedLocationProviderClient.lastLocation
-                locationResult.addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        // Set the map's camera position to the current location of the device.
-                        lastKnownLocation = task.result
-                        if (lastKnownLocation != null) {
-                            map?.moveCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(
-                                        lastKnownLocation!!.latitude,
-                                        lastKnownLocation!!.longitude
-                                    ), DEFAULT_ZOOM.toFloat()
-                                )
-                            )
-                        }
-                    } else {
-                        Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", task.exception)
-                        map?.moveCamera(
-                            CameraUpdateFactory
-                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat())
-                        )
-                        map?.uiSettings?.isMyLocationButtonEnabled = false
-                    }
-                }
-            }
-        } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message, e)
+    private fun updateUI(ui: Ui) {
+        if(ui.currentLocation != null && ui.currentLocation != map?.cameraPosition?.target){
+            map?.isMyLocationEnabled = true
+            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 14f))
         }
+        drawRoute(ui.userPath)
     }
-    // [END maps_current_place_get_device_location]
+
+    private fun drawRoute(locations: List<LatLng>) {
+        val polylineOptions = PolylineOptions()
+
+        map?.clear()
+
+        val points = polylineOptions.points
+        points.addAll(locations)
+
+        map?.addPolyline(polylineOptions)
+    }
 
     /**
      * Prompts the user for permission to use the device location.

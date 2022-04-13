@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.shihs.tripmood.databinding.ActivityMainBinding
+import com.shihs.tripmood.plan.mygps.MapPresenter
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
 
-
-
     }
+
+
 }
