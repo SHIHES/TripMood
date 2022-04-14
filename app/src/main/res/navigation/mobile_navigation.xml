@@ -46,4 +46,18 @@
     <action
         android:id="@+id/action_global_myGPSFragment"
         app:destination="@id/myGPSFragment" />
+
+
+    <fragment
+        android:id="@+id/myPlanFragment"
+        android:name="com.shihs.tripmood.plan.MyPlanFragment"
+        android:label="MyPlanFragment" >
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+    </fragment>
+    <action android:id="@+id/action_global_myPlanFragment"
+        app:destination="@id/myPlanFragment"/>
+
 </navigation>

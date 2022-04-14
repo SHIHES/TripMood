@@ -38,9 +38,9 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         val mockList = mutableListOf<Plan>()
-        val data1 = Plan(title = "宜蘭", startDate = "123", endDate = "456")
-        val data2 = Plan(title = "花蓮", startDate = "123", endDate = "456")
-        val data3 = Plan(title = "墾丁", startDate = "123", endDate = "456")
+        val data1 = Plan(title = "宜蘭", startDate = 123L, endDate = 456L)
+        val data2 = Plan(title = "花蓮", startDate = "123".toLong(), endDate = "456".toLong())
+        val data3 = Plan(title = "墾丁", startDate = "123".toLong(), endDate = "456".toLong())
         mockList.add(data1)
         mockList.add(data2)
         mockList.add(data3)
