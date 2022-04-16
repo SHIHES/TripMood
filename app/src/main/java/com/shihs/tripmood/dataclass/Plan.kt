@@ -9,7 +9,8 @@ data class Plan(
     var title: String? = null,
     var startDate: Long? = null,
     var endDate: Long? = null,
-    var id: String? = null
+    var id: String? = null,
+    var schedules: MutableList<Schedule>? = null
 ) : Parcelable
 
 
