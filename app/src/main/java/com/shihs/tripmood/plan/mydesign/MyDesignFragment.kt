@@ -67,6 +67,7 @@ class MyDesignFragment : Fragment() {
         }
 
         binding.createBtn.setOnClickListener{
+
             val formater = SimpleDateFormat("yyyy-MM-dd")
             val start = binding.startDateBtn.text.toString().let { formater.parse(it) }?.time
             val end = binding.endDateBtn.text?.toString().let { formater.parse(it) }?.time

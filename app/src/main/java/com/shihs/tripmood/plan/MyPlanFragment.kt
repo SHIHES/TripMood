@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.type.DateTime
 import com.shihs.tripmood.databinding.FragmentPlanBinding
+import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.plan.adapter.DateAdapter
+import com.shihs.tripmood.plan.adapter.ScheduleAdapter
 import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MyPlanFragment : Fragment() {
 
@@ -32,30 +30,41 @@ class MyPlanFragment : Fragment() {
 
         binding = FragmentPlanBinding.inflate(inflater, container, false)
 
+        planDayCalculator()
+
+        setUpRv()
+
+        return binding.root
+    }
+
+    fun setUpRv(){
 
         val recyclerView = binding.daysRv
-        val adapter = DateAdapter()
-
-
-        planDayCalculator()
+        val dayAdapter = DateAdapter()
 
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = dayAdapter
+
+        dayAdapter.submitList(daysList)
 
 
+        val scheduleRv = binding.scheduleRv
+        val scheduleAdapter = ScheduleAdapter()
+        scheduleRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        scheduleRv.adapter = scheduleAdapter
 
-        var num = 6
-        val list = mutableListOf<Int>()
-        while (num < 10){
-            list.add(num)
-            num += 1
-            Log.d("SS1", "$list")
-            Log.d("SS1", "$num")
-        }
-        adapter.submitList(daysList)
-
-        return binding.root
+        val mockList = mutableListOf<Schedule>()
+        val mock1 = Schedule("02:00","測試","測測")
+        val mock2 = Schedule("02:00","測試","測測")
+        val mock3 = Schedule("02:00","測試","測測")
+        val mock4 = Schedule("02:00","測試","測測")
+        mockList.add(mock1)
+        mockList.add(mock2)
+        mockList.add(mock3)
+        mockList.add(mock4)
+        scheduleAdapter.submitList(mockList)
     }
 
     fun planDayCalculator() {

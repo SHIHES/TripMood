@@ -1,4 +1,4 @@
-package com.shihs.tripmood.plan
+package com.shihs.tripmood.plan.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

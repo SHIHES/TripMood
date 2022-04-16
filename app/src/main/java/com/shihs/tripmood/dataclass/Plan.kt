@@ -10,3 +10,12 @@ data class Plan(
     var startDate: Long? = null,
     var endDate: Long? = null
 ) : Parcelable
+
+
+@Parcelize
+data class Schedule(
+    var time: String? = null,
+    var title: String? = null,
+    var note: String? = null,
+    var expand: Boolean = false
+)  : Parcelable
