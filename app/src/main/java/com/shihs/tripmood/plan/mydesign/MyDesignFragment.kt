@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanMydesignBinding
 import com.shihs.tripmood.dataclass.Plan
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 

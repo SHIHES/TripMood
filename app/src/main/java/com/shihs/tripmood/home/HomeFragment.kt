@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 import com.shihs.tripmood.dataclass.Plan
 
@@ -39,29 +36,15 @@ class HomeFragment : Fragment() {
 
         val mockList = mutableListOf<Plan>()
         val data1 = Plan(title = "宜蘭", startDate = 123L, endDate = 456L)
-        val data2 = Plan(title = "花蓮", startDate = "123".toLong(), endDate = "456".toLong())
-        val data3 = Plan(title = "墾丁", startDate = "123".toLong(), endDate = "456".toLong())
-        mockList.add(data1)
-        mockList.add(data2)
-        mockList.add(data3)
+
+
+        for(i in 1..10){
+            mockList.add(data1)
+        }
 
         adapter.submitList(mockList)
 
-        homeViewModel.text.observe(viewLifecycleOwner) {
-        }
-
-        setBtn()
-
-
-
-
         return binding.root
-    }
-
-    private fun setBtn() {
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_global_planModeDialog)
-        }
     }
 
     override fun onDestroyView() {

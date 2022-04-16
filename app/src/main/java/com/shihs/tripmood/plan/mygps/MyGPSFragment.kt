@@ -11,13 +11,10 @@ import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.activity.result.ActivityResultCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,9 +25,10 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.shihs.tripmood.BuildConfig
-import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
+import com.shihs.tripmood.util.Logger
+
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
@@ -69,7 +67,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
 
 
-
+        Logger.d("ttttttttttttttttttttttttttttttttttttttttttt")
         // [START_EXCLUDE silent]
         // Retrieve location and camera position from saved instance state.
         // [START maps_current_place_on_create_save_instance_state]
