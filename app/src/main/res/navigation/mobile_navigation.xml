@@ -13,9 +13,8 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.shihs.tripmood.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.shihs.tripmood.Search.SearchFragment"
+        android:label="Search" />
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -34,7 +33,7 @@
         app:destination="@id/navigation_home" />
     <fragment
         android:id="@+id/myDesignFragment"
-        android:name="com.shihs.tripmood.plan.mydesign.MyDesignFragment"
+        android:name="com.shihs.tripmood.plan.myplan.ChooseDateFragment"
         android:label="MyDesignFragment" />
     <fragment
         android:id="@+id/myGPSFragment"
@@ -59,5 +58,10 @@
     </fragment>
     <action android:id="@+id/action_global_myPlanFragment"
         app:destination="@id/myPlanFragment"/>
+    <dialog
+        android:id="@+id/addScheduleDialog"
+        android:name="com.shihs.tripmood.dialog.AddScheduleDialog"
+        android:label="AddScheduleDialog" />
+    <action android:id="@+id/action_global_addScheduleDialog" app:destination="@id/addScheduleDialog" />
 
 </navigation>

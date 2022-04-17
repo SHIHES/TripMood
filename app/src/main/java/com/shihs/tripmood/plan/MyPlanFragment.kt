@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.adapter.DateAdapter
@@ -17,6 +19,7 @@ import java.lang.Exception
 class MyPlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanBinding
+    lateinit var viewModel: MyPlanViewModel
 
     val arg: MyPlanFragmentArgs by navArgs()
 
@@ -33,6 +36,7 @@ class MyPlanFragment : Fragment() {
         planDayCalculator()
 
         setUpRv()
+        setUpBtn()
 
         return binding.root
     }
@@ -55,16 +59,20 @@ class MyPlanFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         scheduleRv.adapter = scheduleAdapter
 
-        val mockList = mutableListOf<Schedule>()
-        val mock1 = Schedule("02:00","測試","測測")
-        val mock2 = Schedule("02:00","測試","測測")
-        val mock3 = Schedule("02:00","測試","測測")
-        val mock4 = Schedule("02:00","測試","測測")
-        mockList.add(mock1)
-        mockList.add(mock2)
-        mockList.add(mock3)
-        mockList.add(mock4)
-        scheduleAdapter.submitList(mockList)
+
+        scheduleAdapter.submitList(arg.myPlan?.schedule)
+
+
+//        val mockList = mutableListOf<Schedule>()
+//        val mock1 = Schedule("02:00","測試","測測")
+//        val mock2 = Schedule("02:00","測試","測測")
+//        val mock3 = Schedule("02:00","測試","測測")
+//        val mock4 = Schedule("02:00","測試","測測")
+//        mockList.add(mock1)
+//        mockList.add(mock2)
+//        mockList.add(mock3)
+//        mockList.add(mock4)
+//        scheduleAdapter.submitList(mockList)
     }
 
     fun planDayCalculator() {
@@ -88,6 +96,12 @@ class MyPlanFragment : Fragment() {
             Log.d("SS", "planDayCalculator Exception $e")
         }
 
+    }
+
+    fun setUpBtn(){
+        binding.addActivityBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddScheduleDialog())
+        }
     }
 
 }

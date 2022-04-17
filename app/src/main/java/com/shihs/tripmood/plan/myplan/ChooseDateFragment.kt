@@ -1,4 +1,4 @@
-package com.shihs.tripmood.plan.mydesign
+package com.shihs.tripmood.plan.myplan
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MyDesignFragment : Fragment() {
+class ChooseDateFragment : Fragment() {
 
     lateinit var binding : FragmentPlanMydesignBinding
 
@@ -27,21 +27,27 @@ class MyDesignFragment : Fragment() {
         binding = FragmentPlanMydesignBinding.inflate(inflater, container, false)
 
 
-
-
         setCalendarBtn()
-
 
         return binding.root
     }
 
     private fun setCalendarBtn() {
+//        val time = LocalDate.now().dayOfWeek.name
+//        val sss = LocalDate.now().
+        val calendar = Calendar.getInstance()
+        val time = calendar.time
+        val fmt = SimpleDateFormat("EE", Locale.ENGLISH).format(time.time)
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+        binding.startDateBtn.text = "$year-$fmt\n${month + 1}-$day"
+        binding.endDateBtn.text = "$year-$fmt\n${month + 1}-$day"
+
 
         binding.startDateBtn.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             val startDatePicker = DatePickerDialog( requireActivity(), { view, mYear, mMonth, mDay ->
                 binding.startDateBtn.text = "${mYear}-${mMonth + 1}-$mDay"
@@ -51,10 +57,6 @@ class MyDesignFragment : Fragment() {
         }
 
         binding.endDateBtn.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             val startDatePicker = DatePickerDialog( requireActivity(), { view, mYear, mMonth, mDay->
                 binding.endDateBtn.text = "${mYear}-${mMonth + 1}-$mDay"

@@ -9,8 +9,12 @@ data class Plan(
     var title: String? = null,
     var startDate: Long? = null,
     var endDate: Long? = null,
-    var id: String? = null
+    var id: String? = null,
+    var schedule: List<Schedule>? = null
 ) : Parcelable
+
+@Parcelize
+data cla
 
 
 @Parcelize

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.shihs.tripmood.plan.MyPlanViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/timeET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="輸入時間"
+            android:text="@={viewModel.schedule.time}"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/titleET"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/titleET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="輸入標題"
+            android:text="@={viewModel.schedule.title}"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/contentET"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeET" />
+
+        <EditText
+            android:id="@+id/contentET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:text="@={viewModel.schedule.note}"
+            android:hint="輸入內容"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/okBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleET" />
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="確定"
+            android:onClick="@{()-> viewModel.storeSchedule(viewModel.schedule)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contentET" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
