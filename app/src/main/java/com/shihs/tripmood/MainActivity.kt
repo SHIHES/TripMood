@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = Firebase.firestore
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
