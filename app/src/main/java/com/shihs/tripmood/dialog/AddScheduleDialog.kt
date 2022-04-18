@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.databinding.DialogAddScheduleBinding
-import com.shihs.tripmood.databinding.DialogPlanModeBinding
-import com.shihs.tripmood.home.HomeViewModel
+import com.shihs.tripmood.dataclass.Event
 import com.shihs.tripmood.plan.MyPlanViewModel
 
 class AddScheduleDialog : DialogFragment() {
 
     lateinit var binding: DialogAddScheduleBinding
-    lateinit var viewModel:MyPlanViewModel
+    lateinit var viewModel: MyPlanViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,11 +22,29 @@ class AddScheduleDialog : DialogFragment() {
     ): View? {
 
         binding = DialogAddScheduleBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
 
         viewModel = ViewModelProvider(requireActivity()).get(MyPlanViewModel::class.java)
 
+        setupBtn()
 
         return binding.root
+    }
+
+    fun setupBtn(){
+        binding.okBtn.setOnClickListener {
+            createActivity()
+        }
+    }
+
+
+    fun createActivity(){
+        val title = binding.titleET.text.toString()
+        val content = binding.contentET.text.toString()
+        val time = binding.timeET.text.toString()
+
+        val activity = Event(title = title, time = time, note = content)
+
+        viewModel.getActivity(activity)
+
     }
 }

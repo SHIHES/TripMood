@@ -7,27 +7,30 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemDayBinding
 import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.plan.MyPlanViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateAdapter(private val onClickListener: OnClickListener) : ListAdapter<Schedule, DateAdapter.DateVH>(DiffUtil()) {
+class ScheduleAdapter(private val onClickListener: OnClickListener,private val viewModel: MyPlanViewModel) : ListAdapter<Schedule, ScheduleAdapter.DateVH>(DiffUtil()) {
 
     class OnClickListener(val clickListener: (schedule: Schedule) -> Unit) {
         fun onClick(schedule: Schedule) = clickListener(schedule)
     }
 
-
     class DateVH(private var binding: ItemDayBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Schedule, onClickListener: OnClickListener) {
+        fun bind(item: Schedule, onClickListener: OnClickListener, viewModel: MyPlanViewModel) {
 
             val fm1 = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+
+            viewModel.getSchedulePosition(adapterPosition)
 
             binding.daysTv.text = "第${adapterPosition.plus(1)}天"
             binding.dateTv.text = fm1.format(item.date).toString()
             binding.root.setOnClickListener {
                 Log.d("SS", "binding.root.setOnClickListener$item")
                 onClickListener.onClick(item) }
+
         }
     }
 
@@ -37,7 +40,7 @@ class DateAdapter(private val onClickListener: OnClickListener) : ListAdapter<Sc
 
     override fun onBindViewHolder(holder: DateVH, position: Int) {
         val date = getItem(position)
-        holder.bind(date, onClickListener)
+        holder.bind(date, onClickListener, viewModel)
     }
 
     class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Schedule>() {
@@ -50,4 +53,5 @@ class DateAdapter(private val onClickListener: OnClickListener) : ListAdapter<Sc
         }
 
     }
+
 }

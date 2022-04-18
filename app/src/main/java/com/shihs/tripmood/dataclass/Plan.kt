@@ -15,13 +15,13 @@ data class Plan(
 
 @Parcelize
 data class Schedule(
-    var activities: List<Activity>? = null,
+    var events: MutableList<Event>? = null,
     var date: Long? = null
 ) : Parcelable
 
 
 @Parcelize
-data class Activity(
+data class Event(
     var time: String? = null,
     var title: String? = null,
     var note: String? = null,

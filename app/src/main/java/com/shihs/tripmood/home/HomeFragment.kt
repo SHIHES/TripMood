@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.Activity
+import com.shihs.tripmood.dataclass.Event
 import com.shihs.tripmood.dataclass.Schedule
 
 class HomeFragment : Fragment() {
@@ -44,8 +44,8 @@ class HomeFragment : Fragment() {
 
         // 假資料
         val mockList = mutableListOf<Plan>()
-        val mockActivity = mutableListOf<Activity>()
-        val activity = Activity(time = "12:00", title = "南投", note = "測試")
+        val mockActivity = mutableListOf<Event>()
+        val activity = Event(time = "12:00", title = "南投", note = "測試")
 
         val mockSchedule = mutableListOf<Schedule>()
         val schedule = Schedule(mockActivity)

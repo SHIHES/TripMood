@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.plan.adapter.DateAdapter
-import com.shihs.tripmood.plan.adapter.ActivityAdapter
+import com.shihs.tripmood.plan.adapter.ScheduleAdapter
+import com.shihs.tripmood.plan.adapter.EventAdapter
 import java.lang.Exception
 
 class MyPlanFragment : Fragment() {
@@ -25,13 +26,17 @@ class MyPlanFragment : Fragment() {
 
     val daysList = mutableListOf<Schedule?>()
 
+    var selectedPosition = -1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+//        daysList[selectedPosition]?.events.add()
         binding = FragmentPlanBinding.inflate(inflater, container, false)
+
+        viewModel = ViewModelProvider(requireActivity()).get(MyPlanViewModel::class.java)
 
         planDayCalculator()
 
@@ -42,39 +47,29 @@ class MyPlanFragment : Fragment() {
     }
 
     fun setUpRv(){
-        val activityAdapter = ActivityAdapter()
+        val eventAdapter = EventAdapter()
         val recyclerView = binding.daysRv
 
-        val dayAdapter = DateAdapter(DateAdapter.OnClickListener{
-            activityAdapter.submitList(it.activities)
-        })
+        val scheduleAdapter = ScheduleAdapter(ScheduleAdapter.OnClickListener{
+            eventAdapter.submitList(it.events)
+        }, viewModel )
 
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = dayAdapter
+        recyclerView.adapter = scheduleAdapter
 
-        dayAdapter.submitList(daysList)
+        scheduleAdapter.submitList(daysList)
 
 
         val scheduleRv = binding.scheduleRv
 
         scheduleRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        scheduleRv.adapter = activityAdapter
+        scheduleRv.adapter = eventAdapter
 
-
-
-//        val mockList = mutableListOf<Schedule>()
-//        val mock1 = Schedule("02:00","測試","測測")
-//        val mock2 = Schedule("02:00","測試","測測")
-//        val mock3 = Schedule("02:00","測試","測測")
-//        val mock4 = Schedule("02:00","測試","測測")
-//        mockList.add(mock1)
-//        mockList.add(mock2)
-//        mockList.add(mock3)
-//        mockList.add(mock4)
-//        scheduleAdapter.submitList(mockList)
     }
+
+
 
     fun planDayCalculator() {
         val myPlan = arg.myPlan
