@@ -13,7 +13,7 @@ import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.adapter.DateAdapter
-import com.shihs.tripmood.plan.adapter.ScheduleAdapter
+import com.shihs.tripmood.plan.adapter.ActivityAdapter
 import java.lang.Exception
 
 class MyPlanFragment : Fragment() {
@@ -23,7 +23,7 @@ class MyPlanFragment : Fragment() {
 
     val arg: MyPlanFragmentArgs by navArgs()
 
-    val daysList = arrayListOf<Long?>()
+    val daysList = mutableListOf<Schedule?>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +42,12 @@ class MyPlanFragment : Fragment() {
     }
 
     fun setUpRv(){
-
+        val activityAdapter = ActivityAdapter()
         val recyclerView = binding.daysRv
-        val dayAdapter = DateAdapter()
+
+        val dayAdapter = DateAdapter(DateAdapter.OnClickListener{
+            activityAdapter.submitList(it.activities)
+        })
 
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -54,13 +57,11 @@ class MyPlanFragment : Fragment() {
 
 
         val scheduleRv = binding.scheduleRv
-        val scheduleAdapter = ScheduleAdapter()
+
         scheduleRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        scheduleRv.adapter = scheduleAdapter
+        scheduleRv.adapter = activityAdapter
 
-
-        scheduleAdapter.submitList(arg.myPlan?.schedule)
 
 
 //        val mockList = mutableListOf<Schedule>()
@@ -84,9 +85,9 @@ class MyPlanFragment : Fragment() {
         try {
             if (start != null && end != null) {
                 while (start <= end) {
-                    daysList.add(start)
-                    Log.d("SS2", "${daysList}")
-                    Log.d("SS1", "$start")
+
+                    daysList.add(Schedule(date = start))
+
                     start += 86400000
 
                 }

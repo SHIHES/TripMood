@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanMydesignBinding
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.home.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 

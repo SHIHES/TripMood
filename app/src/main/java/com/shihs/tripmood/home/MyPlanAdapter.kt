@@ -29,6 +29,7 @@ class MyPlanAdapter(private val onClickListener: OnClickListener) : ListAdapter<
         return PlanVH(ItemPlanBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
+
     override fun onBindViewHolder(holder: PlanVH, position: Int) {
         val plan = getItem(position)
         holder.bind(plan, onClickListener)

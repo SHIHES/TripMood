@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Activity
 import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.util.Logger
 
 class HomeFragment : Fragment() {
 
@@ -28,8 +28,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
@@ -45,18 +44,26 @@ class HomeFragment : Fragment() {
 
         // 假資料
         val mockList = mutableListOf<Plan>()
+        val mockActivity = mutableListOf<Activity>()
+        val activity = Activity(time = "12:00", title = "南投", note = "測試")
+
         val mockSchedule = mutableListOf<Schedule>()
-        val schedule = Schedule(time = "12:00", title = "南投", note = "測試")
+        val schedule = Schedule(mockActivity)
 
         for(i in 1..3){
+            mockActivity.add(activity)
+        }
+
+        for (i in 1..3){
             mockSchedule.add(schedule)
         }
 
-        val data1 = Plan(title = "宜蘭", startDate = 12300000L, endDate = 45600000L, id = "123" , schedule = mockSchedule  )
+        val data1 = Plan(title = "宜蘭", startDate = 12300000L, endDate = 45600000L, id = "123" , schedules = mockSchedule  )
 
         for (i in 1.. 3){
             mockList.add(data1)
         }
+
         adapter.submitList(mockList)
 
         viewModel.selectedPlan.observe(viewLifecycleOwner){

@@ -1,23 +1,33 @@
 package com.shihs.tripmood.plan.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemDayBinding
+import com.shihs.tripmood.dataclass.Schedule
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateAdapter : ListAdapter<Long, DateAdapter.DateVH>(DiffUtil()) {
+class DateAdapter(private val onClickListener: OnClickListener) : ListAdapter<Schedule, DateAdapter.DateVH>(DiffUtil()) {
+
+    class OnClickListener(val clickListener: (schedule: Schedule) -> Unit) {
+        fun onClick(schedule: Schedule) = clickListener(schedule)
+    }
+
 
     class DateVH(private var binding: ItemDayBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Long) {
+        fun bind(item: Schedule, onClickListener: OnClickListener) {
 
             val fm1 = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
 
             binding.daysTv.text = "第${adapterPosition.plus(1)}天"
-            binding.dateTv.text = fm1.format(item).toString()
+            binding.dateTv.text = fm1.format(item.date).toString()
+            binding.root.setOnClickListener {
+                Log.d("SS", "binding.root.setOnClickListener$item")
+                onClickListener.onClick(item) }
         }
     }
 
@@ -27,15 +37,15 @@ class DateAdapter : ListAdapter<Long, DateAdapter.DateVH>(DiffUtil()) {
 
     override fun onBindViewHolder(holder: DateVH, position: Int) {
         val date = getItem(position)
-        holder.bind(date)
+        holder.bind(date, onClickListener)
     }
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Long>() {
-        override fun areItemsTheSame(oldItem: Long, newItem: Long): Boolean {
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Schedule>() {
+        override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: Long, newItem: Long): Boolean {
+        override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
             return oldItem == newItem
         }
 

@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemScheduleBinding
-import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.Activity
 
-class ScheduleAdapter : ListAdapter<Schedule, ScheduleAdapter.ScheduleVH>(DiffUtil()) {
+class ActivityAdapter : ListAdapter<Activity, ActivityAdapter.ScheduleVH>(DiffUtil()) {
 
     class ScheduleVH(private var binding: ItemScheduleBinding ) : RecyclerView.ViewHolder(binding.root){
 
@@ -16,7 +16,7 @@ class ScheduleAdapter : ListAdapter<Schedule, ScheduleAdapter.ScheduleVH>(DiffUt
         val expandLayout = binding.expandedView
         val cardView = binding.cardView
 
-        fun bind(item: Schedule){
+        fun bind(item: Activity){
             binding.timeTv.text = item.time
             binding.noteTv.text = item.title
         }
@@ -48,12 +48,12 @@ class ScheduleAdapter : ListAdapter<Schedule, ScheduleAdapter.ScheduleVH>(DiffUt
             }
     }
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Schedule>(){
-        override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Activity>(){
+        override fun areItemsTheSame(oldItem: Activity, newItem: Activity): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+        override fun areContentsTheSame(oldItem: Activity, newItem: Activity): Boolean {
             return oldItem == newItem
         }
 
