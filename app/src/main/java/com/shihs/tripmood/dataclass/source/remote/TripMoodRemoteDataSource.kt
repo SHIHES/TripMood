@@ -1,5 +1,6 @@
 package com.shihs.tripmood.dataclass.source.remote
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -9,11 +10,13 @@ import com.shihs.tripmood.util.Logger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import com.shihs.tripmood.dataclass.Result
+import com.shihs.tripmood.dataclass.Schedule
 
 
 object TripMoodRemoteDataSource : TripMoodDataSource {
 
     private const val PATH_PLANS = "plans"
+    private const val PATH_SCHEDULE = "schedule"
     private const val KEY_STARTDATE = "startDate"
 
 
@@ -25,6 +28,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             .addOnCompleteListener{ task ->
                 if (task.isSuccessful){
                     val list = mutableListOf<Plan>()
+                    Logger.i("Find addOnCompleteListener")
                     for (document in task.result){
                         Logger.d(document.id + " => " + document.data)
 
@@ -52,7 +56,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             .orderBy(KEY_STARTDATE, Query.Direction.DESCENDING)
             .addSnapshotListener{ snapshot, exception ->
 
-                Logger.i("Find addSnapshotLister")
+                Logger.i("getLivePlans addSnapshotLister success")
 
                 exception?.let {
                     Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
@@ -64,6 +68,34 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
                     val article = document.toObject(Plan::class.java)
                     list.add(article)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
+    override fun getLiveSchedule(planID : String): MutableLiveData<List<Schedule>> {
+
+        val liveData = MutableLiveData<List<Schedule>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_PLANS)
+            .document(planID)
+            .collection(PATH_SCHEDULE)
+            .addSnapshotListener { snapshot, error ->
+
+                Logger.i("getLiveSchedule addSnapshotLister success")
+
+                error?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list= mutableListOf<Schedule>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    var schedule = document.toObject(Schedule::class.java)
+                    list.add(schedule)
                 }
                 liveData.value = list
             }
@@ -92,6 +124,31 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         }
     }
 
+    override suspend fun postSchedule(planID: String, schedule: Schedule): Result<Boolean> = suspendCoroutine{ continuation ->
+        val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
+                    .document(planID).collection(PATH_SCHEDULE)
+        val document = plans.document()
+
+        schedule.id = document.id
+
+        document.set(schedule).addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+                Logger.i("Publish postSchedule: $schedule")
+
+                continuation.resume(Result.Success(true))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error posting documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("postSchedule Fail"))
+            }
+        }
+    }
+
+
+
     override suspend fun delete(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
         plan.id?.let {
             FirebaseFirestore.getInstance()
@@ -109,4 +166,6 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
         }
     }
+
+
 }

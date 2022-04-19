@@ -23,12 +23,11 @@ class ScheduleAdapter(private val onClickListener: OnClickListener,private val v
 
             val fm1 = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
 
-            viewModel.getSchedulePosition(adapterPosition)
 
             binding.daysTv.text = "第${adapterPosition.plus(1)}天"
-            binding.dateTv.text = fm1.format(item.date).toString()
+            binding.dateTv.text = fm1.format(item.time).toString()
             binding.root.setOnClickListener {
-                Log.d("SS", "binding.root.setOnClickListener$item")
+                Log.d("QAQ", "binding.root.setOnClickListener$item")
                 onClickListener.onClick(item) }
 
         }

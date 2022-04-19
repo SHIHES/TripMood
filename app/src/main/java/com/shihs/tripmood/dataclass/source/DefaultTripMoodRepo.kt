@@ -1,34 +1,36 @@
-package com.shihs.tripmood.dataclass.source.local
+package com.shihs.tripmood.dataclass.source
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.dataclass.source.TripMoodDataSource
+import com.shihs.tripmood.dataclass.source.local.TripMoodLocalDataSource
 
-class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
+class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
+                           private val localDataSource: TripMoodDataSource
+                           ): TripMoodRepo {
     override suspend fun getPlans(): Result<List<Plan>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getPlans()
     }
 
     override fun getLivePlans(): MutableLiveData<List<Plan>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getLivePlans()
     }
 
     override suspend fun postPlan(plan: Plan): Result<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.postPlan(plan = plan)
     }
 
     override suspend fun delete(plan: Plan): Result<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.delete(plan = plan)
     }
 
     override fun getLiveSchedule(planID: String): MutableLiveData<List<Schedule>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getLiveSchedule(planID = planID)
     }
 
     override suspend fun postSchedule(planID: String, schedule: Schedule): Result<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.postSchedule(planID, schedule)
     }
+
 }

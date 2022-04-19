@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
+import java.text.SimpleDateFormat
 
 class MyPlanAdapter(private val onClickListener: OnClickListener) : ListAdapter<Plan, MyPlanAdapter.PlanVH>(DiffUtil()) {
 
     class PlanVH (private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Plan, onClickListener: OnClickListener){
+        fun bind(item: Plan){
+            val formatTime = SimpleDateFormat("yyyy.MM.dd")
             binding.planTitle.text = item.title
-            binding.tripDate.text = "${item.startDate} - ${item.endDate}"
-            binding.root.setOnClickListener {
-                Log.d("SS", "binding.root.setOnClickListener$item")
-                onClickListener.onClick(item) }
+            binding.tripDate.text = "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
+
         }
     }
 
@@ -32,7 +32,9 @@ class MyPlanAdapter(private val onClickListener: OnClickListener) : ListAdapter<
 
     override fun onBindViewHolder(holder: PlanVH, position: Int) {
         val plan = getItem(position)
-        holder.bind(plan, onClickListener)
+        holder.bind(plan)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(plan) }
     }
 
     class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>(){

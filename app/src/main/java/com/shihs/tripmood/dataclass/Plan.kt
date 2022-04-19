@@ -9,21 +9,15 @@ data class Plan(
     var title: String? = null,
     var startDate: Long? = null,
     var endDate: Long? = null,
-    var id: String? = null,
-    var schedules: List<Schedule>? = null
+    var id: String? = null
 ) : Parcelable
 
 @Parcelize
 data class Schedule(
-    var events: MutableList<Event>? = null,
-    var date: Long? = null
-) : Parcelable
-
-
-@Parcelize
-data class Event(
-    var time: String? = null,
+    var time: Long? = null,
     var title: String? = null,
     var note: String? = null,
-    var expand: Boolean = false
-)  : Parcelable
+    var id: String? = null,
+    var expand: Boolean? = false
+) : Parcelable
+

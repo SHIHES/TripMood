@@ -5,9 +5,8 @@ import com.shihs.tripmood.dataclass.Plan
 
 import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
-import kotlin.coroutines.suspendCoroutine
 
-interface TripMoodDataSource {
+interface TripMoodRepo {
 
     suspend fun getPlans(): Result<List<Plan>>
 
@@ -22,4 +21,4 @@ interface TripMoodDataSource {
     suspend fun postSchedule(planID: String, schedule: Schedule): Result<Boolean>
 
 
-    }
+}

@@ -33,7 +33,7 @@
         app:destination="@id/navigation_home" />
     <fragment
         android:id="@+id/myDesignFragment"
-        android:name="com.shihs.tripmood.plan.myplan.ChooseDateFragment"
+        android:name="com.shihs.tripmood.plan.myplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
         android:id="@+id/myGPSFragment"

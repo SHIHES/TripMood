@@ -6,18 +6,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemScheduleBinding
-import com.shihs.tripmood.dataclass.Event
+import com.shihs.tripmood.dataclass.Schedule
+import java.text.SimpleDateFormat
+import java.util.*
 
-class EventAdapter : ListAdapter<Event, EventAdapter.ScheduleVH>(DiffUtil()) {
+
+
+class EventAdapter : ListAdapter<Schedule, EventAdapter.ScheduleVH>(DiffUtil()) {
 
     class ScheduleVH(private var binding: ItemScheduleBinding ) : RecyclerView.ViewHolder(binding.root){
 
         val dashline = binding.dashLine
         val expandLayout = binding.expandedView
         val cardView = binding.cardView
+        val fm1 = SimpleDateFormat("yyyy.MM.dd h:mm a", Locale.getDefault())
 
-        fun bind(item: Event){
-            binding.timeTv.text = item.time
+        fun bind(item: Schedule){
+            binding.timeTv.text = fm1.format(item.time)
             binding.noteTv.text = item.title
         }
     }
@@ -29,8 +34,10 @@ class EventAdapter : ListAdapter<Event, EventAdapter.ScheduleVH>(DiffUtil()) {
     override fun onBindViewHolder(holder: ScheduleVH, position: Int) {
         val schedule = getItem(position)
 
-        if (position == currentList.lastIndex){
+        if (position == currentList.size - 1){
             holder.dashline.visibility = View.INVISIBLE
+        } else{
+            holder.dashline.visibility = View.VISIBLE
         }
         holder.bind(schedule)
 
@@ -48,12 +55,12 @@ class EventAdapter : ListAdapter<Event, EventAdapter.ScheduleVH>(DiffUtil()) {
             }
     }
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Event>(){
-        override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Schedule>(){
+        override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
+        override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
             return oldItem == newItem
         }
 

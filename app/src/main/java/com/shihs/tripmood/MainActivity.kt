@@ -1,6 +1,7 @@
 package com.shihs.tripmood
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -50,6 +51,18 @@ class MainActivity : AppCompatActivity() {
         binding.addFAB.setOnClickListener {
             navController.navigate(MobileNavigationDirections.actionGlobalPlanModeDialog())
         }
+    }
+
+    fun hideActionBar(){
+        binding.bottomAppBar.visibility = View.GONE
+        binding.addFAB.visibility = View.GONE
+        binding.bottomNavigationView.visibility = View.GONE
+    }
+
+    fun showActionBar(){
+        binding.bottomAppBar.visibility = View.VISIBLE
+        binding.addFAB.visibility = View.VISIBLE
+        binding.bottomNavigationView.visibility = View.VISIBLE
     }
 
 

@@ -6,19 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanMydesignBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.HomeViewModel
+import com.shihs.tripmood.plan.MyPlanFragmentArgs
+import com.shihs.tripmood.plan.MyPlanViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ChooseDateFragment : Fragment() {
+class CreatePlanFragment : Fragment() {
 
     lateinit var binding : FragmentPlanMydesignBinding
+
+    private val viewModel by viewModels <CreatePlanViewModel> { getVmFactory() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,6 +81,7 @@ class ChooseDateFragment : Fragment() {
             val start = binding.startDateBtn.text.toString().let { formater.parse(it) }?.time
             val end = binding.endDateBtn.text?.toString().let { formater.parse(it) }?.time
             val plan = Plan(binding.planET.text.toString(), start, end )
+            viewModel.postNewPlan(plan = plan)
             findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(plan))
         }
 
