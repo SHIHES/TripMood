@@ -33,7 +33,7 @@
         app:destination="@id/navigation_home" />
     <fragment
         android:id="@+id/myDesignFragment"
-        android:name="com.shihs.tripmood.plan.myplan.CreatePlanFragment"
+        android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
         android:id="@+id/myGPSFragment"
@@ -58,10 +58,6 @@
     </fragment>
     <action android:id="@+id/action_global_myPlanFragment"
         app:destination="@id/myPlanFragment"/>
-    <dialog
-        android:id="@+id/addScheduleDialog"
-        android:name="com.shihs.tripmood.dialog.AddScheduleDialog"
-        android:label="AddScheduleDialog" />
-    <action android:id="@+id/action_global_addScheduleDialog" app:destination="@id/addScheduleDialog" />
+
 
 </navigation>

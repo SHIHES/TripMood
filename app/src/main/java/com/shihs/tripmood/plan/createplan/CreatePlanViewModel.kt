@@ -1,4 +1,4 @@
-package com.shihs.tripmood.plan.myplan
+package com.shihs.tripmood.plan.createplan
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.shihs.tripmood.plan.myplan
+package com.shihs.tripmood.plan.createplan
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MobileNavigationDirections
-import com.shihs.tripmood.databinding.FragmentPlanMydesignBinding
+import com.shihs.tripmood.databinding.FragmentPlanCreateBinding
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.home.HomeViewModel
-import com.shihs.tripmood.plan.MyPlanFragmentArgs
-import com.shihs.tripmood.plan.MyPlanViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class CreatePlanFragment : Fragment() {
 
-    lateinit var binding : FragmentPlanMydesignBinding
+    lateinit var binding : FragmentPlanCreateBinding
 
     private val viewModel by viewModels <CreatePlanViewModel> { getVmFactory() }
 
@@ -33,7 +29,7 @@ class CreatePlanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentPlanMydesignBinding.inflate(inflater, container, false)
+        binding = FragmentPlanCreateBinding.inflate(inflater, container, false)
 
 
         setCalendarBtn()
