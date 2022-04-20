@@ -5,6 +5,8 @@ import app.appworks.school.publisher.factory.PlanViewModelFactory
 import app.appworks.school.publisher.factory.ViewModelFactory
 import com.shihs.tripmood.TripMoodApplication
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.factory.CreateScheduleViewModelFactory
 
 /**
  * Extension functions for Fragment.
@@ -19,6 +21,10 @@ fun Fragment.getVmFactory(plan: Plan?): PlanViewModelFactory {
     return PlanViewModelFactory(repository, plan)
 }
 
+fun Fragment.getVmFactory(plan: Plan?, schedule: Schedule?, adapterPosition: Int?):CreateScheduleViewModelFactory {
+    val repository = (requireContext().applicationContext as TripMoodApplication).repository
+    return CreateScheduleViewModelFactory(repository, plan, schedule, adapterPosition)
+}
 
 
 //fun Fragment.getVmFactory(author: Author?): AuthorViewModelFactory {

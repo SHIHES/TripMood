@@ -13,6 +13,7 @@ import java.util.*
 
 class ScheduleAdapter(private val onClickListener: OnClickListener,private val viewModel: MyPlanViewModel) : ListAdapter<Schedule, ScheduleAdapter.DateVH>(DiffUtil()) {
 
+
     class OnClickListener(val clickListener: (schedule: Schedule) -> Unit) {
         fun onClick(schedule: Schedule) = clickListener(schedule)
     }
@@ -28,7 +29,9 @@ class ScheduleAdapter(private val onClickListener: OnClickListener,private val v
             binding.dateTv.text = fm1.format(item.time).toString()
             binding.root.setOnClickListener {
                 Log.d("QAQ", "binding.root.setOnClickListener$item")
-                onClickListener.onClick(item) }
+                onClickListener.onClick(item)
+                viewModel.getSelectedAdapterPosition(adapterPosition)
+            }
 
         }
     }

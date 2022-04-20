@@ -13,10 +13,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class CreateScheduleViewModel(private val repository: TripMoodRepo, arguments: Plan?) : ViewModel() {
+class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
 
     private val _plan = MutableLiveData<Plan>().apply {
-        value = arguments
+        value = arg1
+
     }
     val plan: LiveData<Plan>
         get() = _plan
