@@ -10,4 +10,5 @@
 
     <color name="tripMood_purple">#D3CDEF</color>
     <color name="tripMood_blue">#FFBCCEFB</color>
+    <color name="tripMood_green">#FF03DAC5</color>
 </resources>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
+import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.EventRecyclerAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
@@ -70,7 +71,13 @@ class MyPlanFragment : Fragment() {
 
     fun setUpBtn(){
         binding.addActivityBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalCreateScheduleFragment(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalCreateScheduleFragment(
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
+                    viewModel.clickSchedule,
+                    viewModel.adapterPosition
+                )
+            )
         }
     }
 
