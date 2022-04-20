@@ -58,6 +58,15 @@
     </fragment>
     <action android:id="@+id/action_global_myPlanFragment"
         app:destination="@id/myPlanFragment"/>
+    <fragment
+        android:id="@+id/createScheduleFragment"
+        android:name="com.shihs.tripmood.plan.createschedule.CreateScheduleFragment"
+        android:label="CreateScheduleFragment">
+        <argument android:name="myPlan"
+        app:argType="com.shihs.tripmood.dataclass.Plan"
+        app:nullable="true"/>
+    </fragment>
+    <action android:id="@+id/action_global_createScheduleFragment" app:destination="@id/createScheduleFragment" />
 
 
 </navigation>

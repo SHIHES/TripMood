@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.plan.MyPlanViewModel
+import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
 
 /**
  * Factory for all ViewModels which need [plan].
@@ -15,12 +16,19 @@ class PlanViewModelFactory(
     private val plan: Plan?
 ) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MyPlanViewModel::class.java)) {
-            return MyPlanViewModel(repository, plan) as T
-        }
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+        with(modelClass) {
+            when {
 
-        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
-    }
+                isAssignableFrom(MyPlanViewModel::class.java) ->
+                    MyPlanViewModel(repository, plan)
+
+                isAssignableFrom(CreateScheduleViewModel::class.java) ->
+                    CreateScheduleViewModel(repository, plan)
+
+                else ->
+                    throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+            }
+        } as T
 
 }

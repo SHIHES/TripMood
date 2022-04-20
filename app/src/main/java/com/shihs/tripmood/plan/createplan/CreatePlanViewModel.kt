@@ -24,8 +24,8 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
         get() = _status
 
     // error: The internal MutableLiveData that stores the error of the most recent request
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String>
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?>
         get() = _error
 
 

@@ -20,7 +20,11 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delete(plan: Plan): Result<Boolean> {
+    override suspend fun deletePlan(planID: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteSchedule(planID: String, scheduleID: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -29,6 +33,14 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     }
 
     override suspend fun postSchedule(planID: String, schedule: Schedule): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updatePlan(plan: Plan): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateSchedule(planID: String, schedule: Schedule): Result<Boolean> {
         TODO("Not yet implemented")
     }
 }

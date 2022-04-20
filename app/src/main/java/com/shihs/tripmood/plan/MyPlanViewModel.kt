@@ -16,7 +16,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
@@ -41,6 +40,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val dayOfSchedule: LiveData<List<Schedule>>
         get() = _dayOfSchedule
 
+    var liveSchedules = MutableLiveData<List<Schedule>>()
+
 
     init {
         getLiveSchedule()
@@ -50,7 +51,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun getLiveSchedule(){
         if (_plan.value != null){
-            _plan.value!!.id?.let { repository.getLiveSchedule(it) }
+            _plan.value!!.id?.let {
+                liveSchedules = repository.getLiveSchedule(it) }
         }
     }
 
@@ -85,10 +87,10 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun findTimeRangeSchedule(){
         try {
-            val aDayOfSchedule = _selectedSchedule.value?.time?.plus(86400000)
+            val aDayOfSchedule = _selectedSchedule.value?.time?.plus(86400000)?.minus(1)
 
-            _dayOfSchedule.value = _schedules.value?.filter {
-                it.time in _selectedSchedule.value?.time!!..aDayOfSchedule!!
+            _dayOfSchedule.value = liveSchedules.value?.filter {
+                it.time in _selectedSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
             }
 
         } catch (e: Exception){

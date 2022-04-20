@@ -69,9 +69,9 @@ class MyPlanFragment : Fragment() {
 
 
     fun setUpBtn(){
-//        binding.addActivityBtn.setOnClickListener {
-//            findNavController().navigate(MobileNavigationDirections.actionGlobalAddScheduleDialog())
-//        }
+        binding.addActivityBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalCreateScheduleFragment(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan))
+        }
     }
 
 }

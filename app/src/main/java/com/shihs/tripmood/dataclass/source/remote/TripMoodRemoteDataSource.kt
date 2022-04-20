@@ -1,6 +1,5 @@
 package com.shihs.tripmood.dataclass.source.remote
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -129,7 +128,8 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                     .document(planID).collection(PATH_SCHEDULE)
         val document = plans.document()
 
-        schedule.id = document.id
+        schedule.scheduleId = document.id
+        schedule.planID = planID
 
         document.set(schedule).addOnCompleteListener{ task ->
             if (task.isSuccessful){
@@ -149,21 +149,81 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
 
 
-    override suspend fun delete(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
-        plan.id?.let {
+    override suspend fun deletePlan(planID: String): Result<Boolean> = suspendCoroutine { continuation ->
+        planID.let {
             FirebaseFirestore.getInstance()
                 .collection(PATH_PLANS)
                 .document(it)
                 .delete()
                 .addOnSuccessListener {
-                    Logger.i("Delete: $plan")
+                    Logger.i("Delete: $planID")
 
                     continuation.resume(Result.Success(true))
                 }
                 .addOnFailureListener {
-                    Logger.w("[${this::class.simpleName}] Error delete documents. ${it.message}")
+                    Logger.w("[${this::class.simpleName}] Error delete plan documents. ${it.message}")
                     continuation.resume(Result.Error(it))
                 }
+        }
+    }
+
+    override suspend fun deleteSchedule(planID: String, scheduleID: String): Result<Boolean> = suspendCoroutine { continuation ->
+        planID.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .collection(PATH_SCHEDULE)
+                .document(scheduleID)
+                .delete()
+                .addOnSuccessListener {
+                    Logger.i("Delete: $scheduleID")
+
+                    continuation.resume(Result.Success(true))
+                }
+                .addOnFailureListener {
+                    Logger.w("[${this::class.simpleName}] Error delete Schedule documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                }
+        }
+    }
+
+    override suspend fun updatePlan(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
+        plan.id?.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .set(plan)
+                .addOnSuccessListener {
+                    Logger.i("Update: $plan")
+
+                    continuation.resume(Result.Success(true))
+                }
+                .addOnFailureListener {
+                    Logger.w("[${this::class.simpleName}] Error updatePlan documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                }
+        }
+    }
+
+    override suspend fun updateSchedule(planID: String, schedule: Schedule): Result<Boolean> = suspendCoroutine { continuation ->
+        planID.let {
+            schedule.scheduleId?.let { it1 ->
+                FirebaseFirestore.getInstance()
+                    .collection(PATH_PLANS)
+                    .document(it)
+                    .collection(PATH_SCHEDULE)
+                    .document(it1)
+                    .set(schedule)
+                    .addOnSuccessListener {
+                        Logger.i("Update: $schedule")
+
+                        continuation.resume(Result.Success(true))
+                    }
+                    .addOnFailureListener {
+                        Logger.w("[${this::class.simpleName}] Error updateSchedule documents. ${it.message}")
+                        continuation.resume(Result.Error(it))
+                    }
+            }
         }
     }
 
