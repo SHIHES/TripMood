@@ -12,10 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.shihs.tripmood.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_search"
+        android:name="com.shihs.tripmood.Search.SearchFragment"
+        android:label="Search" />
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -34,7 +33,7 @@
         app:destination="@id/navigation_home" />
     <fragment
         android:id="@+id/myDesignFragment"
-        android:name="com.shihs.tripmood.plan.mydesign.MyDesignFragment"
+        android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
         android:id="@+id/myGPSFragment"
@@ -46,4 +45,28 @@
     <action
         android:id="@+id/action_global_myGPSFragment"
         app:destination="@id/myGPSFragment" />
+
+
+    <fragment
+        android:id="@+id/myPlanFragment"
+        android:name="com.shihs.tripmood.plan.MyPlanFragment"
+        android:label="MyPlanFragment" >
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+    </fragment>
+    <action android:id="@+id/action_global_myPlanFragment"
+        app:destination="@id/myPlanFragment"/>
+    <fragment
+        android:id="@+id/createScheduleFragment"
+        android:name="com.shihs.tripmood.plan.createschedule.CreateScheduleFragment"
+        android:label="CreateScheduleFragment">
+        <argument android:name="myPlan"
+        app:argType="com.shihs.tripmood.dataclass.Plan"
+        app:nullable="true"/>
+    </fragment>
+    <action android:id="@+id/action_global_createScheduleFragment" app:destination="@id/createScheduleFragment" />
+
+
 </navigation>
