@@ -40,10 +40,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val dayOfSchedule: LiveData<List<Schedule>>
         get() = _dayOfSchedule
 
-<<<<<<< HEAD
-    var liveSchedules = MutableLiveData<List<Schedule>>()
-
-=======
     private val _selectedAdapterPosition = MutableLiveData<Int>()
 
     val selectedAdapterPosition: LiveData<Int>
@@ -56,7 +52,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     var clickSchedule: Schedule = Schedule()
 
 
->>>>>>> develop
 
     init {
         getLiveSchedule()
@@ -98,10 +93,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun getSelectedSchedule(selectedSchedule: Schedule){
         _selectedSchedule.value = selectedSchedule
-<<<<<<< HEAD
-=======
         clickSchedule = selectedSchedule
->>>>>>> develop
     }
 
     fun findTimeRangeSchedule(){
@@ -117,11 +109,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
         }
     }
-<<<<<<< HEAD
-=======
 
     fun getSelectedAdapterPosition(position: Int){
         adapterPosition = position
     }
->>>>>>> develop
 }

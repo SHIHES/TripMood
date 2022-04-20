@@ -78,18 +78,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<<<<<<< HEAD
-    <EditText
-        android:id="@+id/timeEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-=======
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
@@ -136,22 +124,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
->>>>>>> develop
 
     <EditText
         android:id="@+id/titleEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="標題"
-        android:background="@null"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeEditText" />
-=======
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -162,19 +139,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
->>>>>>> develop
 
     <EditText
         android:id="@+id/contentEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="內容"
-        android:background="@null"
-        android:inputType="textPersonName"
-=======
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -182,7 +151,6 @@
         android:ems="10"
         android:hint="內容"
         android:inputType="textMultiLine"
->>>>>>> develop
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -23,12 +23,6 @@ class PlanViewModelFactory(
                 isAssignableFrom(MyPlanViewModel::class.java) ->
                     MyPlanViewModel(repository, plan)
 
-<<<<<<< HEAD
-                isAssignableFrom(CreateScheduleViewModel::class.java) ->
-                    CreateScheduleViewModel(repository, plan)
-
-=======
->>>>>>> develop
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

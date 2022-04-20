@@ -25,10 +25,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.shihs.tripmood.BuildConfig
-<<<<<<< HEAD
-=======
 import com.shihs.tripmood.MainActivity
->>>>>>> develop
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 import com.shihs.tripmood.util.Logger
@@ -86,9 +83,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         // [START_EXCLUDE silent]
         // Construct a PlacesClient
-<<<<<<< HEAD
-        Places.initialize(requireActivity(), BuildConfig.MAPS_API_KEY)
-=======
 
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
@@ -98,7 +92,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         val key = info.metaData[resources.getString(R.string.map_api_key_name)].toString()
 
         Places.initialize(requireActivity(), key)
->>>>>>> develop
         placesClient = Places.createClient(requireActivity())
 
 

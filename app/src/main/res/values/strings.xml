@@ -15,8 +15,5 @@
 
     <string name="start_label">開始記錄</string>
     <string name="stop_label">停止記錄</string>
-<<<<<<< HEAD
-=======
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
->>>>>>> develop
 </resources>

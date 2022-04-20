@@ -2,10 +2,6 @@ package com.shihs.tripmood.plan.createplan
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-<<<<<<< HEAD
-=======
-import android.util.Log
->>>>>>> develop
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

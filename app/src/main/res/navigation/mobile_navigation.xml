@@ -59,10 +59,6 @@
     </fragment>
     <action android:id="@+id/action_global_myPlanFragment"
         app:destination="@id/myPlanFragment"/>
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
     <fragment
         android:id="@+id/createScheduleFragment"
         android:name="com.shihs.tripmood.plan.createschedule.CreateScheduleFragment"
@@ -70,17 +66,12 @@
         <argument android:name="myPlan"
         app:argType="com.shihs.tripmood.dataclass.Plan"
         app:nullable="true"/>
-<<<<<<< HEAD
-=======
         <argument android:name="selectedSchedule"
             app:argType="com.shihs.tripmood.dataclass.Schedule"
             app:nullable="true"/>
         <argument android:name="selectedPosition"
             app:argType="integer"
             android:defaultValue="-1"/>
-
-
->>>>>>> develop
     </fragment>
     <action android:id="@+id/action_global_createScheduleFragment" app:destination="@id/createScheduleFragment" />
 
