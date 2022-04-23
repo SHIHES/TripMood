@@ -14,8 +14,8 @@ android {
         applicationId "com.shihs.tripmood"
         minSdk 30
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,10 +54,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     //navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     //firebase
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.1'
     implementation 'com.google.android.libraries.places:places:2.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -67,6 +67,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     // for location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+
+    //place
+    implementation 'com.google.android.libraries.places:places:2.6.0'
+
 
     // permission
     implementation 'androidx.activity:activity-ktx:1.4.0'

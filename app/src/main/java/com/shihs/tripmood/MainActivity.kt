@@ -1,6 +1,7 @@
 package com.shihs.tripmood
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: NavigationBarView  = binding.bottomNavigationView
+        val navView: NavigationBarView = binding.bottomNavigationView
 
         navView.menu.getItem(2).isEnabled = false
 
@@ -45,25 +48,62 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         setBtn()
+        setupBottomNav()
     }
 
-    fun setBtn(){
+    fun setBtn() {
         binding.addFAB.setOnClickListener {
             navController.navigate(MobileNavigationDirections.actionGlobalPlanModeDialog())
         }
     }
 
-    fun hideActionBar(){
-        binding.bottomAppBar.visibility = View.GONE
-        binding.addFAB.visibility = View.GONE
-        binding.bottomNavigationView.visibility = View.GONE
+    private fun setupBottomNav() {
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                        MobileNavigationDirections.actionGlobalNavigationHome()
+                    )
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_chat -> {
+
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                        MobileNavigationDirections.actionGlobalNavigationHome()
+                    )
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_search -> {
+
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                        MobileNavigationDirections.actionGlobalNavigationSearch()
+                    )
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_notifications -> {
+
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                        MobileNavigationDirections.actionGlobalNavigationNotifications()
+                    )
+                    return@setOnItemSelectedListener false
+                }
+            }
+            false
+        }
+
+        fun hideActionBar() {
+            binding.bottomAppBar.visibility = View.GONE
+            binding.addFAB.visibility = View.GONE
+            binding.bottomNavigationView.visibility = View.GONE
+        }
+
+        fun showActionBar() {
+            binding.bottomAppBar.visibility = View.VISIBLE
+            binding.addFAB.visibility = View.VISIBLE
+            binding.bottomNavigationView.visibility = View.VISIBLE
+        }
+
+
     }
-
-    fun showActionBar(){
-        binding.bottomAppBar.visibility = View.VISIBLE
-        binding.addFAB.visibility = View.VISIBLE
-        binding.bottomNavigationView.visibility = View.VISIBLE
-    }
-
-
 }

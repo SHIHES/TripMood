@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.shihs.tripmood.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.shihs.tripmood.Search.SearchFragment"
+        android:name="com.shihs.tripmood.search.SearchFragment"
         android:label="Search" />
 
     <fragment
@@ -31,7 +30,9 @@
         app:destination="@id/planModeDialog" />
     <action
         android:id="@+id/action_global_navigation_home"
-        app:destination="@id/navigation_home" />
+        app:destination="@id/navigation_home"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/myDesignFragment"
         android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
@@ -57,8 +58,6 @@
             app:nullable="true"/>
 
     </fragment>
-    <action android:id="@+id/action_global_myPlanFragment"
-        app:destination="@id/myPlanFragment"/>
 
     <fragment
         android:id="@+id/createScheduleFragment"
@@ -73,10 +72,37 @@
         <argument android:name="selectedPosition"
             app:argType="integer"
             android:defaultValue="-1"/>
+        <action
+            android:id="@+id/action_createScheduleFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
 
 
     </fragment>
     <action android:id="@+id/action_global_createScheduleFragment" app:destination="@id/createScheduleFragment" />
+    <action
+        android:id="@+id/action_global_navigation_search"
+        app:destination="@id/navigation_search"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_global_navigation_notifications"
+        app:destination="@id/navigation_notifications"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/action_global_myPlanFragment" app:destination="@id/myPlanFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.shihs.tripmood.plan.createschedule.MapFragment"
+        android:label="MapFragment" >
+
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+        <action
+            android:id="@+id/action_mapFragment_to_createScheduleFragment"
+            app:destination="@id/createScheduleFragment" />
+
+    </fragment>
 
 
 </navigation>

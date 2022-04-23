@@ -41,7 +41,10 @@ class HomeFragment : Fragment() {
 
 
         viewModel.selectedPlan.observe(viewLifecycleOwner){
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(it))
+            it?.let{
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                viewModel.onPlanNavigated()
+            }
         }
 
         viewModel.livePlans.observe(viewLifecycleOwner){

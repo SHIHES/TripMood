@@ -60,6 +60,10 @@ class HomeViewModel(private val repository: TripMoodRepo) : ViewModel() {
         Log.d("QAQ","getLivePlansResult ${livePlans}")
     }
 
+    fun onPlanNavigated() {
+        _selectedPlan.value = null
+    }
+
 
 //    private fun getAllPlans(){
 //        coroutineScope.launch {

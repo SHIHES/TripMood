@@ -37,6 +37,9 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
+    val location = MutableLiveData<Double>()
+
+
     fun postNewSchedule(schedule: Schedule){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
