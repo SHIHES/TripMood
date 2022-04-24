@@ -32,7 +32,7 @@
                 app:srcCompat="@drawable/lake_sunset_2021_08_26_18_27_36_utc_1" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/moreBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
