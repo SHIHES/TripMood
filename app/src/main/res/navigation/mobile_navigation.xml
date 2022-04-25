@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.shihs.tripmood.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.shihs.tripmood.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_search"
+        android:name="com.shihs.tripmood.search.SearchFragment"
+        android:label="Search" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.shihs.tripmood.notifications.NotificationsFragment"
+        android:id="@+id/navigation_user"
+        android:name="com.shihs.tripmood.user.UserFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_user" />
     <dialog
         android:id="@+id/planModeDialog"
         android:name="com.shihs.tripmood.dialog.PlanModeDialog"
@@ -31,10 +31,12 @@
         app:destination="@id/planModeDialog" />
     <action
         android:id="@+id/action_global_navigation_home"
-        app:destination="@id/navigation_home" />
+        app:destination="@id/navigation_home"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/myDesignFragment"
-        android:name="com.shihs.tripmood.plan.mydesign.MyDesignFragment"
+        android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
         android:id="@+id/myGPSFragment"
@@ -46,4 +48,62 @@
     <action
         android:id="@+id/action_global_myGPSFragment"
         app:destination="@id/myGPSFragment" />
+
+
+    <fragment
+        android:id="@+id/myPlanFragment"
+        android:name="com.shihs.tripmood.plan.MyPlanFragment"
+        android:label="MyPlanFragment" >
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/createScheduleFragment"
+        android:name="com.shihs.tripmood.plan.createschedule.CreateScheduleFragment"
+        android:label="CreateScheduleFragment">
+        <argument android:name="myPlan"
+        app:argType="com.shihs.tripmood.dataclass.Plan"
+        app:nullable="true"/>
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+        <argument android:name="selectedPosition"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+        <action
+            android:id="@+id/action_createScheduleFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+
+
+    </fragment>
+    <action android:id="@+id/action_global_createScheduleFragment" app:destination="@id/createScheduleFragment" />
+    <action
+        android:id="@+id/action_global_navigation_search"
+        app:destination="@id/navigation_search"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_global_navigation_notifications"
+        app:destination="@id/navigation_user"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/action_global_myPlanFragment" app:destination="@id/myPlanFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.shihs.tripmood.plan.createschedule.MapFragment"
+        android:label="MapFragment" >
+
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+        <action
+            android:id="@+id/action_mapFragment_to_createScheduleFragment"
+            app:destination="@id/createScheduleFragment" />
+
+    </fragment>
+
+
 </navigation>

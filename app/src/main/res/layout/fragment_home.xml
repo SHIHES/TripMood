@@ -9,22 +9,6 @@
     android:layout_marginEnd="16dp">
 
 
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:clickable="true"
-        android:src="@drawable/ic_baseline_add_24"
-        app:backgroundTint="@color/tripMood_purple"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white"
-        app:rippleColor="@color/tripMood_blue"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/planRV"
         android:layout_width="match_parent"
