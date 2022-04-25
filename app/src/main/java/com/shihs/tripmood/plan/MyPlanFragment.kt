@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
+import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.adapter.EventAdapter
-import com.shihs.tripmood.plan.adapter.EventRecyclerAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
 
 class MyPlanFragment : Fragment() {
@@ -55,15 +55,20 @@ class MyPlanFragment : Fragment() {
 
         viewModel.selectedSchedule.observe(viewLifecycleOwner){
             viewModel.findTimeRangeSchedule()
+
         }
 
         viewModel.dayOfSchedule.observe(viewLifecycleOwner){
-            eventAdapter.submitList(it)
+            it?.let{
+                eventAdapter.submitList(it)
+                binding.hintTv.visibility = View.GONE
+            }
         }
 
 
         setUpBtn()
 
+        (requireActivity() as MainActivity).hideActionBar()
 
         return binding.root
     }
@@ -79,6 +84,16 @@ class MyPlanFragment : Fragment() {
                 )
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).hideActionBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as MainActivity).showActionBar()
     }
 
 }

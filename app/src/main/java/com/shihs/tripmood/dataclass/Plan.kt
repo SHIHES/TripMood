@@ -12,15 +12,4 @@ data class Plan(
     var id: String? = null
 ) : Parcelable
 
-@Parcelize
-data class Schedule(
-    var time: Long? = null,
-    var title: String? = null,
-    var note: String? = null,
-    var scheduleId: String? = null,
-    var expand: Boolean? = false,
-    var planID: String? = null,
-    var latLocation: Float? = null,
-    var lonLocation: Float? = null
-) : Parcelable
 

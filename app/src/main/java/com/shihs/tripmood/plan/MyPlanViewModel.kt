@@ -113,4 +113,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     fun getSelectedAdapterPosition(position: Int){
         adapterPosition = position
     }
+
+    fun selectedScheduleClear(){
+         _dayOfSchedule.value = null
+    }
 }

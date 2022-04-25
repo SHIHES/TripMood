@@ -1,17 +1,19 @@
 package com.shihs.tripmood.home
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
-import com.shihs.tripmood.MobileNavigationDirections
+import com.shihs.tripmood.R
+import com.shihs.tripmood.databinding.DialogPlanFuctionMoreBinding
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -41,7 +43,10 @@ class HomeFragment : Fragment() {
 
 
         viewModel.selectedPlan.observe(viewLifecycleOwner){
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(it))
+            it?.let{
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                viewModel.onPlanNavigated()
+            }
         }
 
         viewModel.livePlans.observe(viewLifecycleOwner){
@@ -55,5 +60,28 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showDialog() {
+
+        val dialog = Dialog(requireContext())
+        val binding = DialogPlanFuctionMoreBinding.inflate(LayoutInflater.from(context))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_plan_fuction_more)
+
+        binding.deleteLayout
+        binding.privateLayout
+        binding.openLayout
+        binding.friendListLayout
+        binding.editLayout
+        binding.shareLayout
+
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setGravity(Gravity.BOTTOM)
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
+        dialog.show()
+
     }
 }
