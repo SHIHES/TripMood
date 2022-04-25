@@ -79,7 +79,7 @@ class CreatePlanFragment : Fragment() {
             val end = binding.endDateBtn.text?.toString().let { formater.parse(it) }?.time
             val plan = Plan(binding.planET.text.toString(), start, end )
             viewModel.postNewPlan(plan = plan)
-//            findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(plan))
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(plan))
         }
 
     }

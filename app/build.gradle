@@ -76,7 +76,12 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
 
-
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
     implementation 'com.google.maps.android:maps-utils-ktx:3.2.0'
+
+    //lottie animate
+    implementation 'com.airbnb.android:lottie:5.0.3'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

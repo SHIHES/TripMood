@@ -17,10 +17,10 @@
         android:label="Search" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.shihs.tripmood.notifications.NotificationsFragment"
+        android:id="@+id/navigation_user"
+        android:name="com.shihs.tripmood.user.UserFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_user" />
     <dialog
         android:id="@+id/planModeDialog"
         android:name="com.shihs.tripmood.dialog.PlanModeDialog"
@@ -86,7 +86,7 @@
         app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_global_navigation_notifications"
-        app:destination="@id/navigation_notifications"
+        app:destination="@id/navigation_user"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
     <action android:id="@+id/action_global_myPlanFragment" app:destination="@id/myPlanFragment" />

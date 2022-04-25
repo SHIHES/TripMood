@@ -1,5 +1,6 @@
 package com.shihs.tripmood.plan.createschedule
 
+import android.app.Activity
 import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import app.appworks.school.publisher.ext.getVmFactory
+import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentScheduleCreateBinding
@@ -50,6 +53,9 @@ class CreateScheduleFragment : Fragment() {
 
         binding = FragmentScheduleCreateBinding.inflate(inflater, container, false)
 
+//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+
 
         val argPosition = arg.selectedPosition.plus(1)
         val argSchedule = arg.selectedSchedule
@@ -82,6 +88,8 @@ class CreateScheduleFragment : Fragment() {
 //            binding.addLocationButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.purple_500))
 //            binding.addLocationButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.tripMood_blue), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+
+        (requireActivity() as MainActivity).hideActionBar()
 
         return binding.root
     }
@@ -127,5 +135,17 @@ class CreateScheduleFragment : Fragment() {
         }
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).hideActionBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as MainActivity).showActionBar()
+    }
+
+
 
 }

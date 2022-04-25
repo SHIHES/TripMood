@@ -29,11 +29,24 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scheduleRv"
-        android:layout_width="409dp"
-        android:layout_height="577dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daysRv" />
+
+    <TextView
+        android:id="@+id/hintTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="今天沒有任何行程哦"
+        app:layout_constraintBottom_toBottomOf="@+id/scheduleRv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daysRv"
+        android:textSize="18sp"
+        android:textColor="@color/quantum_grey"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

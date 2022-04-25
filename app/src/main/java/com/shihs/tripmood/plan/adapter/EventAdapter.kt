@@ -19,11 +19,12 @@ class EventAdapter : ListAdapter<Schedule, EventAdapter.ScheduleVH>(DiffUtil()) 
         val dashline = binding.dashLine
         val expandLayout = binding.expandedView
         val cardView = binding.cardView
-        val fm1 = SimpleDateFormat("yyyy.MM.dd h:mm a", Locale.getDefault())
+        val fm1 = SimpleDateFormat("MM.dd h:mm a", Locale.getDefault())
 
         fun bind(item: Schedule){
             binding.timeTv.text = fm1.format(item.time)
             binding.noteTv.text = item.title
+            binding.test.text = item.location?.name
         }
     }
 

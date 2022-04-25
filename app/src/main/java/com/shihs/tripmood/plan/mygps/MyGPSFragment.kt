@@ -108,6 +108,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         presenter = MapPresenter(this)
         presenter.onViewCreated()
 
+        (requireActivity() as MainActivity).hideActionBar()
+
         return binding.root
     }
 
@@ -444,5 +446,15 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         // Used for selecting the current place.
         private const val M_MAX_ENTRIES = 5
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).hideActionBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as MainActivity).showActionBar()
     }
 }

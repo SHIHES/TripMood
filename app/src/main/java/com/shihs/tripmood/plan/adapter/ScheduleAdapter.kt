@@ -22,17 +22,16 @@ class ScheduleAdapter(private val onClickListener: OnClickListener,private val v
 
         fun bind(item: Schedule, onClickListener: OnClickListener, viewModel: MyPlanViewModel) {
 
-            val fm1 = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+            val fm1 = SimpleDateFormat("MM月dd日", Locale.getDefault())
 
 
-            binding.daysTv.text = "第${adapterPosition.plus(1)}天"
+            binding.daysTv.text = "Day ${adapterPosition.plus(1)}"
             binding.dateTv.text = fm1.format(item.time).toString()
             binding.root.setOnClickListener {
                 Log.d("QAQ", "binding.root.setOnClickListener$item")
                 onClickListener.onClick(item)
                 viewModel.getSelectedAdapterPosition(adapterPosition)
             }
-
         }
     }
 
