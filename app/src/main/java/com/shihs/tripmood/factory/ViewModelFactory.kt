@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.home.HomeViewModel
+import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.plan.createplan.CreatePlanViewModel
 
 /**
@@ -19,8 +19,8 @@ class ViewModelFactory constructor(
         with(modelClass) {
             when {
 
-                isAssignableFrom(HomeViewModel::class.java) ->
-                    HomeViewModel(repository)
+                isAssignableFrom(ChildHomeViewModel::class.java) ->
+                    ChildHomeViewModel(repository)
 
                 isAssignableFrom(CreatePlanViewModel::class.java) ->
                     CreatePlanViewModel(repository)
