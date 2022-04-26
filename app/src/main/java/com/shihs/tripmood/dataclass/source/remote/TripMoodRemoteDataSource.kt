@@ -4,18 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Result
+import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 import com.shihs.tripmood.util.Logger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
 
 
 object TripMoodRemoteDataSource : TripMoodDataSource {
 
     private const val PATH_PLANS = "plans"
-    private const val PATH_SCHEDULE = "schedule"
+    private const val PATH_SCHEDULE = "schedules"
     private const val KEY_STARTDATE = "startDate"
 
 
@@ -105,7 +106,10 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
         val document = plans.document()
 
+        val user = User(name = "Steven", email = "test@gamil.com", id = "test")
+
         plan.id = document.id
+        plan.owner = user
 
         document.set(plan).addOnCompleteListener{ task ->
             if (task.isSuccessful){
@@ -226,6 +230,9 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             }
         }
     }
+
+
+
 
 
 }

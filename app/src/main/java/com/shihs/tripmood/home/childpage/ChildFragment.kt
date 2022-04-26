@@ -1,6 +1,7 @@
 package com.shihs.tripmood.home.childpage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,26 +11,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentPlanChildViewpagerBinding
+import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.HomeFragmentDirections
+import com.shihs.tripmood.home.PlanFilter
 import com.shihs.tripmood.home.adapter.MyPlanAdapter
 
-class ChildFragment : Fragment() {
+class ChildFragment(private val planType: PlanFilter) : Fragment() {
 
     lateinit var binding: FragmentPlanChildViewpagerBinding
 
-    private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory() }
+    private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(planType) }
 
-    companion object {
-        fun newInstance(position: Int): Fragment {
-            val childFragment = ChildFragment()
-            val ARG_OBJECT = "object"
-            val bundle = Bundle()
-
-            bundle.putInt(ARG_OBJECT, position)
-            childFragment.setArguments(bundle)
-            return childFragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +29,9 @@ class ChildFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPlanChildViewpagerBinding.inflate(inflater, container, false)
+
+        Log.d("SS","ChildFragment $planType")
+
 
         val recyclerPlan = binding.planRV
 
@@ -56,6 +51,10 @@ class ChildFragment : Fragment() {
         }
 
         viewModel.livePlans.observe(viewLifecycleOwner) {
+            viewModel.planSorter(planType)
+        }
+
+        viewModel.viewpagerPlans.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
 

@@ -19,8 +19,6 @@ class ViewModelFactory constructor(
         with(modelClass) {
             when {
 
-                isAssignableFrom(ChildHomeViewModel::class.java) ->
-                    ChildHomeViewModel(repository)
 
                 isAssignableFrom(CreatePlanViewModel::class.java) ->
                     CreatePlanViewModel(repository)

@@ -12,5 +12,5 @@ data class Schedule(
     var scheduleId: String? = null,
     var expand: Boolean? = false,
     var planID: String? = null,
-    var location: Location? = null
+    var location: Location? = null,
 ) : Parcelable

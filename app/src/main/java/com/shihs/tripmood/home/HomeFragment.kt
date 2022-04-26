@@ -2,7 +2,9 @@ package com.shihs.tripmood.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import app.appworks.school.publisher.ext.getVmFactory
@@ -38,11 +40,11 @@ class HomeFragment : Fragment() {
         viewPager2.adapter = viewPagerAdapter
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-            when (position) {
-                0 -> {
+            when (PlanFilter.values()[position]) {
+                PlanFilter.INDIVIDUAL  -> {
                     tab.text = "計畫中"
                 }
-                1 -> {
+                else -> {
                     tab.text = "共同編輯"
                 }
             }

@@ -7,6 +7,8 @@ import com.shihs.tripmood.TripMoodApplication
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.factory.CreateScheduleViewModelFactory
+import com.shihs.tripmood.factory.PlanTypeViewModelFactory
+import com.shihs.tripmood.home.PlanFilter
 
 /**
  * Extension functions for Fragment.
@@ -25,6 +27,12 @@ fun Fragment.getVmFactory(plan: Plan?, schedule: Schedule?, adapterPosition: Int
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return CreateScheduleViewModelFactory(repository, plan, schedule, adapterPosition)
 }
+
+fun Fragment.getVmFactory(planType: PlanFilter):PlanTypeViewModelFactory {
+    val repository = (requireContext().applicationContext as TripMoodApplication).repository
+    return PlanTypeViewModelFactory(repository, planType)
+}
+
 
 
 //fun Fragment.getVmFactory(author: Author?): AuthorViewModelFactory {
