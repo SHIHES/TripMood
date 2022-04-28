@@ -8,5 +8,10 @@ import kotlinx.android.parcel.Parcelize
 data class Location (
     var latitude: Double? = null,
     var longitude: Double? = null,
-    var name: String? = null
+    var name: String? = null,
+    var address: String? = null,
+    var type: List<String>? = null,
+    var image: String? = null,
+    var icon: String? = null,
+    var rating: Double? = null
 ):Parcelable

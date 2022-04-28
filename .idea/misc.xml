@@ -23,6 +23,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_more_horiz_24.xml" value="0.248" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.2425" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.2775" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_restaurant_24.xml" value="0.1815" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2425" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.4275" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2735" />
@@ -43,7 +44,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_child_viewpager.xml" value="0.1609375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_create.xml" value="0.171875" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_mydesign.xml" value="0.3477366255144033" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_mygps.xml" value="0.375" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_mygps.xml" value="0.20246913580246914" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_schedule_create.xml" value="0.3541666666666667" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_schedule_map.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_user.xml" value="0.27291666666666664" />

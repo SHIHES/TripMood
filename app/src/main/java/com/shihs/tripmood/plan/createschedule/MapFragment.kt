@@ -122,7 +122,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Place.Field.LAT_LNG,
             Place.Field.ADDRESS,
             Place.Field.PHOTO_METADATAS,
-            Place.Field.ICON_URL))
+            Place.Field.ICON_URL,
+            Place.Field.TYPES))
 
         autocompleteFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
             override fun onError(p0: Status) {
@@ -132,7 +133,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             override fun onPlaceSelected(place: Place) {
 
                 if (place.latLng != null){
-                    Log.d("QAQ", "onPlaceSelected selected${place.latLng.latitude}")
+                    Log.d("QAQ", "onPlaceSelected selected${place.types}")
                     selectedLocation.latitude = place.latLng?.latitude
                     selectedLocation.longitude = place.latLng?.longitude
                     selectedLocation.name = place.name

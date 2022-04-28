@@ -2,11 +2,14 @@ package com.shihs.tripmood.plan.mygps
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
@@ -15,21 +18,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.shihs.tripmood.BuildConfig
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
-import com.shihs.tripmood.util.Logger
-
+import com.shihs.tripmood.ext.toBase64String
+import com.shihs.tripmood.plan.adapter.LocationAdapter
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
@@ -42,21 +47,24 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentPlanMygpsBinding
     private lateinit var  presenter : MapPresenter
 
-    // A default location (Sydney, Australia) and default zoom to use when location permission is
-    // not granted.
-    private val defaultLocation = LatLng(-33.8523341, 151.2106085)
     private var locationPermissionGranted = false
-
-
-
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private var lastKnownLocation: Location? = null
-    private var likelyPlaceNames: Array<String?> = arrayOfNulls(0)
-    private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
-    private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
-    private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
+
+    private var recommendPlace = mutableListOf<com.shihs.tripmood.dataclass.source.Location>()
+
+    private lateinit var handler: Handler
+
+    private lateinit var locationAdapter: LocationAdapter
+
+    private var updateLocationTask = object : Runnable {
+        override fun run() {
+            showCurrentPlace()
+            handler.postDelayed(this, 3000)
+        }
+    }
 
 
     override fun onCreateView(
@@ -67,8 +75,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         binding = FragmentPlanMygpsBinding.inflate(inflater, container, false)
 
 
-
-        Logger.d("ttttttttttttttttttttttttttttttttttttttttttt")
         // [START_EXCLUDE silent]
         // Retrieve location and camera position from saved instance state.
         // [START maps_current_place_on_create_save_instance_state]
@@ -76,13 +82,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION)
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION)
         }
-        // [END maps_current_place_on_create_save_instance_state]
-        // [END_EXCLUDE]
-
-        // Retrieve the content view that renders the map.
-
-        // [START_EXCLUDE silent]
-        // Construct a PlacesClient
 
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
@@ -94,14 +93,9 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         Places.initialize(requireActivity(), key)
         placesClient = Places.createClient(requireActivity())
 
-
-        // Build the map.
-        // [START maps_current_place_map_fragment]
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-        // [END maps_current_place_map_fragment]
-        // [END_EXCLUDE]
 
         setBtn()
 
@@ -110,16 +104,24 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         (requireActivity() as MainActivity).hideActionBar()
 
+        handler = Handler(Looper.getMainLooper())
+
+        val recyclerInfo = binding.recyclerInfo
+
+        locationAdapter = LocationAdapter(LocationAdapter.OnClickListener{
+
+        })
+
+        recyclerInfo.adapter = locationAdapter
+        recyclerInfo.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
         return binding.root
     }
 
 
 
     private fun startTracking() {
-//        binding.container.txtPace.text = ""
-//        binding.container.txtDistance.text = ""
-//        binding.container.txtTime.base = SystemClock.elapsedRealtime()
-//        binding.container.txtTime.start()
+
         map?.clear()
 
         presenter.startTracking()
@@ -127,12 +129,12 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     private fun stopTracking() {
         presenter.stopTracking()
-//        binding.container.txtTime.stop()
     }
 
     /**
      * Saves the state of the map when the activity is paused.
      */
+
     // [START maps_current_place_on_save_instance_state]
     override fun onSaveInstanceState(outState: Bundle) {
         map?.let { map ->
@@ -141,24 +143,31 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         }
         super.onSaveInstanceState(outState)
     }
-    // [END maps_current_place_on_save_instance_state]
 
 
-    // [END maps_current_place_on_options_item_selected]
-
-
+    /**等等要在這邊放取得place所有資訊的action**/
     fun setBtn() {
-        binding.button.setOnClickListener {
-            showCurrentPlace()
-        }
-        binding.recordBtn.setOnClickListener {
+        binding.controlLayout.setOnClickListener {
 
-            if(binding.recordBtn.text == getString(R.string.start_label)){
+            if(binding.startRecordBtn.text == getString(R.string.start_label)){
+                recommendPlace.clear()
+                locationAdapter.notifyDataSetChanged()
+                handler.post(updateLocationTask)
                 startTracking()
-                binding.recordBtn.text = getString(R.string.stop_label)
+
+                binding.startRecordBtn.text = getString(R.string.stop_label)
+                binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_red))
+                binding.controlIcon.setImageResource(R.drawable.ic_baseline_stop_24)
             } else {
+                locationAdapter.submitList(recommendPlace)
+                locationAdapter.notifyDataSetChanged()
+                addMarker(recommendPlace)
+                handler.removeCallbacks(updateLocationTask)
                 stopTracking()
-                binding.recordBtn.text = getString(R.string.start_label)
+
+                binding.startRecordBtn.text = getString(R.string.start_label)
+                binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_green))
+                binding.controlIcon.setImageResource(R.drawable.ic_baseline_play_arrow_24)
             }
         }
     }
@@ -168,7 +177,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
      * Manipulates the map when it's available.
      * This callback is triggered when the map is ready to be used.
      */
-    // [START maps_current_place_on_map_ready]
+
     @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(map: GoogleMap) {
         this.map = map
@@ -179,12 +188,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         presenter.onMapLoaded()
         map.uiSettings.isZoomControlsEnabled = true
 
-
-
-        // [START_EXCLUDE]
-        // [START map_current_place_set_info_window_adapter]
-        // Use a custom info window adapter to handle multiple lines of text in the
-        // info window contents.
         this.map?.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             // Return null here, so that getInfoContents() is called next.
             override fun getInfoWindow(arg0: Marker): View? {
@@ -204,23 +207,16 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 return infoWindow
             }
         })
-        // [END map_current_place_set_info_window_adapter]
 
-        // Prompt the user for permission.
         getLocationPermission()
-        // [END_EXCLUDE]
 
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI()
-
-        // Get the current location of the device and set the position of the map.
     }
 
     @SuppressLint("MissingPermission")
     private fun updateUI(ui: Ui) {
         if(ui.currentLocation != null && ui.currentLocation != map?.cameraPosition?.target){
             map?.isMyLocationEnabled = true
-            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 14f))
+            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 18f))
         }
         drawRoute(ui.userPath)
     }
@@ -260,8 +256,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             )
         }
     }
-    // [END maps_current_place_location_permission]
-
     /**
      * Handles the result of the request for location permissions.
      */
@@ -284,10 +278,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
-        updateLocationUI()
     }
-    // [END maps_current_place_on_request_permissions_result]
-
     /**
      * Prompts the user to select the current place from a list of likely places, and shows the
      * current place on the map - provided the user has granted location permission.
@@ -298,9 +289,18 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         if (map == null) {
             return
         }
+
         if (locationPermissionGranted) {
             // Use fields to define the data types to return.
-            val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+            val placeFields = listOf(
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG,
+                Place.Field.TYPES,
+                Place.Field.PHOTO_METADATAS,
+                Place.Field.ICON_URL,
+                Place.Field.RATING
+            )
 
             // Use the builder to create a FindCurrentPlaceRequest.
             val request = FindCurrentPlaceRequest.newInstance(placeFields)
@@ -314,128 +314,95 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
                     // Set the count, handling cases where less than 5 entries are returned.
                     val count =
-                        if (likelyPlaces != null && likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
+                        if (likelyPlaces != null &&
+                            likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
                             likelyPlaces.placeLikelihoods.size
                         } else {
                             M_MAX_ENTRIES
                         }
                     var i = 0
-                    likelyPlaceNames = arrayOfNulls(count)
-                    likelyPlaceAddresses = arrayOfNulls(count)
-                    likelyPlaceAttributions = arrayOfNulls<List<*>?>(count)
-                    likelyPlaceLatLngs = arrayOfNulls(count)
+
                     for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
-                        // Build a list of likely places to show the user.
-                        likelyPlaceNames[i] = placeLikelihood.place.name
-                        likelyPlaceAddresses[i] = placeLikelihood.place.address
-                        likelyPlaceAttributions[i] = placeLikelihood.place.attributions
-                        likelyPlaceLatLngs[i] = placeLikelihood.place.latLng
+                        var result = com.shihs.tripmood.dataclass.source.Location()
+                        var place = placeLikelihood.place
+
+                        result.name = placeLikelihood.place.name
+                        result.address = placeLikelihood.place.address
+                        result.latitude = placeLikelihood.place.latLng?.latitude
+                        result.longitude = placeLikelihood.place.latLng?.longitude
+                        result.type = placeLikelihood.place.types as List<String>?
+                        result.icon = placeLikelihood.place.iconUrl
+                        result.rating = placeLikelihood.place.rating
+
+
+                        showCurrentPlacePhoto(place = place, result = result)
+
+                        Log.d("SS", "placeLikelihood ${result}")
+
+                        recommendPlace.add(result)
+
                         i++
+
                         if (i > count - 1) {
                             break
                         }
                     }
 
-                    // Show a dialog offering the user the list of likely places, and add a
-                    // marker at the selected place.
-                    openPlacesDialog()
+//                    openPlacesDialog()
                 } else {
                     Log.e(TAG, "Exception: %s", task.exception)
                 }
             }
         } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.")
-
-            // Add a default marker, because the user hasn't selected a place.
-            map?.addMarker(
-                MarkerOptions()
-                    .title(getString(R.string.default_info_title))
-                    .position(defaultLocation)
-                    .snippet(getString(R.string.default_info_snippet))
-            )
-
-            // Prompt the user for permission.
             getLocationPermission()
         }
     }
-    // [END maps_current_place_show_current_place]
 
-    /**
-     * Displays a form allowing the user to select a place from a list of likely places.
-     */
-    // [START maps_current_place_open_places_dialog]
-    private fun openPlacesDialog() {
-        // Ask the user to choose the place where they are now.
-        val listener =
-            DialogInterface.OnClickListener { dialog, which -> // The "which" argument contains the position of the selected item.
-                val markerLatLng = likelyPlaceLatLngs[which]
-                var markerSnippet = likelyPlaceAddresses[which]
-                if (likelyPlaceAttributions[which] != null) {
-                    markerSnippet = """
-                    $markerSnippet
-                    ${likelyPlaceAttributions[which]}
-                    """.trimIndent()
-                }
+    private fun showCurrentPlacePhoto(place: Place, result: com.shihs.tripmood.dataclass.source.Location){
+        val photoMetadata = place.photoMetadatas?.get(0)
 
-                if (markerLatLng == null) {
-                    return@OnClickListener
-                }
-
-                // Add a marker for the selected place, with an info window
-                // showing information about that place.
-                map?.addMarker(
-                    MarkerOptions()
-                        .title(likelyPlaceNames[which])
-                        .position(markerLatLng)
-                        .snippet(markerSnippet)
-                )
-
-                // Position the map's camera at the location of the marker.
-                map?.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        markerLatLng,
-                        DEFAULT_ZOOM.toFloat()
-                    )
-                )
-            }
-
-        // Display the dialog.
-        AlertDialog.Builder(requireActivity())
-            .setTitle(R.string.pick_place)
-            .setItems(likelyPlaceNames, listener)
-            .show()
-    }
-    // [END maps_current_place_open_places_dialog]
-
-    /**
-     * Updates the map's UI settings based on whether the user has granted location permission.
-     */
-    // [START maps_current_place_update_location_ui]
-    @SuppressLint("MissingPermission")
-    private fun updateLocationUI() {
-        if (map == null) {
+        if(photoMetadata == null){
             return
         }
-        try {
-            if (locationPermissionGranted) {
-                map?.isMyLocationEnabled = true
-                map?.uiSettings?.isMyLocationButtonEnabled = true
-            } else {
-                map?.isMyLocationEnabled = false
-                map?.uiSettings?.isMyLocationButtonEnabled = false
-                lastKnownLocation = null
-                getLocationPermission()
-            }
-        } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message, e)
+
+        val photoRequest = FetchPhotoRequest
+            .builder(photoMetadata)
+            .setMaxWidth(resources.getDimensionPixelSize(R.dimen.bitmap_height))
+            .setMaxHeight(resources.getDimensionPixelSize(R.dimen.bitmap_width))
+            .build()
+
+        placesClient.fetchPhoto(photoRequest).addOnSuccessListener { response ->
+            val bitmap = response.bitmap
+            result.image = bitmap.toBase64String()
+            Log.d("SS", "fetchPhoto bitmap${result.image}")
+
+
+
+        } .addOnFailureListener { e ->
+            Log.d("SS", "fetchPhoto addOnFailureListener${e}")
         }
     }
-    // [END maps_current_place_update_location_ui]
+
+    private fun addMarker(locations: List<com.shihs.tripmood.dataclass.source.Location>){
+
+        for(location in locations){
+            val latlng = LatLng(location.latitude!!, location.longitude!!)
+            map?.addMarker(MarkerOptions()
+                .position(latlng)
+                .title(location.name)
+            )
+
+        }
+
+
+    }
+
+
+
 
     companion object {
         private val TAG = MyGPSFragment::class.java.simpleName
-        private const val DEFAULT_ZOOM = 15
+        private const val DEFAULT_ZOOM = 20F
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
         // Keys for storing activity state.
@@ -445,7 +412,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         // [END maps_current_place_state_keys]
 
         // Used for selecting the current place.
-        private const val M_MAX_ENTRIES = 5
+        const val M_MAX_ENTRIES = 5
     }
 
     override fun onResume() {
@@ -458,3 +425,67 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         (requireActivity() as MainActivity).showActionBar()
     }
 }
+
+
+
+
+
+
+
+
+/**
+ * Displays a form allowing the user to select a place from a list of likely places.
+ */
+// [START maps_current_place_open_places_dialog]
+//    private fun openPlacesDialog() {
+//        // Ask the user to choose the place where they are now.
+//        val listener =
+//            DialogInterface.OnClickListener { dialog, which -> // The "which" argument contains the position of the selected item.
+//                var latLng  = recommendPlace[which].latitude?.let {
+//                    recommendPlace[which].longitude?.let {
+//                            it1 ->
+//                    LatLng(it, it1) }
+//                }
+//                val markerLatLng = latLng
+//                var markerSnippet = recommendPlace[which].address
+////                if (likelyPlaceAttributions[which] != null) {
+////                    markerSnippet = """
+////                    $markerSnippet
+////                    ${likelyPlaceAttributions[which]}
+////                    """.trimIndent()
+////                }
+//
+//                if (markerLatLng == null) {
+//                    return@OnClickListener
+//                }
+//
+//                // Add a marker for the selected place, with an info window
+//                // showing information about that place.
+//                map?.addMarker(
+//                    MarkerOptions()
+//                        .title(recommendPlace[which].name)
+//                        .position(markerLatLng)
+//                        .snippet(markerSnippet)
+//                )
+//
+//                // Position the map's camera at the location of the marker.
+//                map?.moveCamera(
+//                    CameraUpdateFactory.newLatLngZoom(
+//                        markerLatLng,
+//                        DEFAULT_ZOOM.toFloat()
+//                    )
+//                )
+//            }
+//        var recommendNamelist = mutableListOf<String>()
+//        for (i in recommendPlace){
+//            i.name?.let { recommendNamelist.add(it) }
+//        }
+//
+//        // Display the dialog.
+//        AlertDialog.Builder(requireActivity())
+//            .setTitle(R.string.pick_place)
+//            .setItems(recommendNamelist.toTypedArray(), listener)
+//            .show()
+//
+//    }
+// [END maps_current_place_open_places_dialog]
