@@ -13,7 +13,7 @@ interface TripMoodDataSource {
 
     fun getLivePlans(): MutableLiveData<List<Plan>>
 
-    suspend fun postPlan(plan: Plan): Result<Boolean>
+    suspend fun postPlan(plan: Plan): Result<String>
 
     suspend fun deletePlan(planID: String): Result<Boolean>
 

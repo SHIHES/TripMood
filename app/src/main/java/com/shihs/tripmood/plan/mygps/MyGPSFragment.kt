@@ -2,42 +2,46 @@ package com.shihs.tripmood.plan.mygps
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shihs.tripmood.MainActivity
+import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
+import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.ext.toBase64String
 import com.shihs.tripmood.plan.adapter.LocationAdapter
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
+
+
 
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
@@ -46,6 +50,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     private lateinit var placesClient: PlacesClient
     private lateinit var binding: FragmentPlanMygpsBinding
     private lateinit var  presenter : MapPresenter
+    private val viewModel by viewModels <MyGPSViewModel> { getVmFactory()}
 
     private var locationPermissionGranted = false
 
@@ -53,7 +58,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     // location retrieved by the Fused Location Provider.
     private var lastKnownLocation: Location? = null
 
-    private var recommendPlace = mutableListOf<com.shihs.tripmood.dataclass.source.Location>()
+    private var recommendPlace = mutableListOf<com.shihs.tripmood.dataclass.Location>()
 
     private lateinit var handler: Handler
 
@@ -109,15 +114,89 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         val recyclerInfo = binding.recyclerInfo
 
         locationAdapter = LocationAdapter(LocationAdapter.OnClickListener{
-
+            it.image = null
+            viewModel.getLocationFromCard(it)
         })
 
         recyclerInfo.adapter = locationAdapter
         recyclerInfo.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+
+
+
+
+        viewModel.selectedLocation.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showInterestDialog(it)
+            }
+        })
+
+        viewModel.nearbyLocation.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                locationAdapter.submitList(it)
+                locationAdapter.notifyDataSetChanged()
+                addMarker(it)
+
+            }
+        })
+
+        viewModel.userSaveLocation.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.saveBtn.visibility = View.VISIBLE
+            }
+        })
+
+        showEnterTitleDialog()
+
+
         return binding.root
     }
 
+    private fun showInterestDialog(location:com.shihs.tripmood.dataclass.Location) {
+
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(resources.getString(R.string.add_spot_title))
+            .setMessage(resources.getString(R.string.add_spot_support_msg))
+
+            .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
+                Toast.makeText(context,"忍痛放棄QQ", Toast.LENGTH_LONG).show()
+            }
+            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                Toast.makeText(context,"加入成功!", Toast.LENGTH_LONG).show()
+                viewModel.userAddLocation(location = location)
+
+            }
+            .show()
+
+    }
+
+    private fun showEnterTitleDialog(){
+
+        val inputEditTextField = EditText(requireActivity())
+
+        val dialog = MaterialAlertDialogBuilder(requireActivity())
+            .setView(inputEditTextField)
+            .setTitle("請輸入主題")
+            .setCancelable(false)
+            .setNegativeButton("放棄"){ dialog, _ ->
+
+            }
+            .setPositiveButton("創立"){ dialog,_ ->
+
+                if (inputEditTextField.text != null){
+                    val plan = Plan()
+                    viewModel.getPlanTitle(inputEditTextField.text.toString())
+                    Toast.makeText(context,"創立成功" ,Toast.LENGTH_LONG,).show()
+                    viewModel.packageGPSPlan(plan = plan)
+                    viewModel.postNewPlan(plan = plan)
+
+                } else {
+                    Toast.makeText(context,"沒輸入訊息" ,Toast.LENGTH_LONG,).show()
+                }
+            }.create()
+
+        dialog.show()
+    }
 
 
     private fun startTracking() {
@@ -151,6 +230,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
             if(binding.startRecordBtn.text == getString(R.string.start_label)){
                 recommendPlace.clear()
+                viewModel.clearNearbyLocation()
                 locationAdapter.notifyDataSetChanged()
                 handler.post(updateLocationTask)
                 startTracking()
@@ -159,16 +239,22 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_red))
                 binding.controlIcon.setImageResource(R.drawable.ic_baseline_stop_24)
             } else {
-                locationAdapter.submitList(recommendPlace)
-                locationAdapter.notifyDataSetChanged()
-                addMarker(recommendPlace)
+                viewModel.getNearbyLocation(recommendPlace)
                 handler.removeCallbacks(updateLocationTask)
                 stopTracking()
-
                 binding.startRecordBtn.text = getString(R.string.start_label)
                 binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_green))
                 binding.controlIcon.setImageResource(R.drawable.ic_baseline_play_arrow_24)
             }
+        }
+
+        binding.saveBtn.setOnClickListener {
+
+            viewModel.uploadScheduleAndGPSLocation()
+            viewModel.clearUserAddLocationList()
+            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+            view
+            Toast.makeText(context,"儲存成功!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -323,7 +409,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                     var i = 0
 
                     for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
-                        var result = com.shihs.tripmood.dataclass.source.Location()
+                        var result = com.shihs.tripmood.dataclass.Location()
                         var place = placeLikelihood.place
 
                         result.name = placeLikelihood.place.name
@@ -358,7 +444,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showCurrentPlacePhoto(place: Place, result: com.shihs.tripmood.dataclass.source.Location){
+    private fun showCurrentPlacePhoto(place: Place, result: com.shihs.tripmood.dataclass.Location){
         val photoMetadata = place.photoMetadatas?.get(0)
 
         if(photoMetadata == null){
@@ -374,7 +460,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         placesClient.fetchPhoto(photoRequest).addOnSuccessListener { response ->
             val bitmap = response.bitmap
             result.image = bitmap.toBase64String()
-            Log.d("SS", "fetchPhoto bitmap${result.image}")
 
 
 
@@ -383,7 +468,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun addMarker(locations: List<com.shihs.tripmood.dataclass.source.Location>){
+    private fun addMarker(locations: List<com.shihs.tripmood.dataclass.Location>){
 
         for(location in locations){
             val latlng = LatLng(location.latitude!!, location.longitude!!)
@@ -391,27 +476,15 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 .position(latlng)
                 .title(location.name)
             )
-
         }
-
-
     }
-
-
-
 
     companion object {
         private val TAG = MyGPSFragment::class.java.simpleName
         private const val DEFAULT_ZOOM = 20F
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
-
-        // Keys for storing activity state.
-        // [START maps_current_place_state_keys]
         private const val KEY_CAMERA_POSITION = "camera_position"
         private const val KEY_LOCATION = "location"
-        // [END maps_current_place_state_keys]
-
-        // Used for selecting the current place.
         const val M_MAX_ENTRIES = 5
     }
 
@@ -424,68 +497,5 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         super.onDestroy()
         (requireActivity() as MainActivity).showActionBar()
     }
+
 }
-
-
-
-
-
-
-
-
-/**
- * Displays a form allowing the user to select a place from a list of likely places.
- */
-// [START maps_current_place_open_places_dialog]
-//    private fun openPlacesDialog() {
-//        // Ask the user to choose the place where they are now.
-//        val listener =
-//            DialogInterface.OnClickListener { dialog, which -> // The "which" argument contains the position of the selected item.
-//                var latLng  = recommendPlace[which].latitude?.let {
-//                    recommendPlace[which].longitude?.let {
-//                            it1 ->
-//                    LatLng(it, it1) }
-//                }
-//                val markerLatLng = latLng
-//                var markerSnippet = recommendPlace[which].address
-////                if (likelyPlaceAttributions[which] != null) {
-////                    markerSnippet = """
-////                    $markerSnippet
-////                    ${likelyPlaceAttributions[which]}
-////                    """.trimIndent()
-////                }
-//
-//                if (markerLatLng == null) {
-//                    return@OnClickListener
-//                }
-//
-//                // Add a marker for the selected place, with an info window
-//                // showing information about that place.
-//                map?.addMarker(
-//                    MarkerOptions()
-//                        .title(recommendPlace[which].name)
-//                        .position(markerLatLng)
-//                        .snippet(markerSnippet)
-//                )
-//
-//                // Position the map's camera at the location of the marker.
-//                map?.moveCamera(
-//                    CameraUpdateFactory.newLatLngZoom(
-//                        markerLatLng,
-//                        DEFAULT_ZOOM.toFloat()
-//                    )
-//                )
-//            }
-//        var recommendNamelist = mutableListOf<String>()
-//        for (i in recommendPlace){
-//            i.name?.let { recommendNamelist.add(it) }
-//        }
-//
-//        // Display the dialog.
-//        AlertDialog.Builder(requireActivity())
-//            .setTitle(R.string.pick_place)
-//            .setItems(recommendNamelist.toTypedArray(), listener)
-//            .show()
-//
-//    }
-// [END maps_current_place_open_places_dialog]

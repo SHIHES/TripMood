@@ -37,7 +37,7 @@ class ChildFragment(private val planType: PlanFilter) : Fragment() {
 
         val adapter = MyPlanAdapter(MyPlanAdapter.OnClickListener {
             viewModel.navigateToDetail(it)
-        })
+        },viewModel)
 
         recyclerPlan.adapter = adapter
         recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

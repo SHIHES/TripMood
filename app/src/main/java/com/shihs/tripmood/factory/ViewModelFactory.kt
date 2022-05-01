@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.plan.createplan.CreatePlanViewModel
+import com.shihs.tripmood.plan.mygps.MyGPSViewModel
 
 /**
  * Factory for all ViewModels.
@@ -18,7 +19,8 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-
+                isAssignableFrom(MyGPSViewModel::class.java) ->
+                    MyGPSViewModel(repository)
 
                 isAssignableFrom(CreatePlanViewModel::class.java) ->
                     CreatePlanViewModel(repository)

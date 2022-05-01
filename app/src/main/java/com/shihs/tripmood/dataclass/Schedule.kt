@@ -1,7 +1,6 @@
 package com.shihs.tripmood.dataclass
 
 import android.os.Parcelable
-import com.shihs.tripmood.dataclass.source.Location
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -14,3 +13,4 @@ data class Schedule(
     var planID: String? = null,
     var location: Location? = null,
 ) : Parcelable
+

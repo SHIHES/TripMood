@@ -102,7 +102,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         return liveData
     }
 
-    override suspend fun postPlan(plan: Plan): Result<Boolean> = suspendCoroutine{ continuation ->
+    override suspend fun postPlan(plan: Plan): Result<String> = suspendCoroutine{ continuation ->
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
         val document = plans.document()
 
@@ -113,9 +113,10 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
         document.set(plan).addOnCompleteListener{ task ->
             if (task.isSuccessful){
+
                 Logger.i("Publish: $plan")
 
-                continuation.resume(Result.Success(true))
+                continuation.resume(Result.Success(document.id))
             } else{
                 task.exception?.let {
                     Logger.w("[${this::class.simpleName}] Error posting documents. ${it.message}")

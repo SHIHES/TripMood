@@ -1,19 +1,27 @@
 package com.shihs.tripmood.plan.adapter
 
+import android.app.Dialog
+import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Base64
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shihs.tripmood.R
+import com.shihs.tripmood.databinding.DialogPlanFuctionMoreBinding
+import com.shihs.tripmood.databinding.DialogPlanRequestAddBinding
+import com.shihs.tripmood.databinding.DialogPlanRequestTitleBinding
 import com.shihs.tripmood.databinding.ItemPlaceInfoBinding
-import com.shihs.tripmood.dataclass.source.Location
-import kotlinx.coroutines.withContext
+import com.shihs.tripmood.dataclass.Location
+import com.shihs.tripmood.plan.mygps.MyGPSViewModel
 
-class LocationAdapter(private val onClickListener: OnClickListener, ) : ListAdapter<Location, LocationAdapter.LocationVH>(DiffUtil()) {
+class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapter<Location, LocationAdapter.LocationVH>(DiffUtil()) {
+
 
     class OnClickListener(val clickListener: (location: Location) -> Unit) {
         fun onClick(location: Location) = clickListener(location)
@@ -21,7 +29,7 @@ class LocationAdapter(private val onClickListener: OnClickListener, ) : ListAdap
 
     class LocationVH(private var binding: ItemPlaceInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Location, onClickListener: OnClickListener) {
+        fun bind(item: Location) {
 
             binding.spotAddress.text = item.address
             binding.spotTitile.text = item.name
@@ -45,17 +53,32 @@ class LocationAdapter(private val onClickListener: OnClickListener, ) : ListAdap
                 binding.spotPhoto.setImageBitmap(decodedImage)
             }
 
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationVH {
-        return LocationVH(ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+
+        val locationVH = LocationVH(ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context), parent,false))
+
+        return locationVH
     }
 
     override fun onBindViewHolder(holder: LocationVH, position: Int) {
-        val date = getItem(position)
-        holder.bind(date, onClickListener)
+        val location = getItem(position)
+        holder.bind(location)
+
+
+        holder.itemView.setOnClickListener(object : DoubleClickListener() {
+            override fun onDoubleClick(v: View?) {
+                onClickListener.onClick(location = location)
+            }
+        })
+
+
+
     }
+
 
     class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Location>() {
         override fun areItemsTheSame(oldItem: Location, newItem: Location): Boolean {
@@ -67,5 +90,23 @@ class LocationAdapter(private val onClickListener: OnClickListener, ) : ListAdap
         }
 
     }
+
+    abstract class DoubleClickListener : View.OnClickListener {
+        var lastClickTime: Long = 0
+        override fun onClick(v: View?) {
+            val clickTime = System.currentTimeMillis()
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                onDoubleClick(v)
+            }
+            lastClickTime = clickTime
+        }
+
+        abstract fun onDoubleClick(v: View?)
+
+        companion object {
+            private const val DOUBLE_CLICK_TIME_DELTA: Long = 300 //milliseconds
+        }
+    }
+
 
 }

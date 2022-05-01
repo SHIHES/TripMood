@@ -10,10 +10,7 @@ import androidx.navigation.fragment.findNavController
 import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.material.tabs.TabLayoutMediator
 import com.shihs.tripmood.databinding.FragmentHomeBinding
-import com.shihs.tripmood.home.adapter.MyPlanAdapter
 import com.shihs.tripmood.home.adapter.ViewPagerAdapter
-import com.shihs.tripmood.home.childpage.ChildHomeViewModel
-
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -42,7 +39,7 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             when (PlanFilter.values()[position]) {
                 PlanFilter.INDIVIDUAL  -> {
-                    tab.text = "計畫中"
+                    tab.text = "獨自規劃"
                 }
                 else -> {
                     tab.text = "共同編輯"

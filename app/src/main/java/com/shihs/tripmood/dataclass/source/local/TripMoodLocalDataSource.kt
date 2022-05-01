@@ -16,7 +16,7 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun postPlan(plan: Plan): Result<Boolean> {
+    override suspend fun postPlan(plan: Plan): Result<String> {
         TODO("Not yet implemented")
     }
 
