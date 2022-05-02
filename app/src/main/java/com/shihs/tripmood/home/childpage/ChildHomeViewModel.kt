@@ -33,7 +33,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, planType: PlanFil
     val selectedPlan: LiveData<Plan>
         get() = _selectedPlan
 
-    var _plans = MutableLiveData<List<Plan>>()
+    private var _plans = MutableLiveData<List<Plan>>()
 
     val plans: LiveData<List<Plan>>
         get() = _plans
@@ -104,9 +104,56 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, planType: PlanFil
                             _status.value = LoadApiStatus.ERROR
                         }
                     }
-
         }
+    }
 
+    fun changeToPersonal(plan: Plan){
+
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = plan.id?.let { repository.updatePlanToPersonal(planID = it) }) {
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun changeToPublic(plan: Plan){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = plan.id?.let { repository.updatePlanToPublic(planID = it) }) {
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
     }
 
 

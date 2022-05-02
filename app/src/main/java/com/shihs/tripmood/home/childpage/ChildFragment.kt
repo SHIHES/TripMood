@@ -11,10 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentPlanChildViewpagerBinding
-import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.HomeFragmentDirections
 import com.shihs.tripmood.home.PlanFilter
-import com.shihs.tripmood.home.adapter.MyPlanAdapter
+import com.shihs.tripmood.home.adapter.PlanAdapter
 
 class ChildFragment(private val planType: PlanFilter) : Fragment() {
 
@@ -35,7 +34,7 @@ class ChildFragment(private val planType: PlanFilter) : Fragment() {
 
         val recyclerPlan = binding.planRV
 
-        val adapter = MyPlanAdapter(MyPlanAdapter.OnClickListener {
+        val adapter = PlanAdapter(PlanAdapter.OnClickListener {
             viewModel.navigateToDetail(it)
         },viewModel)
 

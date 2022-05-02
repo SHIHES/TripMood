@@ -8,6 +8,7 @@ import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.factory.CreateScheduleViewModelFactory
 import com.shihs.tripmood.factory.PlanTypeViewModelFactory
+import com.shihs.tripmood.factory.ScheduleViewModelFactory
 import com.shihs.tripmood.home.PlanFilter
 
 /**
@@ -31,6 +32,11 @@ fun Fragment.getVmFactory(plan: Plan?, schedule: Schedule?, adapterPosition: Int
 fun Fragment.getVmFactory(planType: PlanFilter):PlanTypeViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return PlanTypeViewModelFactory(repository, planType)
+}
+
+fun Fragment.getVmFactory(schedule: Schedule?): ScheduleViewModelFactory {
+    val repository = (requireContext().applicationContext as TripMoodApplication).repository
+    return ScheduleViewModelFactory(repository, schedule)
 }
 
 

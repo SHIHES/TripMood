@@ -1,6 +1,7 @@
 package com.shihs.tripmood.plan
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,26 +42,43 @@ class MyPlanFragment : Fragment() {
 
 
         val recyclerEvents = binding.scheduleRv
-        val eventAdapter = EventAdapter()
+        val eventAdapter = EventAdapter(EventAdapter.OnClickListener{
+            viewModel.navigationToDetail(it)
+        })
 
         recyclerEvents.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         recyclerEvents.adapter = eventAdapter
 
-        viewModel.schedules.observe(viewLifecycleOwner){
+        viewModel.schedules.observe(viewLifecycleOwner){ it?.let {
             scheduleAdapter.submitList(it)
-        }
 
-        viewModel.selectedSchedule.observe(viewLifecycleOwner){
+        } }
+
+        viewModel.selectedSchedule.observe(viewLifecycleOwner){ it?.let {
             viewModel.findTimeRangeSchedule()
 
-        }
+        } }
+
+        viewModel.navigationToDetail.observe(viewLifecycleOwner){it?.let{
+            findNavController().navigate(MobileNavigationDirections.actionGlobalDetailFragment(it))
+            viewModel.navigationToDetailEnd()
+        }}
 
         viewModel.dayOfSchedule.observe(viewLifecycleOwner){
-            it?.let{
-                eventAdapter.submitList(it)
-                binding.hintTv.visibility = View.GONE
+            it?.let {
+
+                Log.d("QAQ", "dayOfSchedule $it")
+                if (it.isEmpty() ){
+                    Log.d("QAQ", "dayOfSchedule empty $it")
+                    binding.hintTv.visibility = View.VISIBLE
+                    eventAdapter.submitList(it)
+                } else {
+                    Log.d("QAQ", "dayOfSchedule else$it")
+                    eventAdapter.submitList(it)
+                    binding.hintTv.visibility = View.GONE
+                }
             }
         }
 

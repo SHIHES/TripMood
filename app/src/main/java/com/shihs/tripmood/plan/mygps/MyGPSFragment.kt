@@ -131,14 +131,14 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
-        viewModel.nearbyLocation.observe(viewLifecycleOwner, Observer {
+        viewModel.nearbyLocation.observe(viewLifecycleOwner) {
             it?.let {
                 locationAdapter.submitList(it)
                 locationAdapter.notifyDataSetChanged()
                 addMarker(it)
 
             }
-        })
+        }
 
         viewModel.userSaveLocation.observe(viewLifecycleOwner, Observer {
             it?.let {

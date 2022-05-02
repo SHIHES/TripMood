@@ -45,6 +45,11 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val selectedAdapterPosition: LiveData<Int>
         get() = _selectedAdapterPosition
 
+    private val _navigationToDetail = MutableLiveData<Schedule>()
+
+    val navigationToDetail: LiveData<Schedule>
+        get() = _navigationToDetail
+
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
     var adapterPosition = -1
@@ -116,5 +121,14 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun selectedScheduleClear(){
          _dayOfSchedule.value = null
+    }
+
+
+    fun navigationToDetail(schedule: Schedule){
+        _navigationToDetail.value = schedule
+    }
+
+    fun navigationToDetailEnd(){
+        _navigationToDetail.value = null
     }
 }

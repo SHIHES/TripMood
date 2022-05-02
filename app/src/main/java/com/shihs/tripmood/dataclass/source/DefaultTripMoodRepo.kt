@@ -45,4 +45,16 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.updateSchedule(planID, schedule)
     }
 
+    override suspend fun updatePlanToPersonal(planID: String): Result<Boolean> {
+        return remoteDataSource.updatePlanToPersonal(planID = planID)
+    }
+
+    override suspend fun updatePlanToPublic(planID: String): Result<Boolean> {
+        return remoteDataSource.updatePlanToPublic(planID = planID)
+    }
+
+    override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
+        return remoteDataSource.getLivePublicPlan()
+    }
+
 }

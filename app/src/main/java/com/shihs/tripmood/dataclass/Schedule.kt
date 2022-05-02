@@ -6,11 +6,13 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Schedule(
     var time: Long? = null,
-    var title: String? = null,
-    var note: String? = null,
-    var scheduleId: String? = null,
-    var expand: Boolean? = false,
-    var planID: String? = null,
+    var title: String? = "",
+    var note: String? = "",
+    var scheduleId: String? = "",
+    var planID: String? = "",
+    var cost: String? = "",
+    var catalog: String? = "",
     var location: Location? = null,
+    var notification: Boolean = false
 ) : Parcelable
 

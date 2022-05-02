@@ -80,8 +80,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerOptions.position(latLng)
 
 
-        map?.addMarker(markerOptions)
-
         var cameraUdpate = CameraUpdateFactory.newLatLngZoom(latLng, 8F)
         map?.moveCamera(cameraUdpate)
 
@@ -133,8 +131,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
                     var markerOptions = MarkerOptions()
-                    markerOptions.title("HI")
-                    var latLng = LatLng(selectedLocation?.latitude!!, selectedLocation?.latitude!!)
+                    markerOptions.title(selectedLocation.name)
+                    var latLng = LatLng(selectedLocation?.latitude!!, selectedLocation?.longitude!!)
                     markerOptions.position(latLng)
 
                     map?.addMarker(markerOptions)

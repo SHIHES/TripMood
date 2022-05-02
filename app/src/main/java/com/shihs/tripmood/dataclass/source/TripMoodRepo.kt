@@ -29,4 +29,6 @@ interface TripMoodRepo {
     suspend fun updatePlanToPersonal(planID: String): Result<Boolean>
 
     suspend fun updatePlanToPublic(planID: String): Result<Boolean>
+
+    fun getLivePublicPlan(): MutableLiveData<List<Plan>>
 }

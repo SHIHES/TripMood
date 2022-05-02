@@ -6,10 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Plan(
-    var title: String? = null,
+    var title: String? = "",
     var startDate: Long? = null,
     var endDate: Long? = null,
-    var id: String? = null,
+    var id: String? = "",
     var owner: User? = null,
     var friends: List<String>? = null,
     var private: Boolean = true

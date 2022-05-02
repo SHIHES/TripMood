@@ -27,4 +27,10 @@ interface TripMoodDataSource {
 
     suspend fun updateSchedule(planID: String, schedule: Schedule): Result<Boolean>
 
+    suspend fun updatePlanToPersonal(planID: String): Result<Boolean>
+
+    suspend fun updatePlanToPublic(planID: String): Result<Boolean>
+
+    fun getLivePublicPlan(): MutableLiveData<List<Plan>>
+
     }

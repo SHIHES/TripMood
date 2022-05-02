@@ -44,7 +44,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+
         </activity>
+
+        <receiver
+            android:name="com.shihs.tripmood.util.AlarmReceiver"
+            android:enabled="true" />
+
     </application>
 
 </manifest>

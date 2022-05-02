@@ -43,4 +43,16 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     override suspend fun updateSchedule(planID: String, schedule: Schedule): Result<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun updatePlanToPersonal(planID: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updatePlanToPublic(planID: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
+        TODO("Not yet implemented")
+    }
 }

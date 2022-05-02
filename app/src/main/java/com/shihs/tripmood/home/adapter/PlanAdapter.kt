@@ -1,32 +1,31 @@
 package com.shihs.tripmood.home.adapter
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.Layout
 import android.view.*
-import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.R
-import com.shihs.tripmood.databinding.DialogPlanFuctionMoreBinding
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
-class MyPlanAdapter(private val onClickListener: OnClickListener, val viewModel: ChildHomeViewModel) : ListAdapter<Plan, MyPlanAdapter.PlanVH>(
+class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: ChildHomeViewModel) : ListAdapter<Plan, PlanAdapter.PlanVH>(
     DiffUtil()
 ) {
 
     class PlanVH (private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root){
 
         val moreBtn = binding.moreBtn
+        val statusTv = binding.statusTextView
 
 
         fun bind(item: Plan, viewModel: ChildHomeViewModel){
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
+
             binding.planTitle.text = item.title
 
             if(item.startDate == item.endDate){
@@ -54,12 +53,32 @@ class MyPlanAdapter(private val onClickListener: OnClickListener, val viewModel:
         holder.bind(plan, viewModel)
         val context = holder.itemView.context
         val dialog = Dialog(context)
+        val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
+
+
+        if (calendar < plan.startDate!!){
+            holder.statusTv.text = "尚未開始"
+           holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
+        }
+
+        if (plan.startDate!! >= calendar && plan.endDate!!.plus(86400000) <= calendar ){
+            holder.statusTv.text = "進行中"
+            holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_green))
+        }
+
+        if (plan.endDate!!.plus(86400000) < calendar){
+            holder.statusTv.text = "已結束"
+            holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
+        }
+
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_plan_fuction_more)
 
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(plan) }
+            onClickListener.onClick(plan)
+
+        }
 
         holder.moreBtn.setOnClickListener {
 
@@ -70,14 +89,14 @@ class MyPlanAdapter(private val onClickListener: OnClickListener, val viewModel:
 
 
             dialog.findViewById<View>(R.id.deleteLayout).setOnClickListener {
-                viewModel.deletePlan(plan)
+                viewModel.deletePlan(plan = plan)
                 notifyItemRemoved(position)
             }
             dialog.findViewById<View>(R.id.privateLayout).setOnClickListener {
-
+                viewModel.changeToPersonal(plan = plan)
             }
-            dialog.findViewById<View>(R.id.openLayout).setOnClickListener {
-
+            dialog.findViewById<View>(R.id.publicLayout).setOnClickListener {
+                viewModel.changeToPublic(plan = plan)
             }
             dialog.findViewById<View>(R.id.friendListLayout).setOnClickListener {
 
