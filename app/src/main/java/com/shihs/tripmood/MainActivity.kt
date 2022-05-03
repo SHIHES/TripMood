@@ -1,8 +1,13 @@
 package com.shihs.tripmood
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -31,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_search, R.id.navigation_chat,
+                R.id.navigation_home,
+                R.id.navigation_search,
+                R.id.navigation_chat,
                 R.id.navigation_user
             )
         )
@@ -40,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         setBtn()
         setupBottomNav()
+        createNotificationsChannels()
     }
 
     fun setBtn() {
@@ -81,6 +89,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             false
+        }
+    }
+
+    private fun createNotificationsChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                getString(R.string.reminders_notification_channel_id),
+                getString(R.string.reminders_notification_channel_name),
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                lightColor = Color.GREEN
+                enableLights(true)
+            }
+            ContextCompat.getSystemService(this, NotificationManager::class.java)
+                ?.createNotificationChannel(channel)
         }
     }
 

@@ -59,26 +59,42 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/noteTv"
+                android:id="@+id/ScheduleTitle"
+                android:textColor="@color/tripMood_blue"
+                android:textStyle="bold"
+                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/start_label"
+                android:text=""
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="測試內容"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_baseline_location_on_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/noteTv" />
+                app:layout_constraintTop_toBottomOf="@+id/ScheduleTitle"
+                android:layout_marginTop="16dp"
+                app:tint="@color/tripMood_blue" />
+
+            <TextView
+                android:id="@+id/locationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text=""
+                android:textColor="#878585"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -86,22 +102,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/expandedView"
-        app:layout_constraintTop_toBottomOf="@id/cardView"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="@+id/cardView">
 
-        <TextView
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="這邊之後放上傳照片"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

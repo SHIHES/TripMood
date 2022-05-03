@@ -9,6 +9,9 @@ import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.PermissionsManager
 import com.shihs.tripmood.R
 
+
+
+//觀察Latlng livedata 畫出路線
 class MapPresenter(private val fragment: Fragment) {
 
     val ui = MutableLiveData(Ui.EMPTY)

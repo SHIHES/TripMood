@@ -4,19 +4,21 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Result
+import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 import com.shihs.tripmood.util.Logger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
 
 
 object TripMoodRemoteDataSource : TripMoodDataSource {
 
     private const val PATH_PLANS = "plans"
-    private const val PATH_SCHEDULE = "schedule"
+    private const val PATH_SCHEDULE = "schedules"
     private const val KEY_STARTDATE = "startDate"
+    private const val KEY_PRIVATE = "private"
 
 
     override suspend fun getPlans(): Result<List<Plan>> = suspendCoroutine { continuation ->
@@ -101,17 +103,21 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         return liveData
     }
 
-    override suspend fun postPlan(plan: Plan): Result<Boolean> = suspendCoroutine{ continuation ->
+    override suspend fun postPlan(plan: Plan): Result<String> = suspendCoroutine{ continuation ->
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
         val document = plans.document()
 
+        val user = User(name = "Steven", email = "test@gamil.com", id = "test")
+
         plan.id = document.id
+        plan.owner = user
 
         document.set(plan).addOnCompleteListener{ task ->
             if (task.isSuccessful){
+
                 Logger.i("Publish: $plan")
 
-                continuation.resume(Result.Success(true))
+                continuation.resume(Result.Success(document.id))
             } else{
                 task.exception?.let {
                     Logger.w("[${this::class.simpleName}] Error posting documents. ${it.message}")
@@ -225,6 +231,72 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                     }
             }
         }
+    }
+
+    override suspend fun updatePlanToPersonal(planID: String): Result<Boolean> = suspendCoroutine{ continuation ->
+        planID.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .update(KEY_PRIVATE,true)
+                .addOnSuccessListener {
+                    Logger.i("updatePlanToPersonal: $it")
+
+                    continuation.resume(Result.Success(true))
+                }
+                .addOnFailureListener {
+                    Logger.w("[${this::class.simpleName}] Error updatePlan documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                }
+        }
+
+    }
+
+    override suspend fun updatePlanToPublic(planID: String): Result<Boolean> = suspendCoroutine {continuation ->
+        planID.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .update(KEY_PRIVATE,false)
+                .addOnSuccessListener {
+                    Logger.i("updatePlanToPublic: $it")
+
+                    continuation.resume(Result.Success(true))
+                }
+                .addOnFailureListener {
+                    Logger.w("[${this::class.simpleName}] Error updatePlan documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                }
+        }
+    }
+
+    override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
+        val liveData = MutableLiveData<List<Plan>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_PLANS)
+//            .orderBy(KEY_STARTDATE, Query.Direction.DESCENDING)
+            .whereEqualTo(KEY_PRIVATE, false)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLivePublicPlan success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Plan>()
+                if (snapshot != null) {
+                    for (document in snapshot){
+                        Logger.d(document.id + " => " + document.data)
+
+                        val article = document.toObject(Plan::class.java)
+                        list.add(article)
+                    }
+                }
+                liveData.value = list
+            }
+        return liveData
     }
 
 

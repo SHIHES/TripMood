@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name = "TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/tripMood_light_white</item>
+        <item name="android:letterSpacing">0.15</item>
+<!--        <item name="android:textStyle">bold</item>-->
+    </style>
+
+</resources>

@@ -17,4 +17,13 @@
     <string name="stop_label">停止記錄</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
 
+    <string name="add_spot_title">加入行程?</string>
+    <string name="add_spot_support_msg">點選確認後會將景點儲存至此次旅程中</string>
+    <string name="decline">否</string>
+    <string name="accept">是</string>
+    <string name="title_notification_reminder">旅程通知</string>
+    <string name="description_notification_reminder">時間快到囉</string>
+    <string name="reminders_notification_channel_id">channelID</string>
+    <string name="reminders_notification_channel_name">TripMoodChannel</string>
+
 </resources>

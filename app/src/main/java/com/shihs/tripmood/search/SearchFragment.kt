@@ -1,38 +1,65 @@
 package com.shihs.tripmood.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.shihs.tripmood.databinding.FragmentDashboardBinding
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import app.appworks.school.publisher.ext.getVmFactory
+import com.shihs.tripmood.databinding.FragmentSearchBinding
+import com.shihs.tripmood.home.HomeFragmentDirections
+import com.shihs.tripmood.home.adapter.PlanAdapter
+import com.shihs.tripmood.search.adapter.SearchPlanAdapter
 
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentSearchBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val viewModel by viewModels <SearchViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(SearchViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        val adapter = SearchPlanAdapter(SearchPlanAdapter.OnClickListener {
+            viewModel.navigateToDetail(it)
+        }, viewModel)
+
+        val recyclerPlan = binding.planRecyclerView
+        recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerPlan.adapter = adapter
+
+
+
+        viewModel.plans.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("QAQ", "plans $it")
+                adapter.submitList(it)
+            }
+        })
+
+        viewModel.selectedPlan.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                viewModel.onPlanNavigated()
+            }
+        })
+
+
+
+
+        return binding.root
     }
 
     override fun onDestroyView() {
