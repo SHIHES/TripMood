@@ -39,8 +39,6 @@ class CreatePlanFragment : Fragment() {
     }
 
     private fun setCalendarBtn() {
-//        val time = LocalDate.now().dayOfWeek.name
-//        val sss = LocalDate.now().
         val calendar = Calendar.getInstance()
         val time = calendar.time
         val fmt = SimpleDateFormat("EE", Locale.ENGLISH).format(time.time)

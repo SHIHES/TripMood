@@ -2,6 +2,7 @@ package com.shihs.tripmood.plan.mygps
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +14,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.maps.android.SphericalUtil
 import com.shihs.tripmood.MainActivity
+import java.util.*
 import kotlin.math.roundToInt
 
 @SuppressLint("MissingPermission")
@@ -22,6 +27,8 @@ class LocationProvider(private val fragment: Fragment) {
 
     // The entry point to the Fused Location Provider. Construct a FusedLocationProviderClient.
     private val client by lazy { LocationServices.getFusedLocationProviderClient(fragment.requireActivity()) }
+
+//    private val placesClient by lazy { Places.createClient(fragment.requireActivity()) }
 
     private val locations = mutableListOf<LatLng>()
     private var distance = 0

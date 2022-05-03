@@ -32,6 +32,11 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
     val error: LiveData<String?>
         get() = _error
 
+
+    private val _notificationSwitch = MutableLiveData<Boolean>()
+    val notificationSwitch: LiveData<Boolean>
+        get() = _notificationSwitch
+
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -65,5 +70,9 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
             }
         }
 
+    }
+
+    fun getSwitchStatus(status: Boolean){
+        _notificationSwitch.value = status
     }
 }

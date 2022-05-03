@@ -6,25 +6,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemScheduleBinding
+import com.shihs.tripmood.dataclass.Location
 import com.shihs.tripmood.dataclass.Schedule
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 
-class EventAdapter : ListAdapter<Schedule, EventAdapter.ScheduleVH>(DiffUtil()) {
+class EventAdapter(private val onClickListener: EventAdapter.OnClickListener) : ListAdapter<Schedule, EventAdapter.ScheduleVH>(DiffUtil()) {
+
+    class OnClickListener(val clickListener: (schedule: Schedule) -> Unit) {
+        fun onClick(schedule: Schedule) = clickListener(schedule)
+    }
 
     class ScheduleVH(private var binding: ItemScheduleBinding ) : RecyclerView.ViewHolder(binding.root){
 
         val dashline = binding.dashLine
-        val expandLayout = binding.expandedView
         val cardView = binding.cardView
         val fm1 = SimpleDateFormat("MM.dd h:mm a", Locale.getDefault())
 
         fun bind(item: Schedule){
             binding.timeTv.text = fm1.format(item.time)
-            binding.noteTv.text = item.title
-            binding.test.text = item.location?.name
+            binding.ScheduleTitle.text = item.title
+            binding.locationText.text = item.location?.name
         }
     }
 
@@ -42,18 +46,9 @@ class EventAdapter : ListAdapter<Schedule, EventAdapter.ScheduleVH>(DiffUtil()) 
         }
         holder.bind(schedule)
 
-        holder.cardView.setOnClickListener {
-            if (schedule.expand == false){
-                holder.expandLayout.visibility = View.GONE
-                schedule.expand = true
-                notifyDataSetChanged()
-            } else {
-                holder.expandLayout.visibility = View.VISIBLE
-                schedule.expand = false
-                notifyDataSetChanged()
-            }
-
-            }
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(schedule = schedule)
+        }
     }
 
     class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Schedule>(){

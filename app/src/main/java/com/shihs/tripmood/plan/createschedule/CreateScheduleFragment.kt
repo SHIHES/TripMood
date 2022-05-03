@@ -1,30 +1,28 @@
 package com.shihs.tripmood.plan.createschedule
 
-import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.TimePickerDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MainActivity
-import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentScheduleCreateBinding
 import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.dataclass.source.Location
-import com.shihs.tripmood.plan.MyPlanViewModel
+import com.shihs.tripmood.dataclass.Location
+import com.shihs.tripmood.util.ReminderManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,9 +40,6 @@ class CreateScheduleFragment : Fragment() {
 
     private var locationResult: Location? = null
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,7 +48,12 @@ class CreateScheduleFragment : Fragment() {
 
         binding = FragmentScheduleCreateBinding.inflate(inflater, container, false)
 
-//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        val item = listOf<String>("美食","住宿", "交通", "逛街", "景點")
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_schedule_catalog_list, item)
+
+        (binding.catalogEditText as? AutoCompleteTextView)?.setAdapter(arrayAdapter)
+
 
 
 
@@ -61,7 +61,7 @@ class CreateScheduleFragment : Fragment() {
         val argSchedule = arg.selectedSchedule
         var argLocation = arg.selectedSchedule.let { it?.location }
 
-        Log.d("SS", "argLocation$argLocation")
+
 
         binding.scheduleDayTv.text = "Day $argPosition"
 
@@ -80,19 +80,22 @@ class CreateScheduleFragment : Fragment() {
                 locationResult = bundle.get("bundleKey") as Location?
                 Log.d("SS", "setFragmentResultListener result$locationResult")
             }
-
-
-//            binding.addScheduleBtn.setColorFilter(ContextCompat.getColor(requireContext(),R.color.purple_500))
-//            binding.addPictureButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.purple_500))
-//
-//            binding.addLocationButton.setColorFilter(ContextCompat.getColor(requireContext(),R.color.purple_500))
-//            binding.addLocationButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.tripMood_blue), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
         (requireActivity() as MainActivity).hideActionBar()
 
         return binding.root
     }
+
+    private fun NotificationSwitch(time: Long){
+        if(!binding.notificationSwitch.isChecked){
+            return
+            } else{
+                ReminderManager.startReminder(requireContext(), time, 123)
+            }
+
+    }
+
 
     private fun setupBtn(){
 
@@ -105,19 +108,33 @@ class CreateScheduleFragment : Fragment() {
                 binding.scheduleTimeTv.text = "$hour:$minute"
             }, hour, minute, true).show()
 
-
-
         }
 
         binding.addScheduleBtn.setOnClickListener {
             val title = binding.titleEditText.text.toString()
             val content = binding.contentEditText.text.toString()
+            val cost = binding.costEditText.text.toString()
             val fmt = SimpleDateFormat("HH:mm")
+            val catalog = binding.catalogEditText.toString()
+            val notification = binding.notificationSwitch.isChecked
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
 
+            if (postTime != null) {
+                NotificationSwitch(postTime)
+            }
+
             Log.d("QAQ", "schedultTime$schedultTime")
-            viewModel.postNewSchedule(Schedule(time = postTime, title = title, note = content, location = locationResult ))
+            viewModel.postNewSchedule(Schedule(
+                time = postTime,
+                title = title,
+                note = content,
+                location = locationResult,
+                cost = cost,
+                notification = notification,
+                catalog = catalog))
+
+
             findNavController().navigateUp()
         }
 

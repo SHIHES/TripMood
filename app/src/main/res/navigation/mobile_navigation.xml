@@ -104,6 +104,40 @@
             app:destination="@id/createScheduleFragment" />
 
     </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.shihs.tripmood.detail.DetailFragment"
+        android:label="DetailFragment" >
+
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+
+        <argument android:name="selectedPosition"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+
+
+        <action
+            android:id="@+id/action_detailFragment_to_editScheduleFragment"
+            app:destination="@id/editScheduleFragment" />
+
+    </fragment>
+    <action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment" />
+    <fragment
+        android:id="@+id/editScheduleFragment"
+        android:name="com.shihs.tripmood.edit.EditScheduleFragment"
+        android:label="EditScheduleFragment" >
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+
+        <argument android:name="selectedPosition"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+
+
+    </fragment>
 
 
 </navigation>

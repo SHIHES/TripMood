@@ -194,7 +194,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/spotPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scaleType="center"
@@ -239,7 +239,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/spotIcon"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scaleType="centerInside"
