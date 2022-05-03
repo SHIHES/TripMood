@@ -64,12 +64,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var locationAdapter: LocationAdapter
 
-    private var updateLocationTask = object : Runnable {
-        override fun run() {
-            showCurrentPlace()
-            handler.postDelayed(this, 3000)
-        }
-    }
 
 
     override fun onCreateView(
@@ -232,15 +226,13 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 recommendPlace.clear()
                 viewModel.clearNearbyLocation()
                 locationAdapter.notifyDataSetChanged()
-                handler.post(updateLocationTask)
                 startTracking()
 
                 binding.startRecordBtn.text = getString(R.string.stop_label)
                 binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_red))
                 binding.controlIcon.setImageResource(R.drawable.ic_baseline_stop_24)
             } else {
-                viewModel.getNearbyLocation(recommendPlace)
-                handler.removeCallbacks(updateLocationTask)
+
                 stopTracking()
                 binding.startRecordBtn.text = getString(R.string.start_label)
                 binding.controlLayout.setBackgroundColor(resources.getColor(R.color.tripMood_green))
@@ -255,6 +247,12 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
             view
             Toast.makeText(context,"儲存成功!", Toast.LENGTH_LONG).show()
+        }
+
+        binding.getSpotBtn.setOnClickListener {
+            recommendPlace.clear()
+            showCurrentPlace()
+            viewModel.getNearbyLocation(recommendPlace)
         }
     }
 
@@ -398,7 +396,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 if (task.isSuccessful && task.result != null) {
                     val likelyPlaces = task.result
 
-                    // Set the count, handling cases where less than 5 entries are returned.
+                    // Set the count, handling cases where less than 8 entries are returned.
                     val count =
                         if (likelyPlaces != null &&
                             likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
@@ -485,7 +483,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
         private const val KEY_CAMERA_POSITION = "camera_position"
         private const val KEY_LOCATION = "location"
-        const val M_MAX_ENTRIES = 5
+        const val M_MAX_ENTRIES = 8
     }
 
     override fun onResume() {
