@@ -2,16 +2,21 @@ package com.shihs.tripmood
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationBarView
 import com.shihs.tripmood.databinding.ActivityMainBinding
 
@@ -20,12 +25,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+//    private var PERMISSION_ID = 1000
+//    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+
+    companion object {
+        lateinit var myLocation: String
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+//
+//
+//        requestPermission()
+//        getLastLocation()
 
         val navView: NavigationBarView = binding.bottomNavigationView
 
@@ -118,4 +138,35 @@ class MainActivity : AppCompatActivity() {
         binding.addFAB.visibility = View.VISIBLE
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
+
+
+//    private fun checkPermission(): Boolean {
+//        if (
+//            ActivityCompat.checkSelfPermission(
+//                this,
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED ||
+//            ActivityCompat.checkSelfPermission(
+//                this,
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return true
+//        }
+//        return false
+//    }
+//
+//
+//    private fun requestPermission() {
+//
+//        ActivityCompat.requestPermissions(
+//            this,
+//            arrayOf(
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ),
+//            PERMISSION_ID
+//        )
+//    }
+
 }

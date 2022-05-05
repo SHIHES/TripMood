@@ -99,6 +99,9 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                     list.add(schedule)
                 }
                 liveData.value = list
+
+                Logger.i("SHOWALLLOCATION${liveData.value}")
+
             }
         return liveData
     }

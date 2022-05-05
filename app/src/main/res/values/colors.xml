@@ -15,5 +15,12 @@
     <color name="tripMood_green">#8bc34a</color>
     <color name="tripMood_red">#FFF82C43</color>
 
+    <color name="day1">#112D4E</color>
+    <color name="day2">#3F72AF</color>
+    <color name="day3">#FF03DAC5</color>
+    <color name="day4">#FFBB86FC</color>
+    <color name="day5">#8bc34a</color>
+    <color name="day6">#FFF82C43</color>
+    <color name="day7">#FF018786</color>
 
 </resources>

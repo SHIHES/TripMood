@@ -38,6 +38,8 @@ class CreateScheduleFragment : Fragment() {
 
     val arg: CreateScheduleFragmentArgs by navArgs()
 
+    var catalog = ""
+
     private var locationResult: Location? = null
 
     override fun onCreateView(
@@ -53,6 +55,10 @@ class CreateScheduleFragment : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_schedule_catalog_list, item)
 
         (binding.catalogEditText as? AutoCompleteTextView)?.setAdapter(arrayAdapter)
+
+        binding.catalogEditText.setOnItemClickListener { adapterView, view, position, rowID ->
+            catalog = adapterView.getItemAtPosition(position).toString()
+        }
 
 
 
@@ -72,19 +78,25 @@ class CreateScheduleFragment : Fragment() {
 
         setupBtn()
 
+        (requireActivity() as MainActivity).hideActionBar()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setFragmentResultListener("keyForRequest"){ requestKey, bundle ->
             if (bundle.get("bundleKey") == null){
                 Toast.makeText(requireContext(), "沒選擇任何景點", Toast.LENGTH_SHORT)
 
             } else{
                 locationResult = bundle.get("bundleKey") as Location?
+
+                binding.addressEditText.setText(locationResult?.address)
                 Log.d("SS", "setFragmentResultListener result$locationResult")
             }
         }
-
-        (requireActivity() as MainActivity).hideActionBar()
-
-        return binding.root
     }
 
     private fun NotificationSwitch(time: Long){
@@ -115,7 +127,6 @@ class CreateScheduleFragment : Fragment() {
             val content = binding.contentEditText.text.toString()
             val cost = binding.costEditText.text.toString()
             val fmt = SimpleDateFormat("HH:mm")
-            val catalog = binding.catalogEditText.toString()
             val notification = binding.notificationSwitch.isChecked
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
@@ -132,7 +143,8 @@ class CreateScheduleFragment : Fragment() {
                 location = locationResult,
                 cost = cost,
                 notification = notification,
-                catalog = catalog))
+                catalog = catalog,
+                theDay = arg.selectedPosition.plus(1)))
 
 
             findNavController().navigateUp()

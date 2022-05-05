@@ -13,6 +13,7 @@ data class Schedule(
     var cost: String? = "",
     var catalog: String? = "",
     var location: Location? = null,
-    var notification: Boolean = false
+    var notification: Boolean = false,
+    var theDay: Int = -1
 ) : Parcelable
 

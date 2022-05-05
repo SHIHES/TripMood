@@ -45,7 +45,7 @@ class MyPlanFragment : Fragment() {
         val recyclerEvents = binding.scheduleRv
         val eventAdapter = EventAdapter(EventAdapter.OnClickListener{
             viewModel.navigationToDetail(it)
-        })
+        }, viewModel)
 
         recyclerEvents.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -101,6 +101,12 @@ class MyPlanFragment : Fragment() {
                     viewModel.adapterPosition
                 )
             )
+        }
+
+        binding.mapWholeSchedule.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
+                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
+            ))
         }
     }
 

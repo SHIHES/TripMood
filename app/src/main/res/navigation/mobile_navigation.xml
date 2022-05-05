@@ -138,6 +138,20 @@
 
 
     </fragment>
+    <fragment
+        android:id="@+id/showAllLocationFragment"
+        android:name="com.shihs.tripmood.plan.ShowAllLocationFragment"
+        android:label="ShowAllLocationFragment" >
+
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+
+    </fragment>
+
+
+    <action android:id="@+id/action_global_showAllLocationFragment" app:destination="@id/showAllLocationFragment" />
 
 
 </navigation>
