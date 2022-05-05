@@ -7,18 +7,23 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationBarView
 import com.shihs.tripmood.databinding.ActivityMainBinding
+import com.shihs.tripmood.util.CurrentFragmentType
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +32,10 @@ class MainActivity : AppCompatActivity() {
 
 //    private var PERMISSION_ID = 1000
 //    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+
+    val viewModel by viewModels<MainViewModel> { getVmFactory() }
+
 
 
     companion object {
@@ -40,12 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-//
-//
-//        requestPermission()
-//        getLastLocation()
 
         val navView: NavigationBarView = binding.bottomNavigationView
 
@@ -65,9 +68,39 @@ class MainActivity : AppCompatActivity() {
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        viewModel.currentFragmentType.observe(
+            this, Observer {
+
+            }
+        )
+
+
+
+
         setBtn()
         setupBottomNav()
         createNotificationsChannels()
+        setupNavController()
+    }
+
+    private fun setupNavController() {
+        findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener{navController: NavController, _: NavDestination, _:Bundle? ->
+            viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
+                R.id.navigation_home -> CurrentFragmentType.HOME
+                R.id.navigation_search -> CurrentFragmentType.SEARCH
+//                R.id.      -> CurrentFragmentType.NOTIFICATION
+                R.id.mapFragment -> CurrentFragmentType.FIND_SPOT_MAP
+                R.id.detailFragment -> CurrentFragmentType.MY_PLAN
+                R.id.showAllLocationFragment -> CurrentFragmentType.MY_PLAN_MAP
+                R.id.createScheduleFragment -> CurrentFragmentType.CREATE_SCHEDULE
+                R.id.createPlanFragment -> CurrentFragmentType.CREATE_PLAN
+                R.id.detailFragment -> CurrentFragmentType.DETAIL_SCHEDULE
+                R.id.editScheduleFragment -> CurrentFragmentType.EDIT_SCHEDULE
+                R.id.navigation_chat -> CurrentFragmentType.CHAT
+                R.id.navigation_user -> CurrentFragmentType.USER
+                else -> viewModel.currentFragmentType.value
+            }
+        }
     }
 
     fun setBtn() {

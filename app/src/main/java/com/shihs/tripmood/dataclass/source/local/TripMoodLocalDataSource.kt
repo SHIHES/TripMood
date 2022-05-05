@@ -55,4 +55,8 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

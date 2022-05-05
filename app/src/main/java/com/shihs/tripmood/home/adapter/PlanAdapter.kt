@@ -10,6 +10,7 @@ import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
+import com.shihs.tripmood.util.PlanStatusFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -90,7 +91,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             dialog.findViewById<View>(R.id.deleteLayout).setOnClickListener {
                 viewModel.deletePlan(plan = plan)
-                notifyItemRemoved(position)
+                notifyDataSetChanged()
             }
             dialog.findViewById<View>(R.id.privateLayout).setOnClickListener {
                 viewModel.changeToPersonal(plan = plan)

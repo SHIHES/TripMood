@@ -35,7 +35,7 @@
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
     <fragment
-        android:id="@+id/myDesignFragment"
+        android:id="@+id/createPlanFragment"
         android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
@@ -44,7 +44,7 @@
         android:label="MyGPSFragment" />
     <action
         android:id="@+id/action_global_myDesignFragment"
-        app:destination="@id/myDesignFragment" />
+        app:destination="@id/createPlanFragment" />
     <action
         android:id="@+id/action_global_myGPSFragment"
         app:destination="@id/myGPSFragment" />
@@ -152,6 +152,14 @@
 
 
     <action android:id="@+id/action_global_showAllLocationFragment" app:destination="@id/showAllLocationFragment" />
+    <fragment
+        android:id="@+id/childFragment"
+        android:name="com.shihs.tripmood.home.childpage.ChildFragment"
+        android:label="ChildFragment" />
+    <fragment
+        android:id="@+id/userChildFragment"
+        android:name="com.shihs.tripmood.user.child.UserChildFragment"
+        android:label="UserChildFragment" />
 
 
 </navigation>

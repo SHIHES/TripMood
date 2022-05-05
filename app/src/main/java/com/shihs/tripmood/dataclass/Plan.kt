@@ -13,7 +13,7 @@ data class Plan(
     var owner: User? = null,
     var friends: List<String>? = null,
     var private: Boolean = true,
-    var status: Int = -1
+    var status: Int = 0
 ) : Parcelable
 
 

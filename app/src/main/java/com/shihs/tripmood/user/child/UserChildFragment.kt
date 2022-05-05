@@ -1,25 +1,24 @@
-package com.shihs.tripmood.home.childpage
+package com.shihs.tripmood.user.child
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
-import com.shihs.tripmood.databinding.FragmentPlanChildViewpagerBinding
+import com.shihs.tripmood.databinding.FragmetUserPlanChildViewpagerBinding
 import com.shihs.tripmood.home.HomeFragmentDirections
-import com.shihs.tripmood.util.HomePlanFilter
-import com.shihs.tripmood.home.adapter.PlanAdapter
+import com.shihs.tripmood.user.adapter.MemoryPlanAdapter
+import com.shihs.tripmood.util.UserPlanFilter
 
-class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
+class UserChildFragment(private val userPlanFilter: UserPlanFilter) : Fragment() {
 
-    lateinit var binding: FragmentPlanChildViewpagerBinding
+    lateinit var binding: FragmetUserPlanChildViewpagerBinding
 
-    private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(homePlanType) }
+    private val viewModel by viewModels <UserChildViewModel> { getVmFactory(userPlanFilter) }
 
 
     override fun onCreateView(
@@ -27,19 +26,17 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPlanChildViewpagerBinding.inflate(inflater, container, false)
 
-        Log.d("SS","ChildFragment $homePlanType")
+        binding = FragmetUserPlanChildViewpagerBinding.inflate(inflater, container,false)
 
-
-        val recyclerPlan = binding.planRV
-
-        val adapter = PlanAdapter(PlanAdapter.OnClickListener {
+        val adapter = MemoryPlanAdapter( MemoryPlanAdapter.OnClickListener{
             viewModel.navigateToDetail(it)
-        },viewModel)
+        })
 
-        recyclerPlan.adapter = adapter
-        recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val recyclerViewPlan = binding.userPlanRv
+        recyclerViewPlan.adapter = adapter
+        recyclerViewPlan.layoutManager = GridLayoutManager(
+            context, 2,GridLayoutManager.VERTICAL,false)
 
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
@@ -50,9 +47,7 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         }
 
         viewModel.livePlans.observe(viewLifecycleOwner) {
-            viewModel.planSorter(homePlanType)
-            viewModel.updatePlanStatus(it)
-            adapter.notifyDataSetChanged()
+            viewModel.planSorter(userPlanFilter)
         }
 
         viewModel.viewpagerPlans.observe(viewLifecycleOwner){
@@ -64,4 +59,9 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
         return binding.root
     }
+
+
+
+
+
 }

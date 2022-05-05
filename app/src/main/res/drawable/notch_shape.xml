@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="ExtraText">
+
+    <item
+        android:width="42dp"
+        android:height="42dp"
+        android:left="-6dp"
+        android:top="6dp">
+        <rotate
+            android:fromDegrees="-45"
+            android:pivotX="0%">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:angle="270"
+                    android:centerColor="#00000000"
+                    android:centerX="0.6"
+                    android:endColor="#44000000"
+                    android:startColor="#00000000" />
+            </shape>
+        </rotate>
+    </item>
+
+
+    //左上小三角形
+    <item
+        android:width="24dp"
+        android:height="24dp"
+        android:left="-6dp"
+        android:top="6dp">
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="50%"
+            android:pivotY="100%">
+            <shape>
+                <solid android:color="@color/white" />
+            </shape>
+        </rotate>
+    </item>
+
+    <item
+        android:width="42dp"
+        android:height="42dp"
+        android:left="965dp"
+        android:right="0dp"
+        android:top="975dp">
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="50%"
+            android:pivotY="100%">
+            <shape>
+                <solid android:color="@color/white" />
+            </shape>
+        </rotate>
+    </item>
+
+    <item
+        android:width="1000dp"
+        android:height="42dp"
+        android:left="29.5dp"
+        android:top="-27.5dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:centerColor="#00000000"
+                android:centerX="0.6"
+                android:endColor="#44000000"
+                android:startColor="#00000000" />
+        </shape>
+    </item>
+
+
+
+
+
+    //兩個正方形疊加位移 左上右下各留一個正方形
+    <item
+        android:width="1000dp"
+        android:height="1000dp"
+        android:left="15dp"
+        android:top="3.5dp">
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+
+    <item
+        android:width="1000dp"
+        android:height="1000dp"
+        android:top="20dp">
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+
+</layer-list>

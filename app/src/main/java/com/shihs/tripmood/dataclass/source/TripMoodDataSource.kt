@@ -33,4 +33,6 @@ interface TripMoodDataSource {
 
     fun getLivePublicPlan(): MutableLiveData<List<Plan>>
 
+    suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean>
+
     }

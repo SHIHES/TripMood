@@ -4,15 +4,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.home.PlanFilter
+import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.network.LoadApiStatus
+import com.shihs.tripmood.util.PlanStatusFilter
 import kotlinx.coroutines.*
+import java.util.*
 
-class ChildHomeViewModel(private val repository: TripMoodRepo, planType: PlanFilter) : ViewModel() {
+class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: HomePlanFilter) : ViewModel() {
 
     private var viewModelJob = Job()
 
@@ -53,10 +54,28 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, planType: PlanFil
 
     init {
 
-        Log.d("SS","ChildHomeViewModel $planType")
+        Log.d("SS","ChildHomeViewModel $homePlanType")
 
         getLivePlansResult()
 
+    }
+
+    fun updatePlanStatus(plans: List<Plan>){
+
+        val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
+
+        coroutineScope.launch {
+
+            for (plan in plans){
+                if (calendar > plan.startDate!! && calendar < plan.endDate!!){
+                    repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.ONGOING.code)
+                } else if (calendar < plan.startDate!!){
+                    repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.PLANNING.code)
+                } else{
+                    repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.END.code)
+                }
+            }
+        }
     }
 
 
@@ -67,12 +86,15 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, planType: PlanFil
 
     }
 
-    fun planSorter(planType: PlanFilter){
+    fun planSorter(homePlanType: HomePlanFilter){
 
-        viewpagerPlans.value  = when (planType) {
+        viewpagerPlans.value  = when (homePlanType) {
 
-            PlanFilter.INDIVIDUAL -> livePlans.value?.filter { it.friends == null }
-            PlanFilter.COWORK -> livePlans.value?.filter { it.friends != null }
+            HomePlanFilter.INDIVIDUAL -> livePlans.value?.filter {
+                it.friends == null &&
+                        it.status != PlanStatusFilter.END.code
+            }
+            HomePlanFilter.COWORK -> livePlans.value?.filter { it.friends != null }
 
         }
 

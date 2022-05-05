@@ -57,4 +57,8 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.getLivePublicPlan()
     }
 
+    override suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean> {
+        return remoteDataSource.updatePlanStatus(planID = planID, newStatus = newStatus)
+    }
+
 }

@@ -19,6 +19,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_SCHEDULE = "schedules"
     private const val KEY_STARTDATE = "startDate"
     private const val KEY_PRIVATE = "private"
+    private const val KEY_PLAN_STATUS = "status"
 
 
     override suspend fun getPlans(): Result<List<Plan>> = suspendCoroutine { continuation ->
@@ -297,9 +298,30 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                         list.add(article)
                     }
                 }
+
                 liveData.value = list
+
             }
         return liveData
+    }
+
+    override suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean> = suspendCoroutine {continuation ->
+        planID.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .update(KEY_PLAN_STATUS, newStatus)
+                .addOnSuccessListener {
+
+                    Logger.i("updatePlanStatus: $it")
+
+                    continuation.resume(Result.Success(true))
+                }
+                .addOnFailureListener {
+                    Logger.w("[${this::class.simpleName}] Error updatePlanStatus documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                }
+        }
     }
 
 
