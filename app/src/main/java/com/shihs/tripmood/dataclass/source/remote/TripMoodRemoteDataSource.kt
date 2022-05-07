@@ -1,14 +1,14 @@
 package com.shihs.tripmood.dataclass.source.remote
 
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.dataclass.User
+import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
+import com.shihs.tripmood.util.InviteFilter
 import com.shihs.tripmood.util.Logger
+import com.shihs.tripmood.util.Me
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -16,10 +16,16 @@ import kotlin.coroutines.suspendCoroutine
 object TripMoodRemoteDataSource : TripMoodDataSource {
 
     private const val PATH_PLANS = "plans"
-    private const val PATH_SCHEDULE = "schedules"
+    private const val PATH_SCHEDULES = "schedules"
+    private const val PATH_USERS = "users"
+    private const val PATH_INVITES = "invites"
+    private const val KEY_INVITE_STATUS = "status"
+    private const val KEY_EMAIL = "email"
     private const val KEY_STARTDATE = "startDate"
     private const val KEY_PRIVATE = "private"
     private const val KEY_PLAN_STATUS = "status"
+    private const val KEY_SENDERID = "senderID"
+    private const val KEY_RECEIVERID = "receiverID"
 
 
     override suspend fun getPlans(): Result<List<Plan>> = suspendCoroutine { continuation ->
@@ -83,7 +89,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         FirebaseFirestore.getInstance()
             .collection(PATH_PLANS)
             .document(planID)
-            .collection(PATH_SCHEDULE)
+            .collection(PATH_SCHEDULES)
             .addSnapshotListener { snapshot, error ->
 
                 Logger.i("getLiveSchedule addSnapshotLister success")
@@ -111,7 +117,9 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
         val document = plans.document()
 
+
         val user = User(name = "Steven", email = "test@gamil.com", id = "test")
+
 
         plan.id = document.id
         plan.owner = user
@@ -135,7 +143,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
     override suspend fun postSchedule(planID: String, schedule: Schedule): Result<Boolean> = suspendCoroutine{ continuation ->
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
-                    .document(planID).collection(PATH_SCHEDULE)
+                    .document(planID).collection(PATH_SCHEDULES)
         val document = plans.document()
 
         schedule.scheduleId = document.id
@@ -182,7 +190,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             FirebaseFirestore.getInstance()
                 .collection(PATH_PLANS)
                 .document(it)
-                .collection(PATH_SCHEDULE)
+                .collection(PATH_SCHEDULES)
                 .document(scheduleID)
                 .delete()
                 .addOnSuccessListener {
@@ -221,7 +229,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 FirebaseFirestore.getInstance()
                     .collection(PATH_PLANS)
                     .document(it)
-                    .collection(PATH_SCHEDULE)
+                    .collection(PATH_SCHEDULES)
                     .document(it1)
                     .set(schedule)
                     .addOnSuccessListener {
@@ -324,5 +332,138 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         }
     }
 
+    override suspend fun useEmailFindUser(email: String): Result<User> = suspendCoroutine{ continuation ->
+        email.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_USERS)
+                .whereEqualTo(KEY_EMAIL, email)
+                .get()
+                .addOnCompleteListener{ task ->
+
+                    if (task.isSuccessful){
+
+                        Logger.i("useEmailFindUserID addOnCompleteListener ${task.result.documents.size}")
+                        for (document in task.result){
+                            Logger.d(document.id + " => " + document.data)
+
+                            val user = document.toObject(User::class.java)
+//                            list.add(user)
+                            continuation.resume(Result.Success(user))
+                        }
+//                        val userID = list[0].id.toString()
+
+                    } else {
+                        task.exception?.let {
+                            Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                            continuation.resume(Result.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(Result.Fail("useEmailFindUserID fail"))
+                    }
+                }
+        }
+    }
+
+    override suspend fun postPlanInvite(invite: Invite): Result<Boolean> = suspendCoroutine { continuation ->
+
+        val invites = FirebaseFirestore.getInstance().collection(PATH_INVITES)
+        val document = invites.document()
+
+        invite.id = document.id
+
+        document.set(invite).addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+                Logger.i("sendPlanInvite $invite")
+
+                continuation.resume(Result.Success(true))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error posting documents. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("postSchedule Fail"))
+            }
+        }
+    }
+
+
+    override suspend fun getSendReply(): Result<List<Invite>> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance().collection(PATH_INVITES)
+            .whereEqualTo(KEY_RECEIVERID, Me.user.id)
+            .whereEqualTo(KEY_INVITE_STATUS, InviteFilter.REFUSED.status)
+            .whereEqualTo(KEY_INVITE_STATUS, InviteFilter.APPROVAL.status)
+            .get()
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    val list = mutableListOf<Invite>()
+                    Logger.i("Find getInvite addOnCompleteListener")
+                    for (document in task.result){
+
+                        Logger.d(document.id + " => " + document.data)
+
+                        val invite = document.toObject(Invite::class.java)
+
+                        Logger.i("getInvite $invite")
+
+                        list.add(invite)
+
+                    }
+                    continuation.resume(Result.Success(list))
+                } else {
+                    task.exception?.let {
+                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(Result.Fail("getPlans fail"))
+                }
+            }
+    }
+
+    override suspend fun getReceiveInvite(): Result<List<Invite>> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance().collection(PATH_INVITES)
+            .whereEqualTo(KEY_INVITE_STATUS,InviteFilter.WAITING.status)
+            .whereEqualTo(KEY_RECEIVERID, Me.user.id)
+            .get()
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    val list = mutableListOf<Invite>()
+                    Logger.i("Find getInvite addOnCompleteListener")
+                    for (document in task.result){
+
+                        Logger.d(document.id + " => " + document.data)
+
+                        val invite = document.toObject(Invite::class.java)
+
+                        Logger.i("getInvite $invite")
+
+                        list.add(invite)
+
+                    }
+                    continuation.resume(Result.Success(list))
+                } else {
+                    task.exception?.let {
+                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(Result.Fail("getPlans fail"))
+                }
+            }
+    }
+
+    override suspend fun acceptInvite(inviteID: String): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_INVITES)
+            .document(inviteID)
+    }
+
+    override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 
 }

@@ -16,12 +16,12 @@ class TripMoodApplication : Application() {
         get() = ServiceLocator.provideRepository(this)
 
     companion object {
-        var INSTANCE: TripMoodApplication by Delegates.notNull()
+        var instance: TripMoodApplication by Delegates.notNull()
     }
 
     override fun onCreate() {
         super.onCreate()
-        INSTANCE = this
+        instance = this
     }
 
     fun isLiveDataDesign() = true

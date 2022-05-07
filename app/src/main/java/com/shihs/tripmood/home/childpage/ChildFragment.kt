@@ -49,16 +49,25 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
             }
         }
 
-        viewModel.livePlans.observe(viewLifecycleOwner) {
+        viewModel.livePlans.observe(viewLifecycleOwner) {it?.let {
             viewModel.planSorter(homePlanType)
             viewModel.updatePlanStatus(it)
             adapter.notifyDataSetChanged()
         }
+        }
 
-        viewModel.viewpagerPlans.observe(viewLifecycleOwner){
+        viewModel.viewpagerPlans.observe(viewLifecycleOwner){it?.let {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
+        } }
+
+        viewModel.inviteUser.observe(viewLifecycleOwner) {
+            it?.let {
+                Log.d("QAQ", "inviteUserID$it")
+                viewModel.inviteFriend(it)
+            }
         }
+
 
 
 

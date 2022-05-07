@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.shihs.tripmood.dataclass.Invite
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Result
+import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.network.LoadApiStatus
+import com.shihs.tripmood.util.Me
 import com.shihs.tripmood.util.PlanStatusFilter
 import kotlinx.coroutines.*
 import java.util.*
@@ -41,10 +44,11 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     var livePlans = MutableLiveData<List<Plan>>()
 
-
     var viewpagerPlans = MutableLiveData<List<Plan>>()
 
+    var inviteUser = MutableLiveData<User>()
 
+    var dialogSelectedPlan = Plan()
 
 
     fun navigateToDetail(plan: Plan) {
@@ -91,10 +95,10 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         viewpagerPlans.value  = when (homePlanType) {
 
             HomePlanFilter.INDIVIDUAL -> livePlans.value?.filter {
-                it.friends == null &&
+                it.friendsUserID == null &&
                         it.status != PlanStatusFilter.END.code
             }
-            HomePlanFilter.COWORK -> livePlans.value?.filter { it.friends != null }
+            HomePlanFilter.COWORK -> livePlans.value?.filter { it.friendsUserID != null }
 
         }
 
@@ -175,6 +179,78 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
                     _status.value = LoadApiStatus.ERROR
                 }
             }
+        }
+    }
+
+    fun inviteFriend(receiver: User){
+
+        val invite = Invite(
+            invitePlanID = dialogSelectedPlan.id,
+            invitePlanTitle = dialogSelectedPlan.title,
+            senderID = Me.user.id,
+            senderName = Me.user.name,
+            receiverID = receiver.id,
+            receiverName = receiver.name,
+            status = 0
+        )
+
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.postPlanInvite(invite = invite)) {
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    Log.d("SSS", "else $receiver")
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+
+
+    fun changeEmailToUserID(email: String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            Log.d("QAQQQ","changeEmailToUserID$email")
+
+            when (val result = email.let { repository.useEmailFindUser(email = it) }) {
+                is Result.Success -> {
+                    inviteUser.value = result.data!!
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+
+        }
+    }
+
+    fun getDialogSelectedPlan(plan: Plan?) {
+        if (plan != null) {
+            dialogSelectedPlan = plan
         }
     }
 

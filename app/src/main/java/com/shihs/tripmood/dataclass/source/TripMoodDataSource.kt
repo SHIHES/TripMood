@@ -1,10 +1,8 @@
 package com.shihs.tripmood.dataclass.source
 
 import androidx.lifecycle.MutableLiveData
-import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.*
 
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
 import kotlin.coroutines.suspendCoroutine
 
 interface TripMoodDataSource {
@@ -34,5 +32,17 @@ interface TripMoodDataSource {
     fun getLivePublicPlan(): MutableLiveData<List<Plan>>
 
     suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean>
+
+    suspend fun useEmailFindUser(email: String): Result<User>
+
+    suspend fun postPlanInvite(invite: Invite): Result<Boolean>
+
+    suspend fun getSendReply(): Result<List<Invite>>
+
+    suspend fun getReceiveInvite(): Result<List<Invite>>
+
+    suspend fun acceptInvite(inviteID: String): Result<Boolean>
+
+    suspend fun refusedInvite(inviteID: String): Result<Boolean>
 
     }

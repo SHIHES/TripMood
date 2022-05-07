@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         val navView: NavigationBarView = binding.bottomNavigationView
 
-        navView.menu.getItem(2).isEnabled = false
 
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
@@ -73,14 +72,16 @@ class MainActivity : AppCompatActivity() {
 
             }
         )
-
-
-
-
         setBtn()
         setupBottomNav()
         createNotificationsChannels()
         setupNavController()
+    }
+
+    private fun setBtn() {
+        binding.notificationBtn.setOnClickListener {
+            navController.navigate(MobileNavigationDirections.actionGlobalNotificationFragment())
+        }
     }
 
     private fun setupNavController() {
@@ -103,12 +104,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setBtn() {
-        binding.addFAB.setOnClickListener {
-            navController.navigate(MobileNavigationDirections.actionGlobalPlanModeDialog())
-        }
-    }
-
     private fun setupBottomNav() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -122,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_chat -> {
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
-                        MobileNavigationDirections.actionGlobalNavigationHome()
+                        MobileNavigationDirections.actionGlobalChatFragment()
                     )
                     return@setOnItemSelectedListener true
                 }
@@ -136,9 +131,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_user-> {
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
-                        MobileNavigationDirections.actionGlobalNavigationNotifications()
+                        MobileNavigationDirections.actionGlobalNavigationUser()
                     )
                     return@setOnItemSelectedListener false
+                }
+                R.id.navigation_addPlan ->{
+
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                        MobileNavigationDirections.actionGlobalPlanModeDialog()
+                    )
                 }
             }
             false
@@ -161,14 +162,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideActionBar() {
-        binding.bottomAppBar.visibility = View.GONE
-        binding.addFAB.visibility = View.GONE
         binding.bottomNavigationView.visibility = View.GONE
     }
 
     fun showActionBar() {
-        binding.bottomAppBar.visibility = View.VISIBLE
-        binding.addFAB.visibility = View.VISIBLE
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
 

@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_user"
         android:name="com.shihs.tripmood.user.UserFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_user"
         tools:layout="@layout/fragment_user" />
     <dialog
         android:id="@+id/planModeDialog"
@@ -86,7 +86,7 @@
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
     <action
-        android:id="@+id/action_global_navigation_notifications"
+        android:id="@+id/action_global_navigation_user"
         app:destination="@id/navigation_user"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
@@ -160,6 +160,15 @@
         android:id="@+id/userChildFragment"
         android:name="com.shihs.tripmood.user.child.UserChildFragment"
         android:label="UserChildFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.shihs.tripmood.chat.ChatFragment"
+        android:label="ChatFragment" />
+    <action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.shihs.tripmood.notification.NotificationFragment"
+        android:label="NotificationFragment" /><action android:id="@+id/action_global_notificationFragment" app:destination="@id/notificationFragment"/>
 
 
 </navigation>

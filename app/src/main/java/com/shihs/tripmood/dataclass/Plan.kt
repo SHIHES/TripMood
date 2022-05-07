@@ -11,9 +11,10 @@ data class Plan(
     var endDate: Long? = null,
     var id: String? = "",
     var owner: User? = null,
-    var friends: List<String>? = null,
+    var friendsUserID: List<String>? = null,
     var private: Boolean = true,
-    var status: Int = 0
+    var status: Int = 0,
+    var image: String = ""
 ) : Parcelable
 
 
