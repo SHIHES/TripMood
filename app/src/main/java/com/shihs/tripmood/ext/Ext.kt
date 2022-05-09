@@ -8,8 +8,12 @@ import java.util.*
 /**
  * Created by Wayne Chen on 2020-01-15.
  */
-fun Long.toDisplayFormat(): String {
-    return SimpleDateFormat("yyyy.MM.dd hh:mm", Locale.TAIWAN).format(this)
+fun Long.toDisplayDateFormat(): String {
+    return SimpleDateFormat("MMM dd", Locale.TAIWAN).format(this)
+}
+
+fun Long.toDisplayTimeFormat(): String {
+    return SimpleDateFormat("HH:mm", Locale.TAIWAN).format(this)
 }
 
 fun addData() {

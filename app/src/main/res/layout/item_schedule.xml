@@ -15,6 +15,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/locationAnimate"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/timeTv"
+        app:layout_constraintStart_toEndOf="@+id/timeTv"
+        app:layout_constraintTop_toTopOf="@+id/timeTv"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/walking_lottie"
+        android:visibility="invisible"
+        app:lottie_speed="1" />
+
     <View
         android:id="@+id/dashLine"
         android:layout_width="2dp"

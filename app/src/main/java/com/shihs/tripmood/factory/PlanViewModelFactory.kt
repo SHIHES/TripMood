@@ -2,9 +2,11 @@ package app.appworks.school.publisher.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.shihs.tripmood.chat.ChatViewModel
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.plan.MyPlanViewModel
+import com.shihs.tripmood.plan.ShowAllLocationViewModel
 import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
 
 /**
@@ -22,6 +24,12 @@ class PlanViewModelFactory(
 
                 isAssignableFrom(MyPlanViewModel::class.java) ->
                     MyPlanViewModel(repository, plan)
+
+                isAssignableFrom(ShowAllLocationViewModel::class.java) ->
+                    ShowAllLocationViewModel(repository, plan)
+
+                isAssignableFrom(ChatViewModel::class.java) ->
+                    ChatViewModel(repository, plan)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

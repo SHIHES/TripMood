@@ -1,10 +1,7 @@
 package com.shihs.tripmood.dataclass.source
 
 import androidx.lifecycle.MutableLiveData
-import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.dataclass.source.local.TripMoodLocalDataSource
+import com.shihs.tripmood.dataclass.*
 
 class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
                            private val localDataSource: TripMoodDataSource
@@ -55,6 +52,58 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
 
     override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
         return remoteDataSource.getLivePublicPlan()
+    }
+
+    override suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean> {
+        return remoteDataSource.updatePlanStatus(planID = planID, newStatus = newStatus)
+    }
+
+    override suspend fun useEmailFindUser(email: String): Result<User> {
+        return remoteDataSource.useEmailFindUser(email = email)
+    }
+
+    override suspend fun postPlanInvite(invite: Invite): Result<Boolean> {
+        return remoteDataSource.postPlanInvite(invite = invite)
+    }
+
+    override suspend fun getSendReply(): Result<List<Invite>> {
+        return remoteDataSource.getSendReply()
+    }
+
+    override suspend fun getReceiveInvite(): Result<List<Invite>> {
+        return remoteDataSource.getReceiveInvite()
+    }
+
+    override suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean> {
+        return remoteDataSource.acceptInviteChangeStatus(inviteID = inviteID)
+    }
+
+    override suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean> {
+        return remoteDataSource.acceptInviteAddUserToPlan(planID = planID, user = user)
+    }
+
+    override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
+        return remoteDataSource.refusedInvite(inviteID = inviteID)
+    }
+
+    override fun getLiveChats(planID: String): MutableLiveData<List<Chat>> {
+        return remoteDataSource.getLiveChats(planID = planID)
+    }
+
+    override suspend fun postChats(chat: Chat): Result<Boolean> {
+        return remoteDataSource.postChats(chat = chat)
+    }
+
+    override suspend fun postUser(user: User): Result<String> {
+        return remoteDataSource.postUser(user = user)
+    }
+
+    override suspend fun checkUserExist(userID: String): Result<User> {
+        return remoteDataSource.checkUserExist(userID = userID)
+    }
+
+    override fun getCoWorkLivePlan(): MutableLiveData<List<Plan>> {
+        return remoteDataSource.getCoWorkLivePlan()
     }
 
 }

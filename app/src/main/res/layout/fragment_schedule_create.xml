@@ -157,6 +157,7 @@
 
         <AutoCompleteTextView
             android:id="@+id/catalogEditText"
+            android:inputType="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

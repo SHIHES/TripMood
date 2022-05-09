@@ -34,7 +34,6 @@ import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.ext.toBase64String
 import com.shihs.tripmood.plan.adapter.LocationAdapter
 
@@ -73,10 +72,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentPlanMygpsBinding.inflate(inflater, container, false)
 
-
-        // [START_EXCLUDE silent]
-        // Retrieve location and camera position from saved instance state.
-        // [START maps_current_place_on_create_save_instance_state]
         if (savedInstanceState != null) {
             lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION)
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION)
@@ -101,7 +96,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         presenter = MapPresenter(this)
         presenter.onViewCreated()
 
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
 
         handler = Handler(Looper.getMainLooper())
 
@@ -488,12 +483,12 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as MainActivity).showActionBar()
+        (requireActivity() as MainActivity).showToolBar()
     }
 
 }

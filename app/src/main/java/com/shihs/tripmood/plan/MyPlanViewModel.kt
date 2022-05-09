@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import java.lang.Exception
+import java.util.*
 
 class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : ViewModel() {
 
@@ -57,78 +58,120 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     var clickSchedule: Schedule = Schedule()
 
 
-
     init {
         getLiveSchedule()
         daysCalculator()
 
     }
 
-    fun getLiveSchedule(){
-        if (_plan.value != null){
+    fun getLiveSchedule() {
+        if (_plan.value != null) {
             _plan.value!!.id?.let {
-                liveSchedules = repository.getLiveSchedule(it) }
+                liveSchedules = repository.getLiveSchedule(it)
+            }
         }
     }
 
-    fun daysCalculator(){
-            try {
+    fun daysCalculator() {
+        try {
 
-                var start = _plan.value?.startDate
-                var end = _plan.value?.endDate
+            var start = _plan.value?.startDate
+            var end = _plan.value?.endDate
 
-                var list = mutableListOf<Schedule>()
+            var list = mutableListOf<Schedule>()
 
-                if (start != null && end != null){
-                    while (start <= end){
+            if (start != null && end != null) {
+                while (start <= end) {
 
-                        list.add(Schedule(time = start,))
+                    list.add(Schedule(time = start))
 
-                        start += 86400000
-                    }
-                    _schedules.value = list
+                    start += 86400000
                 }
-                Log.d("QAQ", "${_schedules.value}")
-
-            } catch (e: Exception){
-                Log.d("QAQ","daysCalculator error $e")
+                _schedules.value = list
             }
+            Log.d("QAQ", "${_schedules.value}")
 
+        } catch (e: Exception) {
+            Log.d("QAQ", "daysCalculator error $e")
         }
 
-    fun getSelectedSchedule(selectedSchedule: Schedule){
+    }
+
+    fun getSelectedSchedule(selectedSchedule: Schedule) {
         _selectedSchedule.value = selectedSchedule
         clickSchedule = selectedSchedule
     }
 
-    fun findTimeRangeSchedule(){
+    fun findTimeRangeSchedule() {
         try {
             val aDayOfSchedule = _selectedSchedule.value?.time?.plus(86400000)?.minus(1)
 
             _dayOfSchedule.value = liveSchedules.value?.filter {
                 it.time in _selectedSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
+            }?.sortedBy {
+                it.time
             }
 
-        } catch (e: Exception){
-            Log.d("QAQ","findTimeRangeSchedule error $e")
+        } catch (e: Exception) {
+            Log.d("QAQ", "findTimeRangeSchedule error $e")
 
         }
     }
 
-    fun getSelectedAdapterPosition(position: Int){
+    fun getSelectedAdapterPosition(position: Int) {
         adapterPosition = position
     }
 
-    fun selectedScheduleClear(){
-         _dayOfSchedule.value = null
+    fun selectedScheduleClear() {
+        _dayOfSchedule.value = null
     }
 
 
-    fun navigationToDetail(schedule: Schedule){
+    fun navigationToDetail(schedule: Schedule) {
         _navigationToDetail.value = schedule
     }
 
-    fun navigationToDetailEnd(){
+    fun navigationToDetailEnd() {
         _navigationToDetail.value = null
+    }
+
+    fun showAnimation(schedule: Schedule, position: Int): Boolean {
+
+        val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
+
+        //判斷data不為空
+        if (!_dayOfSchedule.value!!.isNullOrEmpty()) {
+            //判斷list大小大於1個
+            if (_dayOfSchedule.value?.size!! > 1) {
+                //判斷list的最後一個位置
+                if (position == _dayOfSchedule.value?.size?.minus(1) ?: 0) {
+                    //判斷list最後一個位置在行程時間的區間
+                    if (schedule.time!! < calendar) {
+                        return false
+                    } else if (schedule.time!! >= calendar &&
+                        schedule.time!! <= _dayOfSchedule.value!![position - 1].time!!){
+                        return true
+                    } else{
+                        return false
+                    }
+                } else {
+                    if (schedule.time!! < calendar) {
+                        return false
+                    } else if (schedule.time!! >= calendar &&
+                        schedule.time!! <= _dayOfSchedule.value!![position + 1].time!!
+                    ) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            } else {
+                return false
+            }
+
+        } else {
+            return true
+        }
+
     }
 }

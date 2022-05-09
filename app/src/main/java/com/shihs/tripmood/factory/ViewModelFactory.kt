@@ -2,9 +2,13 @@ package app.appworks.school.publisher.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.shihs.tripmood.MainViewModel
 
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
+import com.shihs.tripmood.login.LoginViewModel
+import com.shihs.tripmood.notification.NotificationViewModel
+import com.shihs.tripmood.plan.ShowAllLocationViewModel
 import com.shihs.tripmood.plan.createplan.CreatePlanViewModel
 import com.shihs.tripmood.plan.mygps.MyGPSViewModel
 import com.shihs.tripmood.search.SearchViewModel
@@ -28,6 +32,15 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(SearchViewModel::class.java) ->
                     SearchViewModel(repository)
+
+                isAssignableFrom(MainViewModel::class.java) ->
+                    MainViewModel(repository)
+
+                isAssignableFrom(NotificationViewModel::class.java) ->
+                    NotificationViewModel(repository)
+
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

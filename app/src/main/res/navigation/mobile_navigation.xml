@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_user"
         android:name="com.shihs.tripmood.user.UserFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_user"
         tools:layout="@layout/fragment_user" />
     <dialog
         android:id="@+id/planModeDialog"
@@ -35,7 +35,7 @@
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
     <fragment
-        android:id="@+id/myDesignFragment"
+        android:id="@+id/createPlanFragment"
         android:name="com.shihs.tripmood.plan.createplan.CreatePlanFragment"
         android:label="MyDesignFragment" />
     <fragment
@@ -44,7 +44,7 @@
         android:label="MyGPSFragment" />
     <action
         android:id="@+id/action_global_myDesignFragment"
-        app:destination="@id/myDesignFragment" />
+        app:destination="@id/createPlanFragment" />
     <action
         android:id="@+id/action_global_myGPSFragment"
         app:destination="@id/myGPSFragment" />
@@ -86,7 +86,7 @@
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
     <action
-        android:id="@+id/action_global_navigation_notifications"
+        android:id="@+id/action_global_navigation_user"
         app:destination="@id/navigation_user"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
@@ -138,6 +138,52 @@
 
 
     </fragment>
+    <fragment
+        android:id="@+id/showAllLocationFragment"
+        android:name="com.shihs.tripmood.plan.ShowAllLocationFragment"
+        android:label="ShowAllLocationFragment" >
+
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+
+    </fragment>
+
+
+    <action android:id="@+id/action_global_showAllLocationFragment" app:destination="@id/showAllLocationFragment" />
+    <fragment
+        android:id="@+id/childFragment"
+        android:name="com.shihs.tripmood.home.childpage.ChildFragment"
+        android:label="ChildFragment" />
+    <fragment
+        android:id="@+id/userChildFragment"
+        android:name="com.shihs.tripmood.user.child.UserChildFragment"
+        android:label="UserChildFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.shihs.tripmood.chat.ChatFragment"
+        android:label="ChatFragment" >
+
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+    </fragment>
+    <action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.shihs.tripmood.notification.NotificationFragment"
+        android:label="NotificationFragment" /><action android:id="@+id/action_global_notificationFragment" app:destination="@id/notificationFragment"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.shihs.tripmood.login.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/navigation_collect"
+        android:name="com.shihs.tripmood.collect.CollectionFragment"
+        android:label="CollectionFragment" />
+    <action android:id="@+id/action_global_navigation_collect" app:destination="@id/navigation_collect" />
 
 
 </navigation>

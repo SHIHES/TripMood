@@ -3,15 +3,14 @@ package com.shihs.tripmood.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.home.PlanFilter
+import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
-import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
 
 
 @Suppress("UNCHECKED_CAST")
 class PlanTypeViewModelFactory (
     private val repository: TripMoodRepo,
-    private val planType: PlanFilter
+    private val homePlanType: HomePlanFilter
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -19,7 +18,7 @@ class PlanTypeViewModelFactory (
             when {
 
                 isAssignableFrom(ChildHomeViewModel::class.java) ->
-                    ChildHomeViewModel(repository, planType)
+                    ChildHomeViewModel(repository, homePlanType)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

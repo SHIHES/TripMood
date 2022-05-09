@@ -2,7 +2,7 @@
     <string name="app_name">TripMood</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_user">user</string>
 
 
     <string name="map_key" translatable="false"></string>
@@ -26,5 +26,11 @@
     <string name="description_notification_reminder">時間快到囉</string>
     <string name="reminders_notification_channel_id">channelID</string>
     <string name="reminders_notification_channel_name">TripMoodChannel</string>
+    <string name="inviteTitle">請輸入好友Email</string>
+    <string name="cancel">取消</string>
+    <string name="acceptInvite">已回覆: 接受</string>
+    <string name="refusedInvite">已回覆: 拒絕</string>
+
+    <string name="server_client_id">268286594391-i6qonn8pu347chhg8u3pelscqu9sqndt.apps.googleusercontent.com</string>
 
 </resources>

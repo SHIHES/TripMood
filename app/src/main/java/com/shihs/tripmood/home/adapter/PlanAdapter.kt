@@ -1,9 +1,13 @@
 package com.shihs.tripmood.home.adapter
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.*
+import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.R
@@ -54,6 +58,11 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         val context = holder.itemView.context
         val dialog = Dialog(context)
         val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
+        val editTextLayout = LayoutInflater.from(context).inflate(R.layout.view_edittext, null)
+
+        if(editTextLayout.parent != null){
+            editTextLayout.parent
+        }
 
 
         if (calendar < plan.startDate!!){
@@ -82,6 +91,8 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
         holder.moreBtn.setOnClickListener {
 
+            val dialogContext = dialog.context
+
             dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window?.setGravity(Gravity.BOTTOM)
@@ -90,7 +101,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             dialog.findViewById<View>(R.id.deleteLayout).setOnClickListener {
                 viewModel.deletePlan(plan = plan)
-                notifyItemRemoved(position)
+                notifyDataSetChanged()
             }
             dialog.findViewById<View>(R.id.privateLayout).setOnClickListener {
                 viewModel.changeToPersonal(plan = plan)
@@ -100,11 +111,36 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
             }
             dialog.findViewById<View>(R.id.friendListLayout).setOnClickListener {
 
+
             }
             dialog.findViewById<View>(R.id.editLayout).setOnClickListener {
 
             }
-            dialog.findViewById<View>(R.id.shareLayout).setOnClickListener {
+            dialog.findViewById<View>(R.id.inviteFriendLayout).setOnClickListener {
+
+                AlertDialog.Builder(dialogContext).apply {
+                    setTitle(dialogContext.getString(R.string.inviteTitle))
+                    setView(editTextLayout)
+                    setCancelable(false)
+                    setPositiveButton(R.string.accept){ dialog, which ->
+                        val text = editTextLayout.findViewById<EditText>(R.id.alertDialogEditText).text.toString()
+                        if (text.isNotEmpty()){
+                            Log.d("QAQQQ","AlertDialog$text")
+                            viewModel.changeEmailToUserID(text)
+                            viewModel.getDialogSelectedPlan(plan)
+
+                        } else {
+                            Toast.makeText(context,"沒輸入訊息" , Toast.LENGTH_LONG,).show()
+                        }
+                    }
+                    setNegativeButton(R.string.cancel){ dialog, which ->
+
+                    }
+                    setOnCancelListener {
+                        (editTextLayout.parent as ViewGroup).removeView(editTextLayout)
+                    }
+
+                }.show()
 
             }
 

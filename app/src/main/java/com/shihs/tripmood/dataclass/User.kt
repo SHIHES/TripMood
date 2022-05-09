@@ -9,5 +9,7 @@ data class User(
     var name: String? = null,
     var email: String? = null,
     var image: String? = null,
-    var id: String? = null
+    var uid: String? = null,
+//    var myPlanID: List<String> = emptyList(),
+    var collectionPlanID: List<String> = emptyList(),
 ): Parcelable

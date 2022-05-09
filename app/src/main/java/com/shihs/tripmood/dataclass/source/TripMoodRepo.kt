@@ -1,10 +1,7 @@
 package com.shihs.tripmood.dataclass.source
 
 import androidx.lifecycle.MutableLiveData
-import com.shihs.tripmood.dataclass.Plan
-
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.*
 
 interface TripMoodRepo {
 
@@ -31,4 +28,30 @@ interface TripMoodRepo {
     suspend fun updatePlanToPublic(planID: String): Result<Boolean>
 
     fun getLivePublicPlan(): MutableLiveData<List<Plan>>
+
+    suspend fun updatePlanStatus(planID: String, newStatus: Int): Result<Boolean>
+
+    suspend fun useEmailFindUser(email: String): Result<User>
+
+    suspend fun postPlanInvite(invite: Invite): Result<Boolean>
+
+    suspend fun getSendReply(): Result<List<Invite>>
+
+    suspend fun getReceiveInvite(): Result<List<Invite>>
+
+    suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean>
+
+    suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean>
+
+    suspend fun refusedInvite(inviteID: String): Result<Boolean>
+
+    fun getLiveChats(planID: String): MutableLiveData<List<Chat>>
+
+    suspend fun postChats(chat: Chat): Result<Boolean>
+
+    suspend fun postUser(user: User): Result<String>
+
+    suspend fun checkUserExist(userID: String): Result<User>
+
+    fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
 }

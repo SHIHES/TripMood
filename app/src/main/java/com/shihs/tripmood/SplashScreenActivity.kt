@@ -19,9 +19,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.appName.animate().translationY(-1400F).setDuration(2000L).setStartDelay(1000)
-        binding.lottieAnimationView.animate().translationX(2000F).setDuration(1500).setStartDelay(1900)
-
 
         Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
             override fun run() {

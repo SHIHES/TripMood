@@ -12,14 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentPlanChildViewpagerBinding
 import com.shihs.tripmood.home.HomeFragmentDirections
-import com.shihs.tripmood.home.PlanFilter
+import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.home.adapter.PlanAdapter
 
-class ChildFragment(private val planType: PlanFilter) : Fragment() {
+class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
     lateinit var binding: FragmentPlanChildViewpagerBinding
 
-    private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(planType) }
+    private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(homePlanType) }
+
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        viewModel.waitProgressLiveData()
+//
+//    }
 
 
     override fun onCreateView(
@@ -29,7 +37,7 @@ class ChildFragment(private val planType: PlanFilter) : Fragment() {
     ): View? {
         binding = FragmentPlanChildViewpagerBinding.inflate(inflater, container, false)
 
-        Log.d("SS","ChildFragment $planType")
+        Log.d("SS","ChildFragment $homePlanType")
 
 
         val recyclerPlan = binding.planRV
@@ -41,6 +49,9 @@ class ChildFragment(private val planType: PlanFilter) : Fragment() {
         recyclerPlan.adapter = adapter
         recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+//        viewModel.coworkTotalLiveData.observe(viewLifecycleOwner){it?.let {
+//
+//        } }
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
@@ -49,13 +60,25 @@ class ChildFragment(private val planType: PlanFilter) : Fragment() {
             }
         }
 
-        viewModel.livePlans.observe(viewLifecycleOwner) {
-            viewModel.planSorter(planType)
+        viewModel.livePlans.observe(viewLifecycleOwner) {it?.let {
+            viewModel.planSorter(homePlanType)
+            viewModel.updatePlanStatus(it)
+            adapter.notifyDataSetChanged()
+        }
         }
 
-        viewModel.viewpagerPlans.observe(viewLifecycleOwner){
+        viewModel.viewpagerPlans.observe(viewLifecycleOwner){it?.let {
             adapter.submitList(it)
+            adapter.notifyDataSetChanged()
+        } }
+
+        viewModel.inviteUser.observe(viewLifecycleOwner) {
+            it?.let {
+                Log.d("QAQ", "inviteUserID$it")
+                viewModel.inviteFriend(it)
+            }
         }
+
 
 
 

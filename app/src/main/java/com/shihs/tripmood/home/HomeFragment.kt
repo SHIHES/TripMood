@@ -2,15 +2,12 @@ package com.shihs.tripmood.home
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.material.tabs.TabLayoutMediator
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 import com.shihs.tripmood.home.adapter.ViewPagerAdapter
+import com.shihs.tripmood.util.HomePlanFilter
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -22,6 +19,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
 
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -37,8 +35,8 @@ class HomeFragment : Fragment() {
         viewPager2.adapter = viewPagerAdapter
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-            when (PlanFilter.values()[position]) {
-                PlanFilter.INDIVIDUAL  -> {
+            when (HomePlanFilter.values()[position]) {
+                HomePlanFilter.INDIVIDUAL  -> {
                     tab.text = "獨自規劃"
                 }
                 else -> {
