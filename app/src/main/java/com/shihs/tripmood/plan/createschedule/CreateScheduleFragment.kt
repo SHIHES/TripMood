@@ -1,7 +1,5 @@
 package com.shihs.tripmood.plan.createschedule
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
@@ -78,7 +76,7 @@ class CreateScheduleFragment : Fragment() {
 
         setupBtn()
 
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
 
         return binding.root
     }
@@ -167,12 +165,12 @@ class CreateScheduleFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as MainActivity).showActionBar()
+        (requireActivity() as MainActivity).showToolBar()
     }
 
 

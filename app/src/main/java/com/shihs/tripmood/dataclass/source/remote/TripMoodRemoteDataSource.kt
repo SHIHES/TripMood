@@ -8,7 +8,7 @@ import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 import com.shihs.tripmood.util.InviteFilter
 import com.shihs.tripmood.util.Logger
-import com.shihs.tripmood.util.Me
+import com.shihs.tripmood.util.UserManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,7 +18,14 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_PLANS = "plans"
     private const val PATH_SCHEDULES = "schedules"
     private const val PATH_USERS = "users"
+    private const val PATH_CHATS = "chats"
     private const val PATH_INVITES = "invites"
+
+
+    private const val KEY_CHATS_CREATEDTIME = "createdTime"
+    private const val KEY_OWNER = "ownerID"
+    private const val KEY_UID = "uid"
+    private const val KEY_COWORKLIST = "coworkList"
     private const val KEY_INVITE_STATUS = "status"
     private const val KEY_EMAIL = "email"
     private const val KEY_STARTDATE = "startDate"
@@ -61,10 +68,11 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
         FirebaseFirestore.getInstance()
             .collection(PATH_PLANS)
-            .orderBy(KEY_STARTDATE, Query.Direction.DESCENDING)
+            .whereEqualTo(KEY_OWNER, UserManager.userUID)
+//            .whereArrayContains(KEY_FRIENDLIST, UserManager.userUID!!)
             .addSnapshotListener{ snapshot, exception ->
 
-                Logger.i("getLivePlans addSnapshotLister success")
+                Logger.i("getLivePlans addSnapshotLister success ${UserManager.userUID}")
 
                 exception?.let {
                     Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
@@ -117,12 +125,8 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         val plans = FirebaseFirestore.getInstance().collection(PATH_PLANS)
         val document = plans.document()
 
-
-        val user = User(name = "Steven", email = "test@gamil.com", id = "test")
-
-
         plan.id = document.id
-        plan.owner = user
+        plan.ownerID = UserManager.userUID
 
         document.set(plan).addOnCompleteListener{ task ->
             if (task.isSuccessful){
@@ -282,6 +286,39 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         }
     }
 
+    override fun getCoWorkLivePlan():MutableLiveData<List<Plan>> {
+
+        val liveData = MutableLiveData<List<Plan>>()
+
+        UserManager.userUID?.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .whereArrayContains(KEY_COWORKLIST, it)
+                .addSnapshotListener{ snapshot, exception ->
+
+                    Logger.i("getCoWorkLivePlan success")
+
+                    exception?.let {
+                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    }
+
+                    val list = mutableListOf<Plan>()
+                    if (snapshot != null) {
+                        for (document in snapshot){
+                            Logger.d(document.id + " => " + document.data)
+
+                            val article = document.toObject(Plan::class.java)
+                            list.add(article)
+                        }
+                    }
+
+                    liveData.value = list
+
+                }
+        }
+        return liveData
+    }
+
     override fun getLivePublicPlan(): MutableLiveData<List<Plan>> {
         val liveData = MutableLiveData<List<Plan>>()
 
@@ -391,7 +428,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     override suspend fun getSendReply(): Result<List<Invite>> = suspendCoroutine { continuation ->
 
         FirebaseFirestore.getInstance().collection(PATH_INVITES)
-            .whereEqualTo(KEY_RECEIVERID, Me.user.id)
+            .whereEqualTo(KEY_SENDERID, UserManager.userUID)
             .whereEqualTo(KEY_INVITE_STATUS, InviteFilter.REFUSED.status)
             .whereEqualTo(KEY_INVITE_STATUS, InviteFilter.APPROVAL.status)
             .get()
@@ -426,7 +463,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
         FirebaseFirestore.getInstance().collection(PATH_INVITES)
             .whereEqualTo(KEY_INVITE_STATUS,InviteFilter.WAITING.status)
-            .whereEqualTo(KEY_RECEIVERID, Me.user.id)
+            .whereEqualTo(KEY_RECEIVERID, UserManager.userUID)
             .get()
             .addOnCompleteListener{ task ->
                 if (task.isSuccessful){
@@ -455,15 +492,178 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             }
     }
 
-    override suspend fun acceptInvite(inviteID: String): Result<Boolean> = suspendCoroutine { continuation ->
+    override suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean> = suspendCoroutine { continuation ->
 
         FirebaseFirestore.getInstance()
             .collection(PATH_INVITES)
             .document(inviteID)
+            .update(KEY_PLAN_STATUS, InviteFilter.APPROVAL.status)
+            .addOnSuccessListener {
+
+                Logger.i("acceptInvite: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error acceptInvite documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
     }
 
-    override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean> = suspendCoroutine { continuation ->
+
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.collection(PATH_PLANS).document(planID)
+        val owner = User(name = UserManager.userName, uid = UserManager.userUID, image = UserManager.userPhotoUrl)
+
+            db.runBatch { batch ->
+                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(user) )
+                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(owner))
+            }
+            .addOnSuccessListener{
+                Logger.i("acceptInvite: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error acceptInvite documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+
+    }
+
+    override suspend fun refusedInvite(inviteID: String): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_INVITES)
+            .document(inviteID)
+            .update(KEY_PLAN_STATUS, InviteFilter.REFUSED.status)
+            .addOnSuccessListener {
+
+                Logger.i("acceptInvite: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error acceptInvite documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+    }
+
+    override fun getLiveChats(planID: String): MutableLiveData<List<Chat>> {
+
+        val liveData = MutableLiveData<List<Chat>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_PLANS)
+            .document(planID)
+            .collection(PATH_CHATS)
+            .orderBy(KEY_CHATS_CREATEDTIME, Query.Direction.ASCENDING)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLiveChats addSnapshotLister success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Chat>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    val chat = document.toObject(Chat::class.java)
+                    list.add(chat)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
+    override suspend fun postChats(chat: Chat): Result<Boolean> = suspendCoroutine{ continuation ->
+        val chats = FirebaseFirestore.getInstance().collection(PATH_PLANS).document(chat.planID!!)
+            .collection(PATH_CHATS)
+
+        val document = chats.document()
+
+        chat.id = document.id
+
+        document.set(chat).addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+
+                Logger.i("postChats: $chat")
+
+                continuation.resume(Result.Success(true))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error postChats. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("postChats Fail"))
+            }
+        }
+    }
+
+    override suspend fun postUser(user: User): Result<String>  = suspendCoroutine{ continuation ->
+        val users = FirebaseFirestore.getInstance().collection(PATH_USERS)
+
+        val document = users.document(user.uid!!)
+
+
+        document.set(user).addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+
+                Logger.i("postUser: $user")
+
+                continuation.resume(Result.Success(document.id))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error postUser. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("postUser Fail"))
+            }
+        }
+    }
+
+    override suspend fun checkUserExist(userID: String): Result<User> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance().collection(PATH_USERS)
+            .whereEqualTo(KEY_UID, userID)
+            .get()
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+
+                    var realUser = User()
+
+                    Logger.i("Find checkUserExist addOnCompleteListener")
+                    Logger.i("Find checkUserExist ${task.result.size()}")
+                    for (document in task.result){
+
+                        Logger.d(document.id + " => " + document.data)
+
+                        val user = document.toObject(User::class.java)
+
+                        realUser = user
+
+                        Logger.i("checkUserExist $user")
+
+
+                    }
+
+                    continuation.resume(Result.Success(realUser))
+
+                } else {
+                    task.exception?.let {
+                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(Result.Fail("checkUserExist fail"))
+                }
+            }
+
     }
 
 }

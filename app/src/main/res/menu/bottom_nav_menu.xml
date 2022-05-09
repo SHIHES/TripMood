@@ -18,9 +18,9 @@
         tools:ignore="MenuTitle" />
 
     <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/ic_baseline_chat_24"
-        android:title="Chat" />
+        android:id="@+id/navigation_collect"
+        android:icon="@drawable/favorite_fill0_wght400_grad0_opsz48"
+        android:title="Collect" />
 
     <item
         android:id="@+id/navigation_user"

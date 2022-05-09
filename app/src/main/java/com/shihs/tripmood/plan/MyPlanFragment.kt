@@ -13,7 +13,6 @@ import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
-import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
 
@@ -86,7 +85,7 @@ class MyPlanFragment : Fragment() {
 
         setUpBtn()
 
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
 
         return binding.root
     }
@@ -108,16 +107,22 @@ class MyPlanFragment : Fragment() {
                 MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
             ))
         }
+
+        binding.chatBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChatFragment(
+                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
+            ))
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        (requireActivity() as MainActivity).hideActionBar()
+        (requireActivity() as MainActivity).hideToolBar()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as MainActivity).showActionBar()
+        (requireActivity() as MainActivity).showToolBar()
     }
 
 }

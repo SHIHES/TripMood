@@ -2,6 +2,7 @@ package com.shihs.tripmood.home.childpage
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Invite
@@ -11,8 +12,8 @@ import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.network.LoadApiStatus
-import com.shihs.tripmood.util.Me
 import com.shihs.tripmood.util.PlanStatusFilter
+import com.shihs.tripmood.util.UserManager
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -44,11 +45,25 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     var livePlans = MutableLiveData<List<Plan>>()
 
+    var liveCoworkPlans = MutableLiveData<List<Plan>>()
+
     var viewpagerPlans = MutableLiveData<List<Plan>>()
 
     var inviteUser = MutableLiveData<User>()
 
     var dialogSelectedPlan = Plan()
+
+//    val coworkTotalLiveData: MediatorLiveData<Pair<List<Plan>?, List<Plan>?>> = MediatorLiveData()
+
+//    fun waitProgressLiveData(){
+//        coworkTotalLiveData.addSource(liveCoworkPlans){
+//            coworkTotalLiveData.value = Pair(it, livePlans.value)
+//        }
+//
+//        coworkTotalLiveData.addSource(livePlans){
+//            coworkTotalLiveData.value = Pair(liveCoworkPlans.value, it)
+//        }
+//    }
 
 
     fun navigateToDetail(plan: Plan) {
@@ -61,6 +76,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         Log.d("SS","ChildHomeViewModel $homePlanType")
 
         getLivePlansResult()
+        getCoworkPlansResult()
 
     }
 
@@ -88,6 +104,12 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
         livePlans = repository.getLivePlans()
 
+
+
+    }
+
+    private fun getCoworkPlansResult(){
+        liveCoworkPlans = repository.getCoWorkLivePlan()
     }
 
     fun planSorter(homePlanType: HomePlanFilter){
@@ -95,10 +117,10 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         viewpagerPlans.value  = when (homePlanType) {
 
             HomePlanFilter.INDIVIDUAL -> livePlans.value?.filter {
-                it.friendsUserID == null &&
+                it.coworkList.isNullOrEmpty() &&
                         it.status != PlanStatusFilter.END.code
             }
-            HomePlanFilter.COWORK -> livePlans.value?.filter { it.friendsUserID != null }
+            HomePlanFilter.COWORK -> liveCoworkPlans.value
 
         }
 
@@ -187,9 +209,11 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         val invite = Invite(
             invitePlanID = dialogSelectedPlan.id,
             invitePlanTitle = dialogSelectedPlan.title,
-            senderID = Me.user.id,
-            senderName = Me.user.name,
-            receiverID = receiver.id,
+            senderID = UserManager.userUID,
+            senderPhotoUrl = UserManager.userPhotoUrl,
+            senderName = UserManager.userName,
+            receiverPhotoUrl = receiver.image,
+            receiverID = receiver.uid,
             receiverName = receiver.name,
             status = 0
         )

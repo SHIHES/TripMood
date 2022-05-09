@@ -74,13 +74,36 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.getReceiveInvite()
     }
 
-    override suspend fun acceptInvite(inviteID: String): Result<Boolean> {
-        return remoteDataSource.acceptInvite(inviteID = inviteID)
+    override suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean> {
+        return remoteDataSource.acceptInviteChangeStatus(inviteID = inviteID)
+    }
+
+    override suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean> {
+        return remoteDataSource.acceptInviteAddUserToPlan(planID = planID, user = user)
     }
 
     override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
         return remoteDataSource.refusedInvite(inviteID = inviteID)
     }
 
+    override fun getLiveChats(planID: String): MutableLiveData<List<Chat>> {
+        return remoteDataSource.getLiveChats(planID = planID)
+    }
+
+    override suspend fun postChats(chat: Chat): Result<Boolean> {
+        return remoteDataSource.postChats(chat = chat)
+    }
+
+    override suspend fun postUser(user: User): Result<String> {
+        return remoteDataSource.postUser(user = user)
+    }
+
+    override suspend fun checkUserExist(userID: String): Result<User> {
+        return remoteDataSource.checkUserExist(userID = userID)
+    }
+
+    override fun getCoWorkLivePlan(): MutableLiveData<List<Plan>> {
+        return remoteDataSource.getCoWorkLivePlan()
+    }
 
 }

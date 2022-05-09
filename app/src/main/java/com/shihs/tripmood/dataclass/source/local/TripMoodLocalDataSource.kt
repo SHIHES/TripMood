@@ -74,11 +74,35 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun acceptInvite(inviteID: String): Result<Boolean> {
+    override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun refusedInvite(inviteID: String): Result<Boolean> {
+    override suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveChats(planID: String): MutableLiveData<List<Chat>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postChats(chat: Chat): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postUser(user: User): Result<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun checkUserExist(userID: String): Result<User> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getCoWorkLivePlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
 

@@ -1,41 +1,81 @@
 package com.shihs.tripmood.util
 
 import android.content.Context
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shihs.tripmood.R
 import com.shihs.tripmood.TripMoodApplication
 import com.shihs.tripmood.dataclass.User
-import com.shihs.tripmood.util.Util.getString
 
 object UserManager {
 
     private const val USER_DATA = "user_data"
-    private const val USER_TOKEN = "user_token"
+    private const val USER_UID = "user_uid"
+    private const val USER_PHOTOURL = "user_photoUrl"
+    private const val USER_NAME = "user_name"
 
-    private val _user = MutableLiveData<User>()
 
-    val user: LiveData<User>
-        get() = _user
-
-    var userToken: String? = null
+    var userUID: String? = null
         get() = TripMoodApplication.instance
             .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
-            .getString(USER_TOKEN, null)
+            .getString(USER_UID, null)
         set(value) {
             field = when (value) {
                 null -> {
                     TripMoodApplication.instance
                         .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
-                        .remove(USER_TOKEN)
+                        .remove(USER_UID)
                         .apply()
                     null
                 }
                 else -> {
                     TripMoodApplication.instance
                         .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
-                        .putString(USER_TOKEN, value)
+                        .putString(USER_UID, value)
+                        .apply()
+                    value
+                }
+            }
+        }
+
+    var userPhotoUrl: String? = null
+        get() = TripMoodApplication.instance
+            .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
+            .getString(USER_PHOTOURL, null)
+        set(value) {
+            field = when (value) {
+                null -> {
+                    TripMoodApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .remove(USER_PHOTOURL)
+                        .apply()
+                    null
+                }
+                else -> {
+                    TripMoodApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .putString(USER_PHOTOURL, value)
+                        .apply()
+                    value
+                }
+            }
+        }
+
+    var userName: String? = null
+        get() = TripMoodApplication.instance
+            .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
+            .getString(USER_NAME, null)
+        set(value) {
+            field = when (value) {
+                null -> {
+                    TripMoodApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .remove(USER_NAME)
+                        .apply()
+                    null
+                }
+                else -> {
+                    TripMoodApplication.instance
+                        .getSharedPreferences(USER_DATA, Context.MODE_PRIVATE).edit()
+                        .putString(USER_NAME, value)
                         .apply()
                     value
                 }
@@ -43,33 +83,15 @@ object UserManager {
         }
 
     val isLoggedIn: Boolean
-        get() = userToken != null
+        get() = userUID != null
 
 
     fun clear() {
-        userToken = null
-        _user.value = null
+        userUID = null
+        userPhotoUrl = null
+        userName = null
     }
 
-    private var lastChallengeTime: Long = 0
-    private var challengeCount: Int = 0
-    private const val CHALLENGE_LIMIT = 23
 
-//    fun challenge() {
-//        if (System.currentTimeMillis() - lastChallengeTime > 5000) {
-//            lastChallengeTime = System.currentTimeMillis()
-//            challengeCount = 0
-//        } else {
-//            if (challengeCount == CHALLENGE_LIMIT) {
-//                userToken = null
-//                Toast.makeText(
-//                    TripMoodApplication.instance,
-//                    getString(R.string.profile_mystic_information),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            } else {
-//                challengeCount++
-//            }
-//        }
-//    }
+
 }

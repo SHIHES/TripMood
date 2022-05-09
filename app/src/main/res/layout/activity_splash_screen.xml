@@ -8,7 +8,7 @@
     android:background="#a8dff9">
 
 
-    <TextView
+    <ImageView
         android:id="@+id/appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -29,13 +29,14 @@ class InviteAdapter(private val onClickListener: OnClickListener, private val vi
             binding.InviteMsg.text = "$inviteName \n邀請你一同參加 \n${inviteTitle}旅程"
 
             binding.notificationAcceptBtn.setOnClickListener {
-//                viewModel.acceptInvite()
+                viewModel.acceptInviteChangeStatus(inviteID = invite.id.toString())
+                viewModel.acceptInviteAddUserToPlan(invite = invite)
                 binding.buttonControlLayout.visibility = View.INVISIBLE
                 binding.responseNotification.visibility = View.VISIBLE
                 binding.responseNotification.text = getString(R.string.acceptInvite)
             }
             binding.refusedNotificationBtn.setOnClickListener {
-//                viewModel.refuseInvite()
+                viewModel.refusedInvite(inviteID = invite.id.toString())
                 binding.buttonControlLayout.visibility = View.INVISIBLE
                 binding.responseNotification.visibility = View.VISIBLE
                 binding.responseNotification.text = getString(R.string.refusedInvite)

@@ -39,7 +39,19 @@ interface TripMoodRepo {
 
     suspend fun getReceiveInvite(): Result<List<Invite>>
 
-    suspend fun acceptInvite(inviteID: String): Result<Boolean>
+    suspend fun acceptInviteChangeStatus(inviteID: String): Result<Boolean>
+
+    suspend fun acceptInviteAddUserToPlan(planID: String, user: User): Result<Boolean>
 
     suspend fun refusedInvite(inviteID: String): Result<Boolean>
+
+    fun getLiveChats(planID: String): MutableLiveData<List<Chat>>
+
+    suspend fun postChats(chat: Chat): Result<Boolean>
+
+    suspend fun postUser(user: User): Result<String>
+
+    suspend fun checkUserExist(userID: String): Result<User>
+
+    fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
 }

@@ -2,16 +2,13 @@ package com.shihs.tripmood
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -19,8 +16,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import app.appworks.school.publisher.ext.getVmFactory
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationBarView
 import com.shihs.tripmood.databinding.ActivityMainBinding
 import com.shihs.tripmood.util.CurrentFragmentType
@@ -60,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_search,
-                R.id.navigation_chat,
+                R.id.navigation_collect,
                 R.id.navigation_user
             )
         )
@@ -97,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.createPlanFragment -> CurrentFragmentType.CREATE_PLAN
                 R.id.detailFragment -> CurrentFragmentType.DETAIL_SCHEDULE
                 R.id.editScheduleFragment -> CurrentFragmentType.EDIT_SCHEDULE
-                R.id.navigation_chat -> CurrentFragmentType.CHAT
+                R.id.navigation_collect -> CurrentFragmentType.CHAT
                 R.id.navigation_user -> CurrentFragmentType.USER
                 else -> viewModel.currentFragmentType.value
             }
@@ -114,10 +109,10 @@ class MainActivity : AppCompatActivity() {
                     )
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_chat -> {
+                R.id.navigation_collect -> {
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
-                        MobileNavigationDirections.actionGlobalChatFragment()
+                        MobileNavigationDirections.actionGlobalNavigationCollect()
                     )
                     return@setOnItemSelectedListener true
                 }
@@ -161,11 +156,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun hideActionBar() {
+    fun hideToolBar() {
+        binding.toolbar.visibility = View.GONE
+    }
+
+    fun showToolBar() {
+        binding.toolbar.visibility = View.VISIBLE
+    }
+
+    fun hideBottomNavBar(){
         binding.bottomNavigationView.visibility = View.GONE
     }
 
-    fun showActionBar() {
+    fun showBottomNavBar(){
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
 

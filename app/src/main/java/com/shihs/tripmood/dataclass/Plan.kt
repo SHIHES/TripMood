@@ -1,6 +1,7 @@
 package com.shihs.tripmood.dataclass
 
 import android.os.Parcelable
+import com.shihs.tripmood.util.UserManager
 import kotlinx.android.parcel.Parcelize
 
 
@@ -10,11 +11,12 @@ data class Plan(
     var startDate: Long? = null,
     var endDate: Long? = null,
     var id: String? = "",
-    var owner: User? = null,
-    var friendsUserID: List<String>? = null,
+    var ownerID: String? = null,
+    var coworkList: List<User>? = emptyList(),
     var private: Boolean = true,
     var status: Int = 0,
     var image: String = ""
 ) : Parcelable
+
 
 

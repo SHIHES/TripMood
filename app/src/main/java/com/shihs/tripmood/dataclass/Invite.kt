@@ -10,7 +10,9 @@ data class Invite (
     var invitePlanTitle: String? = "",
     var senderName: String? = "",
     var senderID: String? = "",
+    var senderPhotoUrl: String? = "",
     var receiverName: String? = "",
     var receiverID: String? = "",
+    var receiverPhotoUrl: String? = "",
     var status: Int = 0
 ) : Parcelable

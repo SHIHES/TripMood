@@ -13,6 +13,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dash_line.xml" value="0.3985" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dialog_background.xml" value="0.1" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dish_small.xml" value="0.106" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/favorite_fill0_wght400_grad0_opsz48.xml" value="0.1475" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/home_selector.xml" value="0.1" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/horizontal_dotted_line.xml" value="0.3985" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/hotel_ask.xml" value="0.106" />
@@ -52,8 +53,11 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/dialog_plan_request_add.xml" value="0.165" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/dialog_plan_request_title.xml" value="0.165" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_chat.xml" value="0.290625" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_chat_detail.xml" value="0.25" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_collection.xml" value="0.1375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_dashboard.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_login.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notification.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notifications.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan.xml" value="0.379981884057971" />
@@ -70,6 +74,10 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_user.xml" value="0.25" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragmet_user_plan_child_viewpager.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_activity.xml" value="0.55" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_chat_item.xml" value="0.375" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_chat_me.xml" value="0.335" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_chat_other.xml" value="0.335" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_chat_you.xml" value="0.16197916666666667" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_day.xml" value="0.5" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_invite_notification.xml" value="0.375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_location_icon.xml" value="0.42916666666666664" />
@@ -84,6 +92,8 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/test.xml" value="0.375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/view_edittext.xml" value="0.42916666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.211" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.124" />
       </map>
     </option>
   </component>

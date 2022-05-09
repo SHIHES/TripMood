@@ -6,6 +6,7 @@ import com.shihs.tripmood.MainViewModel
 
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
+import com.shihs.tripmood.login.LoginViewModel
 import com.shihs.tripmood.notification.NotificationViewModel
 import com.shihs.tripmood.plan.ShowAllLocationViewModel
 import com.shihs.tripmood.plan.createplan.CreatePlanViewModel
@@ -37,6 +38,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(NotificationViewModel::class.java) ->
                     NotificationViewModel(repository)
+
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

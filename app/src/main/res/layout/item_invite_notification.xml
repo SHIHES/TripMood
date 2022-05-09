@@ -3,15 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="180dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="@dimen/View_margin"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="20dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -33,7 +36,6 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
 
-
                 <ImageButton
                     android:id="@+id/notificationAcceptBtn"
                     android:layout_width="60dp"
@@ -48,9 +50,9 @@
 
                 <ImageButton
                     android:id="@+id/refusedNotificationBtn"
-                    android:layout_margin="@dimen/View_margin"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/View_margin"
                     android:background="@color/tripMood_red"
                     android:src="@drawable/ic_baseline_close_24"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -68,11 +70,10 @@
                 android:letterSpacing="0.2"
                 android:text="已回覆: 接受"
                 android:textSize="20sp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
 
 
             <TextView

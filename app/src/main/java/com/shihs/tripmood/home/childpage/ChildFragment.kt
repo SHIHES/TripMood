@@ -22,6 +22,14 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
     private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(homePlanType) }
 
 
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        viewModel.waitProgressLiveData()
+//
+//    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +49,9 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         recyclerPlan.adapter = adapter
         recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+//        viewModel.coworkTotalLiveData.observe(viewLifecycleOwner){it?.let {
+//
+//        } }
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {

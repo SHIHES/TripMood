@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -163,12 +163,27 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.shihs.tripmood.chat.ChatFragment"
-        android:label="ChatFragment" />
+        android:label="ChatFragment" >
+
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+
+    </fragment>
     <action android:id="@+id/action_global_chatFragment" app:destination="@id/chatFragment" />
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.shihs.tripmood.notification.NotificationFragment"
         android:label="NotificationFragment" /><action android:id="@+id/action_global_notificationFragment" app:destination="@id/notificationFragment"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.shihs.tripmood.login.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/navigation_collect"
+        android:name="com.shihs.tripmood.collect.CollectionFragment"
+        android:label="CollectionFragment" />
+    <action android:id="@+id/action_global_navigation_collect" app:destination="@id/navigation_collect" />
 
 
 </navigation>
