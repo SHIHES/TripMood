@@ -16,8 +16,8 @@ android {
         applicationId "com.shihs.tripmood"
         minSdk 30
         targetSdk 32
-        versionCode 4
-        versionName "1.0.4"
+        versionCode 5
+        versionName "1.0.5git "
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
