@@ -2,6 +2,7 @@ package com.shihs.tripmood.home.adapter
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -10,8 +11,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
+import com.shihs.tripmood.databinding.ItemPlanCoworkImageBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import java.text.SimpleDateFormat
@@ -37,8 +40,25 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             } else{
                 binding.tripDate.text = "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
-
             }
+
+//            if (!item.coworkList.isNullOrEmpty()){
+//
+//
+//
+//                item.coworkList!!.forEach {
+//
+//                    val itemPlanCoworkImageBinding = ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
+//
+//                    viewModel.getUserInfo(it)
+//
+//                    Glide.with(itemView.context).load(viewModel.coworkUser.uid).into(itemPlanCoworkImageBinding.coworkImage)
+//                    viewModel.coworkUser.image
+//
+//                    binding.coworkerImageLayout.addView(itemPlanCoworkImageBinding.root)
+//                }
+//
+//            }
 
         }
     }

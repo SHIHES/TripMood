@@ -57,4 +57,6 @@ interface TripMoodDataSource {
 
     fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
 
+    suspend fun getUserInfo(userID: String) : Result<User>
+
     }

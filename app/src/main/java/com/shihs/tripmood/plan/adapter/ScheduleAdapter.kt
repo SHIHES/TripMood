@@ -14,6 +14,7 @@ import java.util.*
 class ScheduleAdapter(private val onClickListener: OnClickListener,private val viewModel: MyPlanViewModel) : ListAdapter<Schedule, ScheduleAdapter.DateVH>(DiffUtil()) {
 
 
+
     class OnClickListener(val clickListener: (schedule: Schedule) -> Unit) {
         fun onClick(schedule: Schedule) = clickListener(schedule)
     }

@@ -106,5 +106,9 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getUserInfo(userID: String): Result<User> {
+        TODO("Not yet implemented")
+    }
+
 
 }

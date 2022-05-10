@@ -109,7 +109,8 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     private fun getCoworkPlansResult(){
-        liveCoworkPlans = repository.getCoWorkLivePlan()
+            liveCoworkPlans = repository.getCoWorkLivePlan()
+        Log.d("QAQQQ","liveCoworkPlans ${liveCoworkPlans.value}")
     }
 
     fun planSorter(homePlanType: HomePlanFilter){
@@ -275,6 +276,35 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     fun getDialogSelectedPlan(plan: Plan?) {
         if (plan != null) {
             dialogSelectedPlan = plan
+        }
+    }
+
+    var coworkUser = User()
+
+    fun getUserInfo(userID: String) {
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.getUserInfo(userID = userID)) {
+                is Result.Success -> {
+                    coworkUser = result.data!!
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }.let {
+
+            }
         }
     }
 

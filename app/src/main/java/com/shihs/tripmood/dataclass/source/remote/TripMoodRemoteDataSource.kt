@@ -305,10 +305,10 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                     val list = mutableListOf<Plan>()
                     if (snapshot != null) {
                         for (document in snapshot){
-                            Logger.d(document.id + " => " + document.data)
+                            Logger.d(document.id + " getCoWorkLivePlan => " + document.data)
 
-                            val article = document.toObject(Plan::class.java)
-                            list.add(article)
+                            val plan = document.toObject(Plan::class.java)
+                            list.add(plan)
                         }
                     }
 
@@ -514,11 +514,10 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
         val db = FirebaseFirestore.getInstance()
         val ref = db.collection(PATH_PLANS).document(planID)
-        val owner = User(name = UserManager.userName, uid = UserManager.userUID, image = UserManager.userPhotoUrl)
 
             db.runBatch { batch ->
-                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(user) )
-                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(owner))
+                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(user.uid) )
+                batch.update(ref, KEY_COWORKLIST, FieldValue.arrayUnion(UserManager.userUID))
             }
             .addOnSuccessListener{
                 Logger.i("acceptInvite: $it")
@@ -664,6 +663,34 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
             }
 
+    }
+
+
+    override suspend fun getUserInfo(userID: String) : Result<User> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .whereEqualTo(KEY_UID, userID)
+            .get()
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    Logger.i("Find addOnCompleteListener getUserInfo")
+                    for (document in task.result){
+                        Logger.d(document.id + " => " + document.data)
+
+                        val user = document.toObject(User::class.java)
+
+                        continuation.resume(Result.Success(user))
+                    }
+
+                } else {
+                    task.exception?.let {
+                        Logger.w("[${this::class.simpleName}] Error getting getUserInfo documents. ${it.message}")
+                        continuation.resume(Result.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(Result.Fail("getUserInfo fail"))
+                }
+            }
     }
 
 }

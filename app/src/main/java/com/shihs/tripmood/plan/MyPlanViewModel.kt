@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
+import com.shihs.tripmood.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
@@ -18,6 +21,16 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+
+    val error: LiveData<String>
+        get() = _error
 
 
     private val _plan = MutableLiveData<Plan>().apply {
@@ -53,7 +66,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
-    var adapterPosition = -1
+    var adapterPosition = 0
 
     var clickSchedule: Schedule = Schedule()
 
@@ -172,6 +185,31 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
         } else {
             return true
         }
+
+    }
+
+    fun scheulesDelete(schedule: Schedule) { coroutineScope.launch {
+        _status.value = LoadApiStatus.LOADING
+
+        when (val result =  repository.deleteSchedule(planID = schedule.planID!!, scheduleID = schedule.scheduleId!!) ) {
+            is Result.Success -> {
+                _error.value = null
+                _status.value = LoadApiStatus.DONE
+            }
+            is Result.Fail -> {
+                _error.value = result.error
+                _status.value = LoadApiStatus.ERROR
+            }
+            is Result.Error -> {
+                _error.value = result.exception.toString()
+                _status.value = LoadApiStatus.ERROR
+            }
+            else -> {
+                _status.value = LoadApiStatus.ERROR
+            }
+        }
+    }
+
 
     }
 }

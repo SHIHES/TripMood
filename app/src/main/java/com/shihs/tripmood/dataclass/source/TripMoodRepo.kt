@@ -54,4 +54,6 @@ interface TripMoodRepo {
     suspend fun checkUserExist(userID: String): Result<User>
 
     fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
+
+    suspend fun getUserInfo(userID: String) : Result<User>
 }

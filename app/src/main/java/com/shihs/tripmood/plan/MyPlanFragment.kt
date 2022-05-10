@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MainActivity
@@ -15,12 +16,18 @@ import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
+import com.shihs.tripmood.util.ItemTouchHelperCallback
+
+
+
 
 class MyPlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanBinding
 
     private val viewModel by viewModels <MyPlanViewModel> { getVmFactory(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan) }
+
+    private val position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +48,8 @@ class MyPlanFragment : Fragment() {
         recyclerPlanDays.adapter = scheduleAdapter
 
 
+
+
         val recyclerEvents = binding.scheduleRv
         val eventAdapter = EventAdapter(EventAdapter.OnClickListener{
             viewModel.navigationToDetail(it)
@@ -50,6 +59,12 @@ class MyPlanFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         recyclerEvents.adapter = eventAdapter
+
+        val callback = ItemTouchHelperCallback(eventAdapter, requireContext())
+
+        val itemTouchHelper = ItemTouchHelper(callback)
+
+        itemTouchHelper.attachToRecyclerView(recyclerEvents)
 
         viewModel.schedules.observe(viewLifecycleOwner){ it?.let {
             scheduleAdapter.submitList(it)
@@ -81,6 +96,15 @@ class MyPlanFragment : Fragment() {
                 }
             }
         }
+
+//
+//        val refreshLayout = binding.swipeRefreshLayout
+//
+//        refreshLayout.setOnRefreshListener {
+//            refreshLayout.isRefreshing = false
+//
+//            viewModel.getLiveSchedule()
+//        }
 
 
         setUpBtn()
