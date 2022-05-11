@@ -56,6 +56,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 //                    viewModel.coworkUser.image
 //
 //                    binding.coworkerImageLayout.addView(itemPlanCoworkImageBinding.root)
+//
 //                }
 //
 //            }

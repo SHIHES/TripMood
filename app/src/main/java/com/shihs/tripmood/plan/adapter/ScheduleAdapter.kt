@@ -57,4 +57,5 @@ class ScheduleAdapter(private val onClickListener: OnClickListener,private val v
 
     }
 
+
 }

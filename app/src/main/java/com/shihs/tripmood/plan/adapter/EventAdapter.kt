@@ -53,8 +53,9 @@ class EventAdapter(private val onClickListener: OnClickListener, private val vie
 
                 binding.hideDelete.setOnClickListener {
 
-                    viewModel.scheulesDelete(item)
+                    viewModel.findTimeRangeSchedule()
 
+                    viewModel.scheulesDelete(item)
                 }
             }
         }
@@ -97,6 +98,8 @@ class EventAdapter(private val onClickListener: OnClickListener, private val vie
     }
 
     override fun onItemDelete(position: Int) {
+
+
 
         Log.d("ss","position")
     }

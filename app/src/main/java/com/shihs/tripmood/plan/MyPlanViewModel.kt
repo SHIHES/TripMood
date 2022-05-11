@@ -44,20 +44,11 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val schedules: LiveData<List<Schedule>>
         get() = _schedules
 
-    private val _selectedSchedule = MutableLiveData<Schedule>()
-
-    val selectedSchedule: LiveData<Schedule>
-        get() = _selectedSchedule
 
     private val _dayOfSchedule = MutableLiveData<List<Schedule>>()
 
     val dayOfSchedule: LiveData<List<Schedule>>
         get() = _dayOfSchedule
-
-    private val _selectedAdapterPosition = MutableLiveData<Int>()
-
-    val selectedAdapterPosition: LiveData<Int>
-        get() = _selectedAdapterPosition
 
     private val _navigationToDetail = MutableLiveData<Schedule>()
 
@@ -66,9 +57,13 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
-    var adapterPosition = 0
+    var adapterPosition = MutableLiveData(0)
 
-    var clickSchedule: Schedule = Schedule()
+
+    private val _postitionControlSchedule = MutableLiveData<Schedule>()
+
+    val positionControlSchedule: LiveData<Schedule>
+        get() = _postitionControlSchedule
 
 
     init {
@@ -110,17 +105,21 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     }
 
-    fun getSelectedSchedule(selectedSchedule: Schedule) {
-        _selectedSchedule.value = selectedSchedule
-        clickSchedule = selectedSchedule
+    fun getPositionAndDate(position: Int){
+        _postitionControlSchedule.value = _schedules.value!![position]
     }
+
+//    fun getSelectedSchedule(selectedSchedule: Schedule) {
+//        _selectedSchedule.value = selectedSchedule
+//        clickSchedule = selectedSchedule
+//    }
 
     fun findTimeRangeSchedule() {
         try {
-            val aDayOfSchedule = _selectedSchedule.value?.time?.plus(86400000)?.minus(1)
+            val aDayOfSchedule = _postitionControlSchedule.value?.time?.plus(86400000)?.minus(1)
 
             _dayOfSchedule.value = liveSchedules.value?.filter {
-                it.time in _selectedSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
+                it.time in _postitionControlSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
             }?.sortedBy {
                 it.time
             }
@@ -132,7 +131,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     }
 
     fun getSelectedAdapterPosition(position: Int) {
-        adapterPosition = position
+        adapterPosition.value = position
     }
 
     fun selectedScheduleClear() {

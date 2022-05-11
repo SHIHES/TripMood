@@ -55,15 +55,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
 //    val coworkTotalLiveData: MediatorLiveData<Pair<List<Plan>?, List<Plan>?>> = MediatorLiveData()
 
-//    fun waitProgressLiveData(){
-//        coworkTotalLiveData.addSource(liveCoworkPlans){
-//            coworkTotalLiveData.value = Pair(it, livePlans.value)
-//        }
-//
-//        coworkTotalLiveData.addSource(livePlans){
-//            coworkTotalLiveData.value = Pair(liveCoworkPlans.value, it)
-//        }
-//    }
+
 
 
     fun navigateToDetail(plan: Plan) {
@@ -288,6 +280,8 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
             when (val result = repository.getUserInfo(userID = userID)) {
                 is Result.Success -> {
                     coworkUser = result.data!!
+
+                    Log.d("SS","getUserInfo ${result.data}")
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
