@@ -109,11 +109,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
         _postitionControlSchedule.value = _schedules.value!![position]
     }
 
-//    fun getSelectedSchedule(selectedSchedule: Schedule) {
-//        _selectedSchedule.value = selectedSchedule
-//        clickSchedule = selectedSchedule
-//    }
-
     fun findTimeRangeSchedule() {
         try {
             val aDayOfSchedule = _postitionControlSchedule.value?.time?.plus(86400000)?.minus(1)

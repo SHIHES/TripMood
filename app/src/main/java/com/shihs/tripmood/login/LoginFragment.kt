@@ -76,7 +76,7 @@ class LoginFragment : Fragment() {
         binding.johnBtn.setOnClickListener {
             UserManager.userUID = "8787878787"
             UserManager.userName = "John"
-            UserManager.userPhotoUrl = "https://images.app.goo.gl/jgzBJ6FUqjPDfkrSA"
+            UserManager.userPhotoUrl = "https://tpc.googlesyndication.com/simgad/2401841788922667037"
             findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
 
         }

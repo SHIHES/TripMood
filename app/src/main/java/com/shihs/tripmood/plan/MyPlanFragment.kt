@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
+import app.appworks.school.publisher.ext.toDisplayDateFormat
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
@@ -27,12 +28,6 @@ class MyPlanFragment : Fragment() {
 
     private var position = 0
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        viewModel.adapterPosition.value = -1
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,8 +35,6 @@ class MyPlanFragment : Fragment() {
     ): View? {
 
         binding = FragmentPlanBinding.inflate(inflater, container, false)
-
-//        viewModel.adapterPosition.value = 0
 
         val recyclerPlanDays = binding.daysRv
 
@@ -115,22 +108,21 @@ class MyPlanFragment : Fragment() {
             }
         }
 
-
-        val refreshLayout = binding.swipeRefreshLayout
-
-        refreshLayout.setOnRefreshListener {
-            refreshLayout.isRefreshing = false
-
-            viewModel.getLiveSchedule()
-            eventAdapter.notifyItemRemoved(position)
-        }
-
-
         setUpBtn()
+        setView()
 
         (requireActivity() as MainActivity).hideToolBar()
 
         return binding.root
+    }
+
+    fun setView(){
+
+        val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
+        val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
+        val startDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.startDate?.toDisplayDateFormat()
+        binding.planCollapsingToolbar.title = title
+        binding.myPlanDate.text = "$startDate - $endDate"
     }
 
 

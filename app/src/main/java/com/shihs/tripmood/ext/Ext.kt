@@ -9,7 +9,7 @@ import java.util.*
  * Created by Wayne Chen on 2020-01-15.
  */
 fun Long.toDisplayDateFormat(): String {
-    return SimpleDateFormat("MMM dd", Locale.TAIWAN).format(this)
+    return SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN).format(this)
 }
 
 fun Long.toDisplayTimeFormat(): String {

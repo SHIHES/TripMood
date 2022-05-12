@@ -1,6 +1,7 @@
 package com.shihs.tripmood.dataclass
 
 import android.os.Parcelable
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.parcel.Parcelize
 
 

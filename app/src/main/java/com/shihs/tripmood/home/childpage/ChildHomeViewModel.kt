@@ -2,7 +2,6 @@ package com.shihs.tripmood.home.childpage
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Invite
@@ -52,6 +51,8 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     var inviteUser = MutableLiveData<User>()
 
     var dialogSelectedPlan = Plan()
+
+    var coworkUserListInfo = mutableListOf<User>()
 
 //    val coworkTotalLiveData: MediatorLiveData<Pair<List<Plan>?, List<Plan>?>> = MediatorLiveData()
 
@@ -103,6 +104,27 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     private fun getCoworkPlansResult(){
             liveCoworkPlans = repository.getCoWorkLivePlan()
         Log.d("QAQQQ","liveCoworkPlans ${liveCoworkPlans.value}")
+    }
+
+    var userQueryCount = MutableLiveData(0)
+
+    fun getAllCoworkerInfo(coworkPlans: List<Plan>){
+
+        for (plan in coworkPlans){
+
+            for (userID in plan.coworkList!!){
+                getUserInfo(userID = userID)
+                userQueryCount.value?.plus(1)
+                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
+            }
+        }
+        if(realUserDataList.size == userQueryCount.value!!){
+            Log.d("SS", " == realUserDataList.size${userQueryCount.value}")
+        } else{
+            Log.d("SS", "else realUserDataList.size${userQueryCount.value}")
+        }
+
+
     }
 
     fun planSorter(homePlanType: HomePlanFilter){
@@ -271,7 +293,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-    var coworkUser = User()
+    var coworkUser = MutableLiveData<User>()
 
     fun getUserInfo(userID: String) {
         coroutineScope.launch {
@@ -279,7 +301,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
             when (val result = repository.getUserInfo(userID = userID)) {
                 is Result.Success -> {
-                    coworkUser = result.data!!
+                    coworkUser.value = result.data!!
 
                     Log.d("SS","getUserInfo ${result.data}")
                     _error.value = null
@@ -296,11 +318,17 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
                 else -> {
                     _status.value = LoadApiStatus.ERROR
                 }
-            }.let {
-
             }
         }
     }
+
+    var realUserDataList = mutableListOf<User>()
+
+    fun saveCoworkUserInfo(user: User){
+        realUserDataList.add(user)
+        Log.d("QAQ", "realUserDataList$realUserDataList")
+    }
+
 
 
 }
