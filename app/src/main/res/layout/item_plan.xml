@@ -22,18 +22,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
+                android:id="@+id/coworkerImageLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:elevation="6dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_margin="@dimen/View_margin"
+                android:elevation="10dp"
+                android:gravity="start"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:itemCount="6"
-                tools:listitem="@layout/item_user_image" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/coworkerImageLayoutChild"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="start"
+                    android:elevation="10dp"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/planCoverPic"

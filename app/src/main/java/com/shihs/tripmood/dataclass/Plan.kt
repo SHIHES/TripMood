@@ -12,7 +12,7 @@ data class Plan(
     var endDate: Long? = null,
     var id: String? = "",
     var ownerID: String? = null,
-    var coworkList: List<User>? = emptyList(),
+    var coworkList: List<String>? = emptyList(),
     var private: Boolean = true,
     var status: Int = 0,
     var image: String = ""

@@ -106,4 +106,8 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.getCoWorkLivePlan()
     }
 
+    override suspend fun getUserInfo(userID: String): Result<User> {
+        return remoteDataSource.getUserInfo(userID = userID)
+    }
+
 }

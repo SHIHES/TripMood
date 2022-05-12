@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.appworks.school.publisher.ext.toDisplayDateFormat
 import app.appworks.school.publisher.ext.toDisplayTimeFormat
+import com.bumptech.glide.Glide
 import com.shihs.tripmood.databinding.ItemChatMeBinding
 import com.shihs.tripmood.databinding.ItemChatOtherBinding
 import com.shihs.tripmood.dataclass.Chat
@@ -18,7 +19,6 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
 
         fun bind(chat: Chat) {
 
-            binding.textGchatDateMe.text = chat.createdTime?.toDisplayDateFormat()
             binding.textGchatMessageMe.text = chat.msg
             binding.textGchatTimestampMe.text = chat.createdTime?.toDisplayTimeFormat()
 
@@ -30,11 +30,11 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
 
         fun bind(chat: Chat) {
 
-            binding.textGchatDateOther.text = chat.createdTime?.toDisplayDateFormat()
-//            binding.imageGchatProfileOther = chat.speaker.image
+            Glide.with(itemView.context).load(chat.speaker?.image).into(binding.imageGchatProfileOther)
             binding.textGchatMessageOther.text = chat.msg
             binding.textGchatTimestampOther.text = chat.createdTime?.toDisplayTimeFormat()
             binding.textGchatUserOther.text = chat.speaker?.name
+
 
 
         }

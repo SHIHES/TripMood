@@ -116,6 +116,20 @@
 
     </androidx.cardview.widget.CardView>
 
+    <ImageView
+        android:id="@+id/hideDelete"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:src="@drawable/delete_48"
+        android:scaleType="centerInside"
+        android:textSize="26sp"
+        android:foregroundGravity="center"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="17dp"
+        android:background="@color/tripMood_red"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

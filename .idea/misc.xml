@@ -11,6 +11,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/car_small.xml" value="0.106" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/chat_selector.xml" value="0.208" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dash_line.xml" value="0.3985" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/delete-48px.xml" value="0.2045" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dialog_background.xml" value="0.1" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dish_small.xml" value="0.106" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/favorite_fill0_wght400_grad0_opsz48.xml" value="0.1475" />
@@ -60,7 +61,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_login.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notification.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notifications.xml" value="0.26927083333333335" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan.xml" value="0.379981884057971" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan.xml" value="0.45" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_child_viewpager.xml" value="0.1609375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_create.xml" value="0.171875" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_map.xml" value="0.25" />
@@ -82,14 +83,15 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_invite_notification.xml" value="0.375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_location_icon.xml" value="0.42916666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_place_info.xml" value="0.3183183183183183" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_plan.xml" value="0.335" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_schedule.xml" value="0.375" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_plan.xml" value="0.25" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_plan_cowork_image.xml" value="0.165" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_schedule.xml" value="0.125" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_schedule_catalog_list.xml" value="0.21875" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_schedule_info_map.xml" value="0.45" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_user_image.xml" value="0.375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/item_userpage_plan.xml" value="0.375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/rectangle.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/test.xml" value="0.375" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/test.xml" value="0.33678756476683935" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/view_edittext.xml" value="0.42916666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.211" />

@@ -183,7 +183,7 @@
         android:id="@+id/navigation_collect"
         android:name="com.shihs.tripmood.collect.CollectionFragment"
         android:label="CollectionFragment" />
-    <action android:id="@+id/action_global_navigation_collect" app:destination="@id/navigation_collect" />
+    <action android:id="@+id/action_global_navigation_collect" app:destination="@id/navigation_collect" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
 
 
 </navigation>

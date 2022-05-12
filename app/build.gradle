@@ -16,8 +16,8 @@ android {
         applicationId "com.shihs.tripmood"
         minSdk 30
         targetSdk 32
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 7
+        versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -111,6 +111,8 @@ dependencies {
 
     //Google login
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
 
 

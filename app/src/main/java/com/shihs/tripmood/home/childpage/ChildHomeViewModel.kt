@@ -2,7 +2,6 @@ package com.shihs.tripmood.home.childpage
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Invite
@@ -53,17 +52,11 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     var dialogSelectedPlan = Plan()
 
+    var coworkUserListInfo = mutableListOf<User>()
+
 //    val coworkTotalLiveData: MediatorLiveData<Pair<List<Plan>?, List<Plan>?>> = MediatorLiveData()
 
-//    fun waitProgressLiveData(){
-//        coworkTotalLiveData.addSource(liveCoworkPlans){
-//            coworkTotalLiveData.value = Pair(it, livePlans.value)
-//        }
-//
-//        coworkTotalLiveData.addSource(livePlans){
-//            coworkTotalLiveData.value = Pair(liveCoworkPlans.value, it)
-//        }
-//    }
+
 
 
     fun navigateToDetail(plan: Plan) {
@@ -109,7 +102,29 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     private fun getCoworkPlansResult(){
-        liveCoworkPlans = repository.getCoWorkLivePlan()
+            liveCoworkPlans = repository.getCoWorkLivePlan()
+        Log.d("QAQQQ","liveCoworkPlans ${liveCoworkPlans.value}")
+    }
+
+    var userQueryCount = MutableLiveData(0)
+
+    fun getAllCoworkerInfo(coworkPlans: List<Plan>){
+
+        for (plan in coworkPlans){
+
+            for (userID in plan.coworkList!!){
+                getUserInfo(userID = userID)
+                userQueryCount.value?.plus(1)
+                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
+            }
+        }
+        if(realUserDataList.size == userQueryCount.value!!){
+            Log.d("SS", " == realUserDataList.size${userQueryCount.value}")
+        } else{
+            Log.d("SS", "else realUserDataList.size${userQueryCount.value}")
+        }
+
+
     }
 
     fun planSorter(homePlanType: HomePlanFilter){
@@ -277,6 +292,43 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
             dialogSelectedPlan = plan
         }
     }
+
+    var coworkUser = MutableLiveData<User>()
+
+    fun getUserInfo(userID: String) {
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.getUserInfo(userID = userID)) {
+                is Result.Success -> {
+                    coworkUser.value = result.data!!
+
+                    Log.d("SS","getUserInfo ${result.data}")
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    var realUserDataList = mutableListOf<User>()
+
+    fun saveCoworkUserInfo(user: User){
+        realUserDataList.add(user)
+        Log.d("QAQ", "realUserDataList$realUserDataList")
+    }
+
 
 
 }

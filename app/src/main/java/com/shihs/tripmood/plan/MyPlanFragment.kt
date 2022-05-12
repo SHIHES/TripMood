@@ -8,19 +8,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.appworks.school.publisher.ext.getVmFactory
+import app.appworks.school.publisher.ext.toDisplayDateFormat
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
+import com.shihs.tripmood.util.ItemTouchHelperCallback
+
 
 class MyPlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanBinding
 
     private val viewModel by viewModels <MyPlanViewModel> { getVmFactory(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan) }
+
+    private var position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +39,14 @@ class MyPlanFragment : Fragment() {
         val recyclerPlanDays = binding.daysRv
 
         val scheduleAdapter = ScheduleAdapter(ScheduleAdapter.OnClickListener{
-               viewModel.getSelectedSchedule(it)
+//               viewModel.getSelectedSchedule(it)
         }, viewModel )
 
         recyclerPlanDays.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerPlanDays.adapter = scheduleAdapter
+
+
 
 
         val recyclerEvents = binding.scheduleRv
@@ -51,15 +59,33 @@ class MyPlanFragment : Fragment() {
 
         recyclerEvents.adapter = eventAdapter
 
-        viewModel.schedules.observe(viewLifecycleOwner){ it?.let {
+        val callback = ItemTouchHelperCallback(eventAdapter, requireContext())
+
+        val itemTouchHelper = ItemTouchHelper(callback)
+
+        itemTouchHelper.attachToRecyclerView(recyclerEvents)
+
+        viewModel.liveSchedules.observe(viewLifecycleOwner){it?.let {
+            viewModel.getPositionAndDate(position).let {
+                viewModel.findTimeRangeSchedule()
+            }
+
+        }}
+
+
+        viewModel.schedules.observe(viewLifecycleOwner){it?.let{
             scheduleAdapter.submitList(it)
+        }}
 
-        } }
 
-        viewModel.selectedSchedule.observe(viewLifecycleOwner){ it?.let {
-            viewModel.findTimeRangeSchedule()
+        viewModel.adapterPosition.observe(viewLifecycleOwner){
+            Log.d("SS", "adapterPosition.observe${it}")
+            position = it
+            viewModel.getPositionAndDate(it).let {
+                viewModel.findTimeRangeSchedule()
 
-        } }
+            }
+        }
 
         viewModel.navigationToDetail.observe(viewLifecycleOwner){it?.let{
             findNavController().navigate(MobileNavigationDirections.actionGlobalDetailFragment(it))
@@ -82,13 +108,23 @@ class MyPlanFragment : Fragment() {
             }
         }
 
-
         setUpBtn()
+        setView()
 
         (requireActivity() as MainActivity).hideToolBar()
 
         return binding.root
     }
+
+    fun setView(){
+
+        val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
+        val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
+        val startDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.startDate?.toDisplayDateFormat()
+        binding.planCollapsingToolbar.title = title
+        binding.myPlanDate.text = "$startDate - $endDate"
+    }
+
 
 
     fun setUpBtn(){
@@ -96,8 +132,8 @@ class MyPlanFragment : Fragment() {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalCreateScheduleFragment(
                     MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
-                    viewModel.clickSchedule,
-                    viewModel.adapterPosition
+                    viewModel.positionControlSchedule.value,
+                    position
                 )
             )
         }

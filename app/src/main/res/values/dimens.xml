@@ -7,4 +7,6 @@
     <dimen name="bitmap_height">150dp</dimen>
 
     <dimen name="View_margin">16dp</dimen>
+
+    <dimen name="small_margin">8dp</dimen>
 </resources>

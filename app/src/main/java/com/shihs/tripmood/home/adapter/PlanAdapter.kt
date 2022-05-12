@@ -2,6 +2,7 @@ package com.shihs.tripmood.home.adapter
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -10,33 +11,68 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
+import com.shihs.tripmood.databinding.ItemPlanCoworkImageBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: ChildHomeViewModel) : ListAdapter<Plan, PlanAdapter.PlanVH>(
-    DiffUtil()
-) {
+class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: ChildHomeViewModel) :
+    ListAdapter<Plan, PlanAdapter.PlanVH>(
+        DiffUtil()
+    ) {
 
-    class PlanVH (private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root){
+    class PlanVH(private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root) {
 
         val moreBtn = binding.moreBtn
         val statusTv = binding.statusTextView
 
+        var flag = false
 
-        fun bind(item: Plan, viewModel: ChildHomeViewModel){
+
+        fun bind(item: Plan, viewModel: ChildHomeViewModel) {
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
 
             binding.planTitle.text = item.title
 
-            if(item.startDate == item.endDate){
+            if (item.startDate == item.endDate) {
                 binding.tripDate.text = "${formatTime.format(item.startDate)}"
 
-            } else{
-                binding.tripDate.text = "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
+            } else {
+                binding.tripDate.text =
+                    "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
+            }
+
+            if (!item.coworkList.isNullOrEmpty()) {
+
+//                item.coworkList!!.forEach {
+//
+//                    for (user in viewModel.realUserDataList){
+//                        if (user.uid == it){
+//                            val itemPlanCoworkImageBinding = ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
+//
+//                            Glide.with(itemView.context).load(user.image).override(100,100).into(itemPlanCoworkImageBinding.coworkImage)
+//                            binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
+//                        }s
+//                    }
+//
+//                }
+
+        viewModel.realUserDataList.forEach {
+            if (item.coworkList!!.contains(it.uid)) {
+                val itemPlanCoworkImageBinding =
+                    ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
+
+                Log.d("SS", "count function run times")
+                Glide.with(itemView.context).load(it.image).override(100, 100)
+                    .into(itemPlanCoworkImageBinding.coworkImage)
+                binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
+            }
+
+        }
 
             }
 
@@ -60,22 +96,22 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
         val editTextLayout = LayoutInflater.from(context).inflate(R.layout.view_edittext, null)
 
-        if(editTextLayout.parent != null){
+        if (editTextLayout.parent != null) {
             editTextLayout.parent
         }
 
 
-        if (calendar < plan.startDate!!){
+        if (calendar < plan.startDate!!) {
             holder.statusTv.text = "尚未開始"
-           holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
+            holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
         }
 
-        if (plan.startDate!! >= calendar && plan.endDate!!.plus(86400000) <= calendar ){
+        if (plan.startDate!! >= calendar && plan.endDate!!.plus(86400000) <= calendar) {
             holder.statusTv.text = "進行中"
             holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_green))
         }
 
-        if (plan.endDate!!.plus(86400000) < calendar){
+        if (plan.endDate!!.plus(86400000) < calendar) {
             holder.statusTv.text = "已結束"
             holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
         }
@@ -93,7 +129,10 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             val dialogContext = dialog.context
 
-            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window?.setGravity(Gravity.BOTTOM)
             dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
@@ -122,18 +161,19 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
                     setTitle(dialogContext.getString(R.string.inviteTitle))
                     setView(editTextLayout)
                     setCancelable(false)
-                    setPositiveButton(R.string.accept){ dialog, which ->
-                        val text = editTextLayout.findViewById<EditText>(R.id.alertDialogEditText).text.toString()
-                        if (text.isNotEmpty()){
-                            Log.d("QAQQQ","AlertDialog$text")
+                    setPositiveButton(R.string.accept) { dialog, which ->
+                        val text =
+                            editTextLayout.findViewById<EditText>(R.id.alertDialogEditText).text.toString()
+                        if (text.isNotEmpty()) {
+                            Log.d("QAQQQ", "AlertDialog$text")
                             viewModel.changeEmailToUserID(text)
                             viewModel.getDialogSelectedPlan(plan)
 
                         } else {
-                            Toast.makeText(context,"沒輸入訊息" , Toast.LENGTH_LONG,).show()
+                            Toast.makeText(context, "沒輸入訊息", Toast.LENGTH_LONG).show()
                         }
                     }
-                    setNegativeButton(R.string.cancel){ dialog, which ->
+                    setNegativeButton(R.string.cancel) { dialog, which ->
 
                     }
                     setOnCancelListener {
@@ -153,7 +193,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
     }
 
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>(){
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>() {
         override fun areItemsTheSame(oldItem: Plan, newItem: Plan): Boolean {
             return oldItem === newItem
         }

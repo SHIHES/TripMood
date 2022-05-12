@@ -64,8 +64,14 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
             viewModel.planSorter(homePlanType)
             viewModel.updatePlanStatus(it)
             adapter.notifyDataSetChanged()
-        }
-        }
+        } }
+
+        viewModel.liveCoworkPlans.observe(viewLifecycleOwner) {it?.let {
+            viewModel.planSorter(homePlanType)
+            viewModel.updatePlanStatus(it)
+            viewModel.getAllCoworkerInfo(it)
+            adapter.notifyDataSetChanged()
+        } }
 
         viewModel.viewpagerPlans.observe(viewLifecycleOwner){it?.let {
             adapter.submitList(it)
@@ -79,9 +85,25 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
             }
         }
 
-
-
-
+        viewModel.coworkUser.observe(viewLifecycleOwner){
+            it?.let {
+                Log.d("QAQ", "coworkUser$it")
+                viewModel.saveCoworkUserInfo(it)
+                adapter.notifyDataSetChanged()
+            }
+        }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.realUserDataList.clear()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        viewModel.realUserDataList.clear()
     }
 }

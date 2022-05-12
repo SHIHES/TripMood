@@ -66,8 +66,6 @@ class LoginFragment : Fragment() {
             this.setSize(SignInButton.SIZE_WIDE)
         }
 
-//        binding.appName.animate().translationY(-1400F).setDuration(2000L).setStartDelay(1000)
-//        binding.lottieAnimationView.animate().translationX(2000F).setDuration(1500).setStartDelay(1900)
 
 
         viewModel.navigateToLoginSuccess.observe(viewLifecycleOwner){ it?.let {
@@ -75,13 +73,13 @@ class LoginFragment : Fragment() {
           viewModel.navigateToLoginSuccessEnd()
         }}
 
-//        binding.johnBtn.setOnClickListener {
-//            UserManager.userUID = "8787878787"
-//            UserManager.userName = "John"
-//            UserManager.userPhotoUrl = "https://images.app.goo.gl/jgzBJ6FUqjPDfkrSA"
-//
-//
-//        }
+        binding.johnBtn.setOnClickListener {
+            UserManager.userUID = "8787878787"
+            UserManager.userName = "John"
+            UserManager.userPhotoUrl = "https://tpc.googlesyndication.com/simgad/2401841788922667037"
+            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+
+        }
 
         Log.d("SS","userToken ${UserManager.userUID}")
 

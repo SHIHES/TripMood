@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
+import com.shihs.tripmood.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
@@ -18,6 +21,16 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+
+    val error: LiveData<String>
+        get() = _error
 
 
     private val _plan = MutableLiveData<Plan>().apply {
@@ -31,20 +44,11 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val schedules: LiveData<List<Schedule>>
         get() = _schedules
 
-    private val _selectedSchedule = MutableLiveData<Schedule>()
-
-    val selectedSchedule: LiveData<Schedule>
-        get() = _selectedSchedule
 
     private val _dayOfSchedule = MutableLiveData<List<Schedule>>()
 
     val dayOfSchedule: LiveData<List<Schedule>>
         get() = _dayOfSchedule
-
-    private val _selectedAdapterPosition = MutableLiveData<Int>()
-
-    val selectedAdapterPosition: LiveData<Int>
-        get() = _selectedAdapterPosition
 
     private val _navigationToDetail = MutableLiveData<Schedule>()
 
@@ -53,9 +57,13 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
-    var adapterPosition = -1
+    var adapterPosition = MutableLiveData(0)
 
-    var clickSchedule: Schedule = Schedule()
+
+    private val _postitionControlSchedule = MutableLiveData<Schedule>()
+
+    val positionControlSchedule: LiveData<Schedule>
+        get() = _postitionControlSchedule
 
 
     init {
@@ -97,17 +105,16 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     }
 
-    fun getSelectedSchedule(selectedSchedule: Schedule) {
-        _selectedSchedule.value = selectedSchedule
-        clickSchedule = selectedSchedule
+    fun getPositionAndDate(position: Int){
+        _postitionControlSchedule.value = _schedules.value!![position]
     }
 
     fun findTimeRangeSchedule() {
         try {
-            val aDayOfSchedule = _selectedSchedule.value?.time?.plus(86400000)?.minus(1)
+            val aDayOfSchedule = _postitionControlSchedule.value?.time?.plus(86400000)?.minus(1)
 
             _dayOfSchedule.value = liveSchedules.value?.filter {
-                it.time in _selectedSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
+                it.time in _postitionControlSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
             }?.sortedBy {
                 it.time
             }
@@ -119,7 +126,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     }
 
     fun getSelectedAdapterPosition(position: Int) {
-        adapterPosition = position
+        adapterPosition.value = position
     }
 
     fun selectedScheduleClear() {
@@ -172,6 +179,31 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
         } else {
             return true
         }
+
+    }
+
+    fun scheulesDelete(schedule: Schedule) { coroutineScope.launch {
+        _status.value = LoadApiStatus.LOADING
+
+        when (val result =  repository.deleteSchedule(planID = schedule.planID!!, scheduleID = schedule.scheduleId!!) ) {
+            is Result.Success -> {
+                _error.value = null
+                _status.value = LoadApiStatus.DONE
+            }
+            is Result.Fail -> {
+                _error.value = result.error
+                _status.value = LoadApiStatus.ERROR
+            }
+            is Result.Error -> {
+                _error.value = result.exception.toString()
+                _status.value = LoadApiStatus.ERROR
+            }
+            else -> {
+                _status.value = LoadApiStatus.ERROR
+            }
+        }
+    }
+
 
     }
 }
