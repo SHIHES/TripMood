@@ -5,9 +5,11 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaMetadata
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,6 +44,7 @@ class HomeFragment : Fragment() {
 
     companion object{
         var LOCATION_REQUEST_CODE = 999
+        var PHOTO_PICKER_REQUEST_CODE =100
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +65,7 @@ class HomeFragment : Fragment() {
         } else{
             requestLocationPermission()
         }
+
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 

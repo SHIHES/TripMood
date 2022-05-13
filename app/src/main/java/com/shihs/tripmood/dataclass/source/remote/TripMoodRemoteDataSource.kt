@@ -1,14 +1,21 @@
 package com.shihs.tripmood.dataclass.source.remote
 
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 import com.shihs.tripmood.util.InviteFilter
 import com.shihs.tripmood.util.Logger
 import com.shihs.tripmood.util.UserManager
+import java.io.FileInputStream
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -764,6 +771,33 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 liveData.value = list
             }
         return liveData
+    }
+
+    override suspend fun uploadImage(localUri: Uri) : Result<Uri> = suspendCoroutine { continuation ->
+
+        val time = Calendar.getInstance().timeInMillis
+        val fileName = "${UserManager.userName}&$time"
+        val storageReference = FirebaseStorage.getInstance().reference.child("$fileName")
+
+        val uploadTask = storageReference.putFile(localUri)
+
+        uploadTask.continueWith{ task ->
+            if(!task.isSuccessful){
+                task.exception?.let {
+                    throw it
+                }
+            }
+            storageReference.downloadUrl
+        }.addOnCompleteListener {  task ->
+            if (task.isSuccessful){
+                task.result.addOnSuccessListener {
+                    continuation.resume(Result.Success(it))
+                }
+
+            } else {
+
+            }
+        }
     }
 
 }

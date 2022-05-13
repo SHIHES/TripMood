@@ -1,6 +1,7 @@
 package com.shihs.tripmood.dataclass.source.local
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
@@ -121,6 +122,10 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     }
 
     override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadImage(localUri: Uri): Result<Uri> {
         TODO("Not yet implemented")
     }
 

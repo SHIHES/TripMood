@@ -1,5 +1,6 @@
 package com.shihs.tripmood.dataclass.source
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
@@ -64,5 +65,7 @@ interface TripMoodDataSource {
     suspend fun sendMyLocation(userLocation: UserLocation ) : Result<Boolean>
 
     suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean>
+
+    suspend fun uploadImage(localUri: Uri) : Result<Uri>
 
     }

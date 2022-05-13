@@ -290,7 +290,7 @@ class ShowAllLocationFragment() : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
         val taiwanPosition = LatLng( 25.105497,121.597366)
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(taiwanPosition,13F)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(taiwanPosition,10F)
         map?.moveCamera(cameraUpdate)
 
         map?.uiSettings?.apply {

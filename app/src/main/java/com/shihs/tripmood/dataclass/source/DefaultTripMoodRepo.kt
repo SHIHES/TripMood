@@ -1,5 +1,6 @@
 package com.shihs.tripmood.dataclass.source
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
@@ -122,6 +123,10 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
 
     override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
         return remoteDataSource.updateMyLocation(lat, lng)
+    }
+
+    override suspend fun uploadImage(localUri: Uri): Result<Uri> {
+        return remoteDataSource.uploadImage(localUri = localUri)
     }
 
 }

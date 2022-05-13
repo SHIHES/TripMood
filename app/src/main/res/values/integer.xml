@@ -2,7 +2,7 @@
 <resources>
     <integer name="integer_star_number">5</integer>
 
-    <integer name="gps_request_interval">10000</integer>
+    <integer name="gps_request_interval">20000</integer>
 
 
 </resources>

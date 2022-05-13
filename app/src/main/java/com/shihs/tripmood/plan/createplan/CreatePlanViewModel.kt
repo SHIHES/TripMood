@@ -1,5 +1,6 @@
 package com.shihs.tripmood.plan.createplan
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,38 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?>
         get() = _error
+
+    private val _imageStatus = MutableLiveData<LoadApiStatus>()
+
+    val imageStatus: LiveData<LoadApiStatus>
+        get() = _imageStatus
+
+
+    val imageUriCallback = MutableLiveData<Uri>()
+
+
+    fun uploadImage(uri: Uri){
+        coroutineScope.launch {
+
+            _imageStatus.value = LoadApiStatus.LOADING
+
+            when(val result = repository.uploadImage(localUri = uri)){
+                is Result.Success ->{
+                     imageUriCallback.value = result.data!!
+                    _imageStatus.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _imageStatus.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _imageStatus.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _imageStatus.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
 
 
     fun postNewPlan(plan: Plan){
