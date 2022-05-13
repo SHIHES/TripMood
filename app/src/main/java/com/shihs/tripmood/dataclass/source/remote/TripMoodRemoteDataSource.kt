@@ -20,8 +20,11 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_USERS = "users"
     private const val PATH_CHATS = "chats"
     private const val PATH_INVITES = "invites"
+    private const val PATH_COWORKLOCATION = "coworkLocation"
 
 
+    private const val KEY_LATITUDE = "lat"
+    private const val KEY_LONGTITUDE = "lng"
     private const val KEY_CHATS_CREATEDTIME = "createdTime"
     private const val KEY_OWNER = "ownerID"
     private const val KEY_UID = "uid"
@@ -691,6 +694,76 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                     continuation.resume(Result.Fail("getUserInfo fail"))
                 }
             }
+    }
+
+    override suspend fun sendMyLocation(userLocation: UserLocation ) : Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_COWORKLOCATION)
+            .document(UserManager.userUID!!)
+            .set(userLocation)
+            .addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+
+                Logger.i("sendMyLocation: $userLocation")
+
+                continuation.resume(Result.Success(true))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error sendMyLocation. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("sendMyLocation Fail"))
+            }
+        }
+    }
+
+
+    override suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean> = suspendCoroutine { continuation ->
+
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.collection(PATH_COWORKLOCATION).document(UserManager.userUID!!)
+
+        db.runBatch { batch ->
+            batch.update(ref, KEY_LONGTITUDE, lng)
+            batch.update(ref, KEY_LATITUDE, lat)
+        }
+            .addOnSuccessListener{
+                Logger.i("updateMyLocation addOnSuccessListener")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error acceptInvite documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+    }
+
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+
+        val liveData = MutableLiveData<List<UserLocation>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_COWORKLOCATION)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLiveCoworkLocation addSnapshotLister success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<UserLocation>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    val userLocation = document.toObject(UserLocation::class.java)
+                    list.add(userLocation)
+                }
+                liveData.value = list
+            }
+        return liveData
     }
 
 }

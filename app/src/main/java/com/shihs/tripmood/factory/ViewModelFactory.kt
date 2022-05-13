@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.MainViewModel
 
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
+import com.shihs.tripmood.home.HomeViewModel
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.login.LoginViewModel
 import com.shihs.tripmood.notification.NotificationViewModel
@@ -41,6 +42,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repository)
+
+                isAssignableFrom(HomeViewModel::class.java) ->
+                    HomeViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

@@ -146,6 +146,8 @@
         <argument android:name="myPlan"
             app:argType="com.shihs.tripmood.dataclass.Plan"
             app:nullable="true"/>
+        <argument android:name="mapViewType"
+            app:argType="integer"/>
 
 
     </fragment>

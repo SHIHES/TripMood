@@ -64,7 +64,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/coworkLocationBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bright_blue_sky_with_puffy_clouds_bgfoto"
@@ -77,10 +77,14 @@
                     android:id="@+id/myPlanDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/parent"
+                    android:text="2022/06/08 - 2022/06/09"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="@+id/parent"
                     app:layout_constraintRight_toRightOf="@+id/parent"
-                    android:text="2022222222222"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

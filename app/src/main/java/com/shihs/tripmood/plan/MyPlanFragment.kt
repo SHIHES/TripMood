@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import app.appworks.school.publisher.ext.addData
 import app.appworks.school.publisher.ext.getVmFactory
 import app.appworks.school.publisher.ext.toDisplayDateFormat
 import com.shihs.tripmood.MainActivity
@@ -18,6 +19,7 @@ import com.shihs.tripmood.databinding.FragmentPlanBinding
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
 import com.shihs.tripmood.util.ItemTouchHelperCallback
+import com.shihs.tripmood.util.MapViewType
 
 
 class MyPlanFragment : Fragment() {
@@ -83,8 +85,8 @@ class MyPlanFragment : Fragment() {
             position = it
             viewModel.getPositionAndDate(it).let {
                 viewModel.findTimeRangeSchedule()
-
             }
+            scheduleAdapter.notifyDataSetChanged()
         }
 
         viewModel.navigationToDetail.observe(viewLifecycleOwner){it?.let{
@@ -138,9 +140,15 @@ class MyPlanFragment : Fragment() {
             )
         }
 
+        binding.coworkLocationBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
+                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_COWORKLOCATION.value
+            ))
+        }
+
         binding.mapWholeSchedule.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
-                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
+                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_SHOWALLLOCATION.value
             ))
         }
 

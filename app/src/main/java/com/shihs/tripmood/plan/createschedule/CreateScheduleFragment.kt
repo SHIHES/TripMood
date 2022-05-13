@@ -20,7 +20,6 @@ import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentScheduleCreateBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.Location
-import com.shihs.tripmood.util.ReminderManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,14 +96,14 @@ class CreateScheduleFragment : Fragment() {
         }
     }
 
-    private fun NotificationSwitch(time: Long){
-        if(!binding.notificationSwitch.isChecked){
-            return
-            } else{
-                ReminderManager.startReminder(requireContext(), time, 123)
-            }
-
-    }
+//    private fun NotificationSwitch(time: Long){
+//        if(!binding.notificationSwitch.isChecked){
+//            return
+//            } else{
+//                ReminderManager.startReminder(requireContext(), time, 123)
+//            }
+//
+//    }
 
 
     private fun setupBtn(){
@@ -129,9 +128,9 @@ class CreateScheduleFragment : Fragment() {
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
 
-            if (postTime != null) {
-                NotificationSwitch(postTime)
-            }
+//            if (postTime != null) {
+//                NotificationSwitch(postTime)
+//            }
 
             Log.d("QAQ", "schedultTime$schedultTime")
             viewModel.postNewSchedule(Schedule(

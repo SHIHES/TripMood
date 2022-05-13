@@ -74,6 +74,13 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         } }
 
         viewModel.viewpagerPlans.observe(viewLifecycleOwner){it?.let {
+            if (!it.isNullOrEmpty()){
+                binding.earthAnimation.visibility = View.GONE
+                binding.noPlanHint.visibility = View.GONE
+            } else{
+                binding.earthAnimation.visibility = View.VISIBLE
+                binding.noPlanHint.visibility = View.VISIBLE
+            }
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
         } }

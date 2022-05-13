@@ -56,4 +56,10 @@ interface TripMoodRepo {
     fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
 
     suspend fun getUserInfo(userID: String) : Result<User>
+
+    fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>>
+
+    suspend fun sendMyLocation( userLocation: UserLocation ) : Result<Boolean>
+
+    suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean>
 }

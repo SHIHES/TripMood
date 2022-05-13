@@ -9,4 +9,6 @@
     <dimen name="View_margin">16dp</dimen>
 
     <dimen name="small_margin">8dp</dimen>
+
+    <dimen name="stroke_size">2dp</dimen>
 </resources>

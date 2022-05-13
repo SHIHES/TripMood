@@ -110,5 +110,19 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun sendMyLocation(
+        userLocation: UserLocation
+    ): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
 
 }

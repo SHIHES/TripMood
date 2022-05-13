@@ -110,4 +110,18 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.getUserInfo(userID = userID)
     }
 
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+        return remoteDataSource.getLiveCoworkLocation()
+    }
+
+    override suspend fun sendMyLocation(
+        userLocation: UserLocation
+    ): Result<Boolean> {
+        return remoteDataSource.sendMyLocation( userLocation = userLocation)
+    }
+
+    override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
+        return remoteDataSource.updateMyLocation(lat, lng)
+    }
+
 }

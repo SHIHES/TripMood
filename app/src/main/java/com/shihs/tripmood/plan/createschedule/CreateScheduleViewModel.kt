@@ -3,9 +3,7 @@ package com.shihs.tripmood.plan.createschedule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +70,4 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
 
     }
 
-    fun getSwitchStatus(status: Boolean){
-        _notificationSwitch.value = status
-    }
 }
