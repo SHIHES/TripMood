@@ -63,6 +63,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         MyGPSFragmentArgs.fromBundle(requireArguments()).selectedPosition
     ) }
 
+    private lateinit var presenter:MapPresenter
+
     private var lastKnownLocation: Location? = null
 
     private var recommendPlace = mutableListOf<com.shihs.tripmood.dataclass.Location>()
@@ -125,12 +127,17 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.nearbyLocation.observe(viewLifecycleOwner) {
             it?.let {
+                Log.d("SS", "nearbyLocation $it")
                 locationAdapter.submitList(it)
                 locationAdapter.notifyDataSetChanged()
                 addMarker(it)
 
             }
         }
+
+        presenter = MapPresenter(this)
+        presenter.onViewCreated()
+
         return binding.root
     }
 
@@ -151,18 +158,26 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             .show()
 
     }
+    private fun startTracking(){
+
+        map?.clear()
+
+        presenter.startTracking()
+    }
+
+    private fun stopTracking(){
+        presenter.stopTracking()
+    }
+
 
     fun setBtn() {
         binding.controlLayout.setOnClickListener {
-            recommendPlace.clear()
-            viewModel.clearNearbyLocation()
+            startTracking()
             showCurrentPlace()
-            Log.d("SS", "recomedPlace ${recommendPlace}")
-            viewModel.getNearbyLocation(recommendPlace)
-            locationAdapter.notifyDataSetChanged()
         }
 
         binding.gpsBackButton.setOnClickListener {
+            stopTracking()
             findNavController().navigateUp()
         }
     }
@@ -172,6 +187,12 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(map: GoogleMap) {
         this.map = map
+
+        presenter.ui.observe(this){ui->
+            updateUI(ui)
+        }
+        presenter.onMapLoaded()
+        map.uiSettings.isZoomControlsEnabled=true
 
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isMyLocationButtonEnabled = true
@@ -184,7 +205,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
 
         if (isLocationPermissionGranted()){
-            keepTrackUser()
+
         } else{
             requestLocationPermission()
         }
@@ -192,34 +213,17 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
 
     @SuppressLint("MissingPermission")
-    fun keepTrackUser() {
-
-        val locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = requireContext().resources.getInteger(R.integer.gps_request_interval).toLong()
-
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                val currentLocation = result.lastLocation
-                if (currentLocation != null) {
-
-                    Log.d("SS", "currentLocation keepTrackUser$currentLocation")
-
-                } else {
-                    Log.d("SS", "Current location is null.")
-                }
-            }
+    private fun updateUI(ui:Ui){
+        if(ui.currentLocation!=null&&ui.currentLocation!=map?.cameraPosition?.target){
+            map?.isMyLocationEnabled=true
         }
-
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-
     }
-
-
-
 
     @SuppressLint("MissingPermission")
     private fun showCurrentPlace() {
+
+        recommendPlace.clear()
+        viewModel.clearNearbyLocation()
 
             val placeFields = listOf(
                 Place.Field.NAME,
@@ -253,7 +257,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                         var result = com.shihs.tripmood.dataclass.Location()
                         var place = placeLikelihood.place
 
-                        Log.d("SS", "placeLikelihood isSuccessful $result")
+                        Log.d("SS", "placeLikelihood isSuccessful ${placeLikelihood.place}")
 
                         result.name = placeLikelihood.place.name
                         result.address = placeLikelihood.place.address
@@ -263,10 +267,14 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                         result.icon = placeLikelihood.place.iconUrl
                         result.rating = placeLikelihood.place.rating
 
+                        Log.d("SS", "result Successful ${result}")
+
 
                         showCurrentPlacePhoto(place = place, result = result)
 
                         recommendPlace.add(result)
+
+                        Log.d("SS", "result Successful recommendPlace${recommendPlace.size}")
 
                         i++
 
@@ -274,8 +282,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                             break
                         }
                     }
-
-//                    openPlacesDialog()
+                    viewModel.getNearbyLocation(recommendPlace)
                 } else {
                     Log.e(TAG, "Exception: %s", task.exception)
                 }
@@ -322,7 +329,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         private val TAG = MyGPSFragment::class.java.simpleName
         private const val DEFAULT_ZOOM = 13F
         private const val ACCESS_FINE_LOCATION = 100
-        const val M_MAX_ENTRIES = 10
+        const val M_MAX_ENTRIES = 6
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -355,12 +362,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         }
     }
-
-
-
-
-
-
 
     override fun onResume() {
         super.onResume()
