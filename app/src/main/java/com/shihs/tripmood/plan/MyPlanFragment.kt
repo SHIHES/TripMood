@@ -188,8 +188,11 @@ class MyPlanFragment : Fragment() {
         }
 
         binding.addMode2Btn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMyGPSFragment())
-            TODO()
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMyGPSFragment(
+                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
+                viewModel.positionControlSchedule.value,
+                position
+            ))
         }
 
         binding.friendsLocation.setOnClickListener {

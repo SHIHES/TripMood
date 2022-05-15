@@ -44,7 +44,21 @@
     <fragment
         android:id="@+id/myGPSFragment"
         android:name="com.shihs.tripmood.plan.mygps.MyGPSFragment"
-        android:label="MyGPSFragment" />
+        android:label="MyGPSFragment" >
+
+
+        <argument android:name="myPlan"
+            app:argType="com.shihs.tripmood.dataclass.Plan"
+            app:nullable="true"/>
+        <argument android:name="selectedSchedule"
+            app:argType="com.shihs.tripmood.dataclass.Schedule"
+            app:nullable="true"/>
+        <argument android:name="selectedPosition"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+
+    </fragment>
+
 
 
 
