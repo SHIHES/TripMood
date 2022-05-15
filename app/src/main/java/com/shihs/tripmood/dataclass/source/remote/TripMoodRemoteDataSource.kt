@@ -30,6 +30,9 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_COWORKLOCATION = "coworkLocation"
 
 
+
+    private const val KEY_FAVORITEPLANSID = "favoritePlansID"
+    private const val KEY_PLAN_TITLE = "title"
     private const val KEY_LATITUDE = "lat"
     private const val KEY_LONGTITUDE = "lng"
     private const val KEY_CHATS_CREATEDTIME = "createdTime"
@@ -799,5 +802,44 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
             }
         }
     }
+
+    override suspend fun addFavoritePlan(planID: String): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .update(KEY_FAVORITEPLANSID, FieldValue.arrayUnion(planID))
+            .addOnSuccessListener{
+                Logger.i("addFavoritePlan: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error addFavoritePlan documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+
+    }
+
+    override suspend fun cancelFavoritePlan(planID: String): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .update(KEY_FAVORITEPLANSID, FieldValue.arrayRemove(planID))
+            .addOnSuccessListener{
+                Logger.i("cancelFavoritePlan: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error cancelFavoritePlan documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+
+    }
+
+
+
 
 }

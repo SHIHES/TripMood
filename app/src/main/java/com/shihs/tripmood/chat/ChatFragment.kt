@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.chat.adapter.ChatAdapter
 import com.shihs.tripmood.databinding.FragmentChatDetailBinding
 import com.shihs.tripmood.dataclass.Chat
 import com.shihs.tripmood.dataclass.User
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.util.UserManager
 import java.util.*
 

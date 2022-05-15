@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import app.appworks.school.publisher.ext.getVmFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -31,6 +30,7 @@ import com.shihs.tripmood.databinding.FragmentPlanMapBinding
 import com.shihs.tripmood.databinding.ItemPlanCoworkImageBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.UserLocation
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.plan.adapter.MapScheduleAdapter
 import com.shihs.tripmood.util.CatalogFilter
 import com.shihs.tripmood.util.InviteFilter

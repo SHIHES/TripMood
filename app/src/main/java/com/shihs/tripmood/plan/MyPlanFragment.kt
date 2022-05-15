@@ -10,12 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.addData
-import app.appworks.school.publisher.ext.getVmFactory
-import app.appworks.school.publisher.ext.toDisplayDateFormat
+import com.bumptech.glide.Glide
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
+import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanBinding
+import com.shihs.tripmood.ext.getVmFactory
+import com.shihs.tripmood.ext.toDisplayDateFormat
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
 import com.shihs.tripmood.util.ItemTouchHelperCallback
@@ -100,11 +101,13 @@ class MyPlanFragment : Fragment() {
                 Log.d("QAQ", "dayOfSchedule $it")
                 if (it.isEmpty() ){
                     Log.d("QAQ", "dayOfSchedule empty $it")
+                    binding.hintAnimation.visibility = View.VISIBLE
                     binding.hintTv.visibility = View.VISIBLE
                     eventAdapter.submitList(it)
                 } else {
                     Log.d("QAQ", "dayOfSchedule else$it")
                     eventAdapter.submitList(it)
+                    binding.hintAnimation.visibility = View.GONE
                     binding.hintTv.visibility = View.GONE
                 }
             }
@@ -123,8 +126,13 @@ class MyPlanFragment : Fragment() {
         val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
         val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
         val startDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.startDate?.toDisplayDateFormat()
+        val image = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.image
         binding.planCollapsingToolbar.title = title
         binding.myPlanDate.text = "$startDate - $endDate"
+
+        Glide.with(requireContext()).load(image).placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .into(binding.coworkLocationImage)
     }
 
 
@@ -140,7 +148,7 @@ class MyPlanFragment : Fragment() {
             )
         }
 
-        binding.coworkLocationBtn.setOnClickListener {
+        binding.friendsLocation.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
                 MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_COWORKLOCATION.value
             ))

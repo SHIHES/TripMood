@@ -1,4 +1,4 @@
-package app.appworks.school.publisher.ext
+package com.shihs.tripmood.ext
 
 import android.app.Activity
 import android.view.Gravity

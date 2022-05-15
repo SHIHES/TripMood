@@ -7,7 +7,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,12 +15,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="12dp"
         app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/tripMood_dark_blue"
         app:cardElevation="4dp">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
+
 
             <LinearLayout
                 android:id="@+id/coworkerImageLayout"
@@ -64,6 +68,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
 
+            <CheckBox
+                android:id="@+id/favoriteBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="@dimen/small_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:button="@drawable/sl_favorite_bg"
+                android:backgroundTint="@color/transparent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view"
                 android:layout_width="0dp"
@@ -85,6 +99,9 @@
                     android:textColor="@color/tripMood_light_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -115,7 +132,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
 

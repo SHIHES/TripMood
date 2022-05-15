@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentNotificationBinding
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.notification.adapter.InviteAdapter
 
 class NotificationFragment : Fragment() {

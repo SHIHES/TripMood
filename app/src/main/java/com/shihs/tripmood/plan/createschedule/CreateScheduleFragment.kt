@@ -14,12 +14,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentScheduleCreateBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.Location
+import com.shihs.tripmood.ext.getVmFactory
 import java.text.SimpleDateFormat
 import java.util.*
 

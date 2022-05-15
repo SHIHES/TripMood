@@ -1,4 +1,4 @@
-package app.appworks.school.publisher.ext
+package com.shihs.tripmood.ext
 
 import androidx.fragment.app.Fragment
 import app.appworks.school.publisher.factory.PlanViewModelFactory

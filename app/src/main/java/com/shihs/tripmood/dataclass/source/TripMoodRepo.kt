@@ -65,4 +65,8 @@ interface TripMoodRepo {
     suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean>
 
     suspend fun uploadImage(localUri: Uri) : Result<Uri>
+
+    suspend fun addFavoritePlan(planID: String): Result<Boolean>
+
+    suspend fun cancelFavoritePlan(planID: String): Result<Boolean>
 }

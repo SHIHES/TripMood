@@ -94,7 +94,7 @@ class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     fun packageGPSPlan(plan: Plan){
 
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(Locale.TAIWAN)
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
         val date = calendar.get(Calendar.DATE)
@@ -121,8 +121,7 @@ class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     fun packageGPSSchedule(schedule: Schedule, location: Location){
 
-        val now = Calendar.getInstance().timeInMillis
-
+        val now = Calendar.getInstance(Locale.TAIWAN).timeInMillis
 
         schedule.planID = planID
         schedule.time = now

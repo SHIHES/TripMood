@@ -19,15 +19,14 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.gms.location.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.maps.android.SphericalUtil
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentHomeBinding
 import com.shihs.tripmood.dataclass.UserLocation
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.home.adapter.ViewPagerAdapter
 
 import com.shihs.tripmood.util.HomePlanFilter

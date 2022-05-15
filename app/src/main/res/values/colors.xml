@@ -23,4 +23,7 @@
     <color name="day6">#FFF82C43</color>
     <color name="day7">#FF018786</color>
 
+    <color name="transparent">#00000000</color>
+    <color name="transparent_black">#99000000</color>
+
 </resources>

@@ -48,11 +48,11 @@
                 app:layout_constraintEnd_toStartOf="@+id/friendsLocation" />
 
             <ImageView
+                android:id="@+id/friendsLocation"
                 android:layout_marginBottom="@dimen/small_margin"
                 android:layout_marginRight="90dp"
                 android:elevation="10dp"
                 android:layout_gravity="end|bottom"
-                android:id="@+id/friendsLocation"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/location"
@@ -64,7 +64,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/coworkLocationBtn"
+                    android:id="@+id/coworkLocationImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bright_blue_sky_with_puffy_clouds_bgfoto"
@@ -138,18 +138,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/daysRv" />
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/hintAnimation"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="56dp"
+                app:layout_constraintBottom_toTopOf="@+id/hintTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/daysRv"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_tourists" />
+
             <TextView
                 android:id="@+id/hintTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="今天沒有任何行程哦"
-                android:textColor="@color/quantum_grey"
-                android:textSize="18sp"
+                android:letterSpacing="0.1"
+                android:text="趕快來加入第一個行程!!"
+                android:textColor="@color/tripMood_dark_blue"
+                android:textSize="24sp"
+                android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/daysRv" />
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

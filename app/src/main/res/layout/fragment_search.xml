@@ -6,12 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".search.SearchFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/View_margin"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/search_view_bg"
+        app:queryHint="搜尋旅程地點.."
+        app:iconifiedByDefault="false"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/planRecyclerView"
-        tools:listitem="@layout/item_plan"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/View_margin"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:itemCount="6"
-        />
+        tools:listitem="@layout/item_plan" />
 </androidx.constraintlayout.widget.ConstraintLayout>

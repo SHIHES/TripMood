@@ -1,6 +1,7 @@
 package com.shihs.tripmood.util
 
 enum class CurrentFragmentType(val value: String) {
+    PLAN_MODE("旅程模式選擇"),
     HOME("TripMood"),
     SEARCH("發現行程"),
     NOTIFICATION("通知"),

@@ -17,7 +17,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -34,8 +33,10 @@ import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.ext.toBase64String
 import com.shihs.tripmood.plan.adapter.LocationAdapter
+import com.shihs.tripmood.util.PlanStatusFilter
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
@@ -82,9 +83,11 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 (activity as MainActivity).packageName,
                 PackageManager.GET_META_DATA
             )
+
         val key = info.metaData[resources.getString(R.string.map_api_key_name)].toString()
 
         Places.initialize(requireActivity(), key)
+
         placesClient = Places.createClient(requireActivity())
 
         val mapFragment = childFragmentManager
@@ -109,9 +112,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         recyclerInfo.adapter = locationAdapter
         recyclerInfo.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-
-
 
 
         viewModel.selectedLocation.observe(viewLifecycleOwner, Observer {
@@ -173,7 +173,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             .setPositiveButton("創立"){ dialog,_ ->
 
                 if (inputEditTextField.text != null){
-                    val plan = Plan()
+                    val plan = Plan(status = PlanStatusFilter.ONGOING.code)
                     viewModel.getPlanTitle(inputEditTextField.text.toString())
                     Toast.makeText(context,"創立成功" ,Toast.LENGTH_LONG,).show()
                     viewModel.packageGPSPlan(plan = plan)
@@ -247,7 +247,9 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         binding.getSpotBtn.setOnClickListener {
             recommendPlace.clear()
             showCurrentPlace()
+            Log.d("SS", "recomedPlace ${recommendPlace}")
             viewModel.getNearbyLocation(recommendPlace)
+
         }
     }
 

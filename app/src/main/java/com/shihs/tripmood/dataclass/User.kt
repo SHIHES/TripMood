@@ -10,6 +10,5 @@ data class User(
     var email: String? = null,
     var image: String? = null,
     var uid: String? = null,
-//    var myPlanID: List<String> = emptyList(),
-    var collectionPlanID: List<String> = emptyList(),
+    var favoritePlansID: List<String> = emptyList(),
 ): Parcelable
