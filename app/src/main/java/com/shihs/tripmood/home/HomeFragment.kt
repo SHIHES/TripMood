@@ -42,8 +42,9 @@ class HomeFragment : Fragment() {
     lateinit var client: FusedLocationProviderClient
 
     companion object{
+
         var LOCATION_REQUEST_CODE = 999
-        var PHOTO_PICKER_REQUEST_CODE =100
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

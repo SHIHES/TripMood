@@ -19,10 +19,8 @@ import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -30,16 +28,21 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.maps.android.SphericalUtil
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentPlanMygpsBinding
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.UserLocation
 import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.ext.toBase64String
+import com.shihs.tripmood.home.HomeFragment
 import com.shihs.tripmood.plan.adapter.LocationAdapter
 import com.shihs.tripmood.plan.createschedule.CreateScheduleFragmentArgs
 import com.shihs.tripmood.util.PlanStatusFilter
+import com.shihs.tripmood.util.UserManager
+import kotlin.math.roundToInt
 
 
 class MyGPSFragment : Fragment(), OnMapReadyCallback {
@@ -52,19 +55,21 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     private lateinit var placesClient: PlacesClient
     private lateinit var binding: FragmentPlanMygpsBinding
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private val viewModel by viewModels<MyGPSViewModel> { getVmFactory(
         MyGPSFragmentArgs.fromBundle(requireArguments()).myPlan,
         MyGPSFragmentArgs.fromBundle(requireArguments()).selectedSchedule,
         MyGPSFragmentArgs.fromBundle(requireArguments()).selectedPosition
     ) }
 
-    private var locationPermissionGranted = false
-
     private var lastKnownLocation: Location? = null
 
     private var recommendPlace = mutableListOf<com.shihs.tripmood.dataclass.Location>()
 
     private val arg: MyGPSFragmentArgs by navArgs()
+
+    private val defaultLocation = LatLng(25.105497, 121.597366)
 
     private lateinit var locationAdapter: LocationAdapter
 
@@ -87,6 +92,9 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         Places.initialize(requireActivity(), key)
 
         placesClient = Places.createClient(requireActivity())
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
 
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
@@ -167,63 +175,51 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isMyLocationButtonEnabled = true
+        map.uiSettings.setAllGesturesEnabled(true)
         map.uiSettings.isCompassEnabled = true
 
-        getLocationPermission()
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(defaultLocation, 13F)
+
+        map.moveCamera(cameraUpdate)
+
+
+        if (isLocationPermissionGranted()){
+            keepTrackUser()
+        } else{
+            requestLocationPermission()
+        }
 
     }
 
     @SuppressLint("MissingPermission")
-    private fun updateUI(ui: Ui) {
-        if (ui.currentLocation != null && ui.currentLocation != map?.cameraPosition?.target) {
-            map?.isMyLocationEnabled = true
-            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 18f))
-        }
-    }
+    fun keepTrackUser() {
 
-    private fun getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            locationPermissionGranted = true
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-            )
-        }
-    }
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = requireContext().resources.getInteger(R.integer.gps_request_interval).toLong()
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        locationPermissionGranted = false
-        when (requestCode) {
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                val currentLocation = result.lastLocation
+                if (currentLocation != null) {
 
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    locationPermissionGranted = true
+                    Log.d("SS", "currentLocation keepTrackUser$currentLocation")
+
+                } else {
+                    Log.d("SS", "Current location is null.")
                 }
             }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+
     }
+
+
 
 
     @SuppressLint("MissingPermission")
     private fun showCurrentPlace() {
-        if (map == null) {
-            return
-        }
-
-        if (locationPermissionGranted) {
 
             val placeFields = listOf(
                 Place.Field.NAME,
@@ -242,7 +238,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             placeResult.addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result != null) {
                     val likelyPlaces = task.result
-
+                    Log.d("SS", "showCurrentPlace isSuccessful")
                     val count =
                         if (likelyPlaces != null &&
                             likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES
@@ -256,6 +252,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                     for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
                         var result = com.shihs.tripmood.dataclass.Location()
                         var place = placeLikelihood.place
+
+                        Log.d("SS", "placeLikelihood isSuccessful $result")
 
                         result.name = placeLikelihood.place.name
                         result.address = placeLikelihood.place.address
@@ -282,9 +280,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                     Log.e(TAG, "Exception: %s", task.exception)
                 }
             }
-        } else {
-            getLocationPermission()
-        }
+
     }
 
     private fun showCurrentPlacePhoto(place: Place, result: com.shihs.tripmood.dataclass.Location) {
@@ -324,12 +320,47 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         private val TAG = MyGPSFragment::class.java.simpleName
-        private const val DEFAULT_ZOOM = 20F
-        private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
-        private const val KEY_CAMERA_POSITION = "camera_position"
-        private const val KEY_LOCATION = "location"
+        private const val DEFAULT_ZOOM = 13F
+        private const val ACCESS_FINE_LOCATION = 100
         const val M_MAX_ENTRIES = 10
     }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            ACCESS_FINE_LOCATION
+        )
+        // AppConstant.LOCATION_REQUEST_CODE 為自己隨意定義的 int（例如：999）
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == ACCESS_FINE_LOCATION){
+            if (grantResults.size > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                //被拒絕惹
+                Toast.makeText(requireContext(), "QQQQQQQ", Toast.LENGTH_LONG).show()
+                if(!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)){
+                    //被拒絕惹 + 按了never ask again
+                }
+
+            }
+
+        }
+    }
+
+
+
+
+
+
 
     override fun onResume() {
         super.onResume()
