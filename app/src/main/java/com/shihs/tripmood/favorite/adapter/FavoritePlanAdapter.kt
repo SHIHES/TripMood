@@ -1,22 +1,19 @@
-package com.shihs.tripmood.search.adapter
+package com.shihs.tripmood.favorite.adapter
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.view.*
-import android.widget.Toast
-import androidx.recyclerview.widget.DiffUtil
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.home.childpage.ChildHomeViewModel
+import com.shihs.tripmood.favorite.FavoriteViewModel
 import com.shihs.tripmood.search.SearchViewModel
 import java.text.SimpleDateFormat
 
-class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewModel: SearchViewModel) : ListAdapter<Plan, SearchPlanAdapter.PlanVH>(
+class FavoritePlanAdapter (private val onClickListener: OnClickListener, val viewModel: FavoriteViewModel) : ListAdapter<Plan, FavoritePlanAdapter.PlanVH>(
     (DiffUtil())
 ) {
 
@@ -24,13 +21,15 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
 
 
 
-        fun bind(item: Plan, viewModel: SearchViewModel) {
+        fun bind(item: Plan, viewModel: FavoriteViewModel) {
 
             Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(binding.planCoverPic)
 
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
 
             binding.planTitle.text = item.title
+
+            binding.favoriteBtn.visibility = View.INVISIBLE
 
             binding.moreBtn.visibility = View.INVISIBLE
 
@@ -48,12 +47,12 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
 
             binding.favoriteBtn.setOnCheckedChangeListener { compoundButton, b ->
 
-                if (compoundButton.isChecked){
-                    item.let { viewModel.addFavoritePlan(it) }
-                }
-                else{
-                    item.let { viewModel.cancelFavoritePlan(it) }
-                }
+//                if (compoundButton.isChecked){
+//                    item.id?.let { viewModel.addFavoritePlan(it) }
+//                }
+//                else{
+//                    item.id?.let { viewModel.cancelFavoritePlan(it) }
+//                }
             }
 
         }
@@ -78,15 +77,15 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
     }
 
 
-        class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>() {
-            override fun areItemsTheSame(oldItem: Plan, newItem: Plan): Boolean {
-                return oldItem === newItem
-            }
-
-            override fun areContentsTheSame(oldItem: Plan, newItem: Plan): Boolean {
-                return oldItem == newItem
-            }
-
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>() {
+        override fun areItemsTheSame(oldItem: Plan, newItem: Plan): Boolean {
+            return oldItem === newItem
         }
+
+        override fun areContentsTheSame(oldItem: Plan, newItem: Plan): Boolean {
+            return oldItem == newItem
+        }
+
+    }
 
 }

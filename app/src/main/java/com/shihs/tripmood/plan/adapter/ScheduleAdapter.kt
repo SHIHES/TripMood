@@ -47,9 +47,13 @@ class ScheduleAdapter(private val onClickListener: OnClickListener,private val v
             if(adapterPosition == viewModel.adapterPosition.value){
 
                 binding.dayConstraintLayout.setBackgroundColor(itemView.context.getColor(R.color.tripMood_blue))
+                binding.daysTv.setTextColor(itemView.context.getColor(R.color.white))
+                binding.dateTv.setTextColor(itemView.context.getColor(R.color.white))
 
             } else{
                 binding.dayConstraintLayout.setBackgroundColor(itemView.context.getColor(R.color.tripMood_light_purple))
+                binding.daysTv.setTextColor(itemView.context.getColor(R.color.white))
+                binding.dateTv.setTextColor(itemView.context.getColor(R.color.white))
             }
 
 

@@ -14,6 +14,7 @@ import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.home.HomeFragmentDirections
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.home.adapter.PlanAdapter
+import com.shihs.tripmood.util.DetailPageFilter
 
 class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
@@ -55,8 +56,14 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                if (HomePlanFilter.INDIVIDUAL.value == homePlanType.value){
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom,it))
                 viewModel.onPlanNavigated()
+                }
+                if (HomePlanFilter.COWORK.value == homePlanType.value){
+                    findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom,it))
+                    viewModel.onPlanNavigated()
+                }
             }
         }
 

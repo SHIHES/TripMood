@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_addPlan ->{
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
-                        MobileNavigationDirections.actionGlobalPlanModeDialog()
+                        MobileNavigationDirections.actionGlobalCreatePlanFragment()
                     )
                 }
             }

@@ -28,6 +28,7 @@ import com.shihs.tripmood.databinding.FragmentPlanCreateBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.network.LoadApiStatus
+import com.shihs.tripmood.util.DetailPageFilter
 import com.shihs.tripmood.util.UserManager
 import java.text.SimpleDateFormat
 import java.util.*
@@ -129,9 +130,16 @@ class CreatePlanFragment : Fragment() {
 
             postPlan.title = binding.planET.text.toString()
 
-            viewModel.postNewPlan(plan = postPlan)
+            if(!postPlan.title.isNullOrEmpty()
+                && !postPlan.image.isNullOrEmpty()
+                && postPlan.startDate != null
+                && postPlan.endDate != null){
 
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(postPlan))
+                viewModel.postNewPlan(plan = postPlan)
+                findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment( DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom, postPlan))
+            } else {
+                Toast.makeText(requireContext(),"還有訊息沒填哦!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.selectedPhoto.setOnClickListener {

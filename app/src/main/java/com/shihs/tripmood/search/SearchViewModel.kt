@@ -77,15 +77,15 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     }
 
-    fun addFavoritePlan(planID: String) {  coroutineScope.launch {
-        repository.addFavoritePlan(planID)
+    fun addFavoritePlan(plan: Plan) {  coroutineScope.launch {
+        repository.addFavoritePlan(plan)
 
     }
 
     }
 
-    fun cancelFavoritePlan(planID: String) { coroutineScope.launch {
-        repository.cancelFavoritePlan(planID)
+    fun cancelFavoritePlan(plan: Plan) { coroutineScope.launch {
+        repository.cancelFavoritePlan(plan)
     }
 
     }

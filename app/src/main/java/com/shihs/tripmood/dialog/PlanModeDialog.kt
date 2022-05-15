@@ -40,7 +40,7 @@ class PlanModeDialog : AppCompatDialogFragment() {
         }
 
         binding.seriousModeBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_global_myDesignFragment)
+            findNavController().navigate(R.id.action_global_createScheduleFragment)
 
         }
     }

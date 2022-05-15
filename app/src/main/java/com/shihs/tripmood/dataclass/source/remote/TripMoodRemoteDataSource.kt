@@ -28,6 +28,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_CHATS = "chats"
     private const val PATH_INVITES = "invites"
     private const val PATH_COWORKLOCATION = "coworkLocation"
+    private const val PATH_FAVORITE = "favoritePlan"
 
 
 
@@ -803,13 +804,16 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         }
     }
 
-    override suspend fun addFavoritePlan(planID: String): Result<Boolean> = suspendCoroutine { continuation ->
+    override suspend fun addFavoritePlan(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
 
         FirebaseFirestore.getInstance()
             .collection(PATH_USERS)
             .document(UserManager.userUID.toString())
-            .update(KEY_FAVORITEPLANSID, FieldValue.arrayUnion(planID))
+            .collection(PATH_FAVORITE)
+            .document(plan.id.toString())
+            .set(plan)
             .addOnSuccessListener{
+
                 Logger.i("addFavoritePlan: $it")
 
                 continuation.resume(Result.Success(true))
@@ -821,23 +825,55 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
     }
 
-    override suspend fun cancelFavoritePlan(planID: String): Result<Boolean> = suspendCoroutine { continuation ->
+    override suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
 
         FirebaseFirestore.getInstance()
             .collection(PATH_USERS)
             .document(UserManager.userUID.toString())
-            .update(KEY_FAVORITEPLANSID, FieldValue.arrayRemove(planID))
+            .collection(PATH_FAVORITE)
+            .document(plan.id.toString())
+            .delete()
             .addOnSuccessListener{
-                Logger.i("cancelFavoritePlan: $it")
+
+                Logger.i("addFavoritePlan: $it")
 
                 continuation.resume(Result.Success(true))
             }
             .addOnFailureListener {
-                Logger.w("[${this::class.simpleName}] Error cancelFavoritePlan documents. ${it.message}")
+                Logger.w("[${this::class.simpleName}] Error addFavoritePlan documents. ${it.message}")
                 continuation.resume(Result.Error(it))
             }
 
     }
+
+    override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
+
+        val liveData = MutableLiveData<List<Plan>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .collection(PATH_FAVORITE)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLiveCoworkLocation addSnapshotLister success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Plan>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    val plan = document.toObject(Plan::class.java)
+                    list.add(plan)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
 
 
 

@@ -127,6 +127,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("QAQ", "onPlaceSelected selected${place.types}")
                     selectedLocation.latitude = place.latLng?.latitude
                     selectedLocation.longitude = place.latLng?.longitude
+                    selectedLocation.address = place.address
                     selectedLocation.name = place.name
 
 

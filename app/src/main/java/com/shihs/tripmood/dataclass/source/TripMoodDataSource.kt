@@ -68,8 +68,10 @@ interface TripMoodDataSource {
 
     suspend fun uploadImage(localUri: Uri) : Result<Uri>
 
-    suspend fun addFavoritePlan(planID: String): Result<Boolean>
+    suspend fun addFavoritePlan(plan: Plan): Result<Boolean>
 
-    suspend fun cancelFavoritePlan(planID: String): Result<Boolean>
+    suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean>
+
+    fun getLiveFavoritePlan(): MutableLiveData<List<Plan>>
 
     }

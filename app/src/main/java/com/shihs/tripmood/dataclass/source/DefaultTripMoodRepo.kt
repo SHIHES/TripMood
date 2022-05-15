@@ -129,12 +129,16 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.uploadImage(localUri = localUri)
     }
 
-    override suspend fun addFavoritePlan(planID: String): Result<Boolean> {
-        return remoteDataSource.addFavoritePlan(planID)
+    override suspend fun addFavoritePlan(plan: Plan): Result<Boolean> {
+        return remoteDataSource.addFavoritePlan(plan)
     }
 
-    override suspend fun cancelFavoritePlan(planID: String): Result<Boolean> {
-        return remoteDataSource.cancelFavoritePlan(planID)
+    override suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean> {
+        return remoteDataSource.cancelFavoritePlan(plan)
+    }
+
+    override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
+        return remoteDataSource.getLiveFavoritePlan()
     }
 
 }

@@ -188,12 +188,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
-    <Button
+    <ImageButton
         android:id="@+id/editBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_edit_note_24"
+        android:backgroundTint="@color/transparent"
+        android:layout_marginTop="@dimen/small_margin"
+        android:scaleType="centerCrop"
         android:text="Edit"
-        android:layout_margin="@dimen/View_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

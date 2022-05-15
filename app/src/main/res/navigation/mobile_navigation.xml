@@ -45,8 +45,11 @@
         android:id="@+id/myGPSFragment"
         android:name="com.shihs.tripmood.plan.mygps.MyGPSFragment"
         android:label="MyGPSFragment" />
+
+
+
     <action
-        android:id="@+id/action_global_myDesignFragment"
+        android:id="@+id/action_global_createPlanFragment"
         app:destination="@id/createPlanFragment" />
     <action
         android:id="@+id/action_global_myGPSFragment"
@@ -57,6 +60,8 @@
         android:id="@+id/myPlanFragment"
         android:name="com.shihs.tripmood.plan.MyPlanFragment"
         android:label="MyPlanFragment" >
+        <argument android:name="navigateFrom"
+            app:argType="integer"/>
         <argument android:name="myPlan"
             app:argType="com.shihs.tripmood.dataclass.Plan"
             app:nullable="true"/>
@@ -186,7 +191,7 @@
         android:label="LoginFragment" />
     <fragment
         android:id="@+id/navigation_collect"
-        android:name="com.shihs.tripmood.collect.CollectionFragment"
+        android:name="com.shihs.tripmood.favorite.FavoriteFragment"
         android:label="CollectionFragment" />
     <action android:id="@+id/action_global_navigation_collect" app:destination="@id/navigation_collect" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
 

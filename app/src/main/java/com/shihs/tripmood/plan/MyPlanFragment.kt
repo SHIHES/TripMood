@@ -5,9 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -19,6 +22,7 @@ import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.ext.toDisplayDateFormat
 import com.shihs.tripmood.plan.adapter.EventAdapter
 import com.shihs.tripmood.plan.adapter.ScheduleAdapter
+import com.shihs.tripmood.util.DetailPageFilter
 import com.shihs.tripmood.util.ItemTouchHelperCallback
 import com.shihs.tripmood.util.MapViewType
 
@@ -29,7 +33,16 @@ class MyPlanFragment : Fragment() {
 
     private val viewModel by viewModels <MyPlanViewModel> { getVmFactory(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan) }
 
+    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
+    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
+    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
+    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
+
+    private var fabClicked = false
+
     private var position = 0
+
+    private val args: MyPlanFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +62,28 @@ class MyPlanFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerPlanDays.adapter = scheduleAdapter
 
+
+        when(args.navigateFrom){
+
+            DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom -> {
+                binding.chatBtn.visibility = View.VISIBLE
+                binding.mapWholeSchedule.visibility = View.VISIBLE
+                binding.friendsLocation.visibility = View.VISIBLE
+            }
+
+            DetailPageFilter.FROM_OTHERS.navigateFrom -> {
+                binding.chatBtn.visibility = View.INVISIBLE
+                binding.mapWholeSchedule.visibility = View.VISIBLE
+                binding.friendsLocation.visibility = View.INVISIBLE
+            }
+
+            DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom -> {
+                binding.chatBtn.visibility = View.INVISIBLE
+                binding.mapWholeSchedule.visibility = View.VISIBLE
+                binding.friendsLocation.visibility = View.INVISIBLE
+            }
+
+        }
 
 
 
@@ -139,6 +174,10 @@ class MyPlanFragment : Fragment() {
 
     fun setUpBtn(){
         binding.addActivityBtn.setOnClickListener {
+            onAddButtonClicked()
+        }
+
+        binding.addMode1Btn.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalCreateScheduleFragment(
                     MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
@@ -146,6 +185,11 @@ class MyPlanFragment : Fragment() {
                     position
                 )
             )
+        }
+
+        binding.addMode2Btn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMyGPSFragment())
+            TODO()
         }
 
         binding.friendsLocation.setOnClickListener {
@@ -166,6 +210,47 @@ class MyPlanFragment : Fragment() {
             ))
         }
     }
+
+    private fun onAddButtonClicked() {
+        setVisibility(fabClicked)
+        setAnimation(fabClicked)
+        setClickable(fabClicked)
+        fabClicked = !fabClicked
+    }
+
+    private fun setAnimation(clicked: Boolean) {
+        if(!clicked){
+            binding.addMode1Btn.visibility = View.VISIBLE
+            binding.addMode2Btn.visibility = View.VISIBLE
+        } else {
+            binding.addMode1Btn.visibility = View.INVISIBLE
+            binding.addMode2Btn.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setVisibility(clicked: Boolean) {
+        if(!clicked){
+            binding.addMode1Btn.startAnimation(fromBottom)
+            binding.addMode2Btn.startAnimation(fromBottom)
+            binding.addActivityBtn.startAnimation(rotateOpen)
+        } else {
+            binding.addMode1Btn.startAnimation(toBottom)
+            binding.addMode2Btn.startAnimation(toBottom)
+            binding.addActivityBtn.startAnimation(rotateClose)
+        }
+    }
+
+    private fun setClickable(clicked: Boolean){
+        if(!clicked){
+            binding.addMode1Btn.isClickable = true
+            binding.addMode2Btn.isClickable = true
+        } else {
+            binding.addMode1Btn.isClickable = false
+            binding.addMode2Btn.isClickable = false
+        }
+    }
+
+
 
     override fun onResume() {
         super.onResume()

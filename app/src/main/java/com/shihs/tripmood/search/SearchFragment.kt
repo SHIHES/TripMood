@@ -15,6 +15,7 @@ import com.shihs.tripmood.databinding.FragmentSearchBinding
 import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.home.HomeFragmentDirections
 import com.shihs.tripmood.search.adapter.SearchPlanAdapter
+import com.shihs.tripmood.util.DetailPageFilter
 
 class SearchFragment : Fragment() {
 
@@ -76,7 +77,7 @@ class SearchFragment : Fragment() {
 
         viewModel.selectedPlan.observe(viewLifecycleOwner, Observer {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_OTHERS.navigateFrom, it))
                 viewModel.onPlanNavigated()
             }
         })

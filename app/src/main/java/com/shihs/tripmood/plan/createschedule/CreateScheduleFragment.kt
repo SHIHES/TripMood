@@ -76,6 +76,7 @@ class CreateScheduleFragment : Fragment() {
         setupBtn()
 
         (requireActivity() as MainActivity).hideToolBar()
+        (requireActivity() as MainActivity).hideBottomNavBar()
 
         return binding.root
     }
@@ -151,7 +152,7 @@ class CreateScheduleFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.addLocationButton.setOnClickListener {
+        binding.addressEditText.setOnClickListener {
             findNavController().navigate(CreateScheduleFragmentDirections
                 .actionCreateScheduleFragmentToMapFragment(arg.selectedSchedule))
         }
@@ -165,11 +166,13 @@ class CreateScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (requireActivity() as MainActivity).hideToolBar()
+        (requireActivity() as MainActivity).hideBottomNavBar()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         (requireActivity() as MainActivity).showToolBar()
+        (requireActivity() as MainActivity).showBottomNavBar()
     }
 
 

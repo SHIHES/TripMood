@@ -16,6 +16,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dialog_background.xml" value="0.1" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/dish_small.xml" value="0.106" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/favorite_fill0_wght400_grad0_opsz48.xml" value="0.1475" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/from_bottom_anim.xml" value="0.3675" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/home_selector.xml" value="0.1" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/horizontal_dotted_line.xml" value="0.3985" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/hotel_ask.xml" value="0.106" />
@@ -28,6 +29,7 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_chat_24.xml" value="0.2425" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.293" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.224" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_edit_calendar_24.xml" value="0.3675" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.204" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.1865" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.2425" />
@@ -65,11 +67,12 @@
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_chat_detail.xml" value="0.25" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_collection.xml" value="0.1375" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_dashboard.xml" value="0.26927083333333335" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_favorite.xml" value="0.5" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_login.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notification.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_notifications.xml" value="0.26927083333333335" />
-        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan.xml" value="0.20987654320987653" />
+        <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_child_viewpager.xml" value="0.25" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_create.xml" value="0.335" />
         <entry key="..\:/Users/SHIHS/Documents/TripMood/app/src/main/res/layout/fragment_plan_map.xml" value="0.25" />

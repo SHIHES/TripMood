@@ -7,6 +7,30 @@
     android:layout_height="match_parent"
     android:background="@drawable/cornercircle">
 
+    <TextView
+        android:id="@+id/createPlanTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/View_margin"
+        android:textSize="28sp"
+        android:letterSpacing="0.15"
+        android:textColor="@color/tripMood_dark_blue"
+        android:layout_marginStart="16dp"
+        android:text="創立旅程"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/View_margin"
+        android:background="@color/tripMood_dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createPlanTitle" />
+
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
@@ -17,7 +41,7 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view7"
         app:strokeColor="@color/black"
         app:strokeWidth="1dp">
 
