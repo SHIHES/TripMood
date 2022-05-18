@@ -317,6 +317,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         for (location in locations) {
             val latlng = LatLng(location.latitude!!, location.longitude!!)
+
             map?.addMarker(
                 MarkerOptions()
                     .position(latlng)

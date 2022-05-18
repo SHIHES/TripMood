@@ -109,7 +109,7 @@ class CreateScheduleFragment : Fragment() {
 
     private fun setupBtn(){
 
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(Locale.TAIWAN)
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
@@ -129,20 +129,19 @@ class CreateScheduleFragment : Fragment() {
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
 
-//            if (postTime != null) {
-//                NotificationSwitch(postTime)
-//            }
-
-            Log.d("QAQ", "schedultTime$schedultTime")
-            viewModel.postNewSchedule(Schedule(
-                time = postTime,
+            val postSchedule = Schedule(time = postTime,
                 title = title,
                 note = content,
                 location = locationResult,
                 cost = cost,
                 notification = notification,
                 catalog = catalog,
-                theDay = arg.selectedPosition.plus(1)))
+                theDay = arg.selectedPosition.plus(1))
+
+            Log.d("QAQ", "schedultTime$schedultTime")
+
+
+            viewModel.postNewSchedule(postSchedule)
 
 
             findNavController().navigateUp()

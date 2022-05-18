@@ -1,6 +1,7 @@
 package com.shihs.tripmood.chat
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,9 @@ import com.shihs.tripmood.util.UserManager
 import java.util.*
 
 
-class ChatFragment : Fragment() {
+class ChatFragment : Fragment()
+//    KeyEvent.Callback
+    {
 
     lateinit var binding: FragmentChatDetailBinding
 
@@ -67,11 +70,52 @@ class ChatFragment : Fragment() {
 
             )
 
-
             viewModel.postChats(chat)
+
+            binding.editGchatMessage.setText("")
         }
     }
 
+//    override fun onKeyDown(p0: Int, p1: KeyEvent?): Boolean {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onKeyLongPress(p0: Int, p1: KeyEvent?): Boolean {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+//        return when (keyCode){
+//
+//            KeyEvent.KEYCODE_ENTER -> {
+//                val time = Calendar.getInstance(Locale.TAIWAN).timeInMillis
+//                var msg = binding.editGchatMessage.text.toString()
+//                val user = User(name = UserManager.userName,
+//                    email = "",
+//                    image = UserManager.userPhotoUrl,
+//                    uid = UserManager.userUID)
+//
+//                val chat = Chat(
+//                    createdTime = time,
+//                    speaker = user,
+//                    msg = msg ,
+//                    planID = arg.myPlan?.id,
+//                    )
+//
+//                viewModel.postChats(chat)
+//
+//                binding.editGchatMessage.setText("")
+//                true
+//            }
+//            else -> {
+//                return true
+//            }
+//        }
+//    }
+//
+//    override fun onKeyMultiple(p0: Int, p1: Int, p2: KeyEvent?): Boolean {
+//        TODO("Not yet implemented")
+//    }
 
 
 }

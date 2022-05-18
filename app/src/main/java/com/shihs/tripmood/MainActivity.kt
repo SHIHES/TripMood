@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNotificationsChannels() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 getString(R.string.reminders_notification_channel_id),

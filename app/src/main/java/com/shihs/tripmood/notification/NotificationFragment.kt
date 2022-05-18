@@ -49,7 +49,16 @@ class NotificationFragment : Fragment() {
 
         viewModel.allUserInvites.observe(viewLifecycleOwner){it?.let{
             Log.d("QAQQQ", "allUserInvites$it")
-            adapter.submitList(it)
+
+//            if(it.isNullOrEmpty()){
+//                    binding.noNotificationAnimation.visibility = View.VISIBLE
+//                    binding.noNotificationHint.visibility = View.VISIBLE
+//                } else {
+//                    binding.noNotificationAnimation.visibility = View.GONE
+//                    binding.noNotificationHint.visibility = View.GONE
+                    adapter.submitList(it)
+//            }
+
         }}
 
 

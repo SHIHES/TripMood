@@ -144,7 +144,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun showAnimation(schedule: Schedule, position: Int): Boolean {
 
-        val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
+        val calendar = Calendar.getInstance(Locale.TAIWAN).timeInMillis
 
         //判斷data不為空
         if (!_dayOfSchedule.value!!.isNullOrEmpty()) {

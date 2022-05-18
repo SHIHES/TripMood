@@ -81,7 +81,7 @@
                     android:id="@+id/coworkLocationImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bright_blue_sky_with_puffy_clouds_bgfoto"
+                    android:background="@drawable/blue_sky"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"/>

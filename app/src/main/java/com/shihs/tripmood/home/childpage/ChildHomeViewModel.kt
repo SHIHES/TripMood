@@ -114,15 +114,15 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
             for (userID in plan.coworkList!!){
                 getUserInfo(userID = userID)
-                userQueryCount.value?.plus(1)
-                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
+//                userQueryCount.value?.plus(1)
+//                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
             }
         }
-        if(realUserDataList.size == userQueryCount.value!!){
-            Log.d("SS", " == realUserDataList.size${userQueryCount.value}")
-        } else{
-            Log.d("SS", "else realUserDataList.size${userQueryCount.value}")
-        }
+//        if(realUserDataList.size == userQueryCount.value!!){
+//            Log.d("SS", " == realUserDataList.size${userQueryCount.value}")
+//        } else{
+//            Log.d("SS", "else realUserDataList.size${userQueryCount.value}")
+//        }
 
 
     }
@@ -322,7 +322,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-    var realUserDataList = mutableListOf<User>()
+    var realUserDataList = mutableSetOf<User>()
 
     fun saveCoworkUserInfo(user: User){
         realUserDataList.add(user)

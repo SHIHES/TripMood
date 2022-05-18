@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieCompositionFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -76,7 +78,7 @@ class LoginFragment : Fragment() {
         binding.johnBtn.setOnClickListener {
             UserManager.userUID = "8787878787"
             UserManager.userName = "皮卡皮卡!"
-            UserManager.userPhotoUrl = "https://c.ecimg.tw/items/DEAS2NA900BTSO7/000001_1632984102.jpg"
+            UserManager.userPhotoUrl = "https://browsecat.net/sites/default/files/the-professor-money-heist-wallpapers-87259-579206-1832331.png"
             findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
 
         }
