@@ -14,13 +14,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.FragmentScheduleCreateBinding
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.Location
-import com.shihs.tripmood.util.ReminderManager
+import com.shihs.tripmood.ext.getVmFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -77,6 +76,7 @@ class CreateScheduleFragment : Fragment() {
         setupBtn()
 
         (requireActivity() as MainActivity).hideToolBar()
+        (requireActivity() as MainActivity).hideBottomNavBar()
 
         return binding.root
     }
@@ -97,19 +97,19 @@ class CreateScheduleFragment : Fragment() {
         }
     }
 
-    private fun NotificationSwitch(time: Long){
-        if(!binding.notificationSwitch.isChecked){
-            return
-            } else{
-                ReminderManager.startReminder(requireContext(), time, 123)
-            }
-
-    }
+//    private fun NotificationSwitch(time: Long){
+//        if(!binding.notificationSwitch.isChecked){
+//            return
+//            } else{
+//                ReminderManager.startReminder(requireContext(), time, 123)
+//            }
+//
+//    }
 
 
     private fun setupBtn(){
 
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(Locale.TAIWAN)
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
@@ -129,20 +129,19 @@ class CreateScheduleFragment : Fragment() {
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
 
-            if (postTime != null) {
-                NotificationSwitch(postTime)
-            }
-
-            Log.d("QAQ", "schedultTime$schedultTime")
-            viewModel.postNewSchedule(Schedule(
-                time = postTime,
+            val postSchedule = Schedule(time = postTime,
                 title = title,
                 note = content,
                 location = locationResult,
                 cost = cost,
                 notification = notification,
                 catalog = catalog,
-                theDay = arg.selectedPosition.plus(1)))
+                theDay = arg.selectedPosition.plus(1))
+
+            Log.d("QAQ", "schedultTime$schedultTime")
+
+
+            viewModel.postNewSchedule(postSchedule)
 
 
             findNavController().navigateUp()
@@ -152,7 +151,7 @@ class CreateScheduleFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.addLocationButton.setOnClickListener {
+        binding.addressEditText.setOnClickListener {
             findNavController().navigate(CreateScheduleFragmentDirections
                 .actionCreateScheduleFragmentToMapFragment(arg.selectedSchedule))
         }
@@ -166,11 +165,13 @@ class CreateScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (requireActivity() as MainActivity).hideToolBar()
+        (requireActivity() as MainActivity).hideBottomNavBar()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         (requireActivity() as MainActivity).showToolBar()
+        (requireActivity() as MainActivity).showBottomNavBar()
     }
 
 

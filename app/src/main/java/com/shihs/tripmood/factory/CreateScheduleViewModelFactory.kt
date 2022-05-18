@@ -7,6 +7,7 @@ import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.plan.MyPlanViewModel
 import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
+import com.shihs.tripmood.plan.mygps.MyGPSViewModel
 
 
 /**
@@ -26,6 +27,9 @@ class CreateScheduleViewModelFactory(
 
                 isAssignableFrom(CreateScheduleViewModel::class.java) ->
                     CreateScheduleViewModel(repository, plan, schedule, adapterPosition)
+
+                isAssignableFrom(MyGPSViewModel::class.java) ->
+                    MyGPSViewModel(repository, plan, schedule, adapterPosition)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

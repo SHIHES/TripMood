@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentNotificationBinding
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.notification.adapter.InviteAdapter
 
 class NotificationFragment : Fragment() {
@@ -49,7 +49,16 @@ class NotificationFragment : Fragment() {
 
         viewModel.allUserInvites.observe(viewLifecycleOwner){it?.let{
             Log.d("QAQQQ", "allUserInvites$it")
-            adapter.submitList(it)
+
+//            if(it.isNullOrEmpty()){
+//                    binding.noNotificationAnimation.visibility = View.VISIBLE
+//                    binding.noNotificationHint.visibility = View.VISIBLE
+//                } else {
+//                    binding.noNotificationAnimation.visibility = View.GONE
+//                    binding.noNotificationHint.visibility = View.GONE
+                    adapter.submitList(it)
+//            }
+
         }}
 
 

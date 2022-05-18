@@ -1,5 +1,6 @@
 package com.shihs.tripmood.dataclass.source
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
@@ -56,4 +57,18 @@ interface TripMoodRepo {
     fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
 
     suspend fun getUserInfo(userID: String) : Result<User>
+
+    fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>>
+
+    suspend fun sendMyLocation( userLocation: UserLocation ) : Result<Boolean>
+
+    suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean>
+
+    suspend fun uploadImage(localUri: Uri) : Result<Uri>
+
+    suspend fun addFavoritePlan(plan: Plan): Result<Boolean>
+
+    suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean>
+
+    fun getLiveFavoritePlan(): MutableLiveData<List<Plan>>
 }

@@ -1,4 +1,4 @@
-package app.appworks.school.publisher.ext
+package com.shihs.tripmood.ext
 
 import androidx.fragment.app.Fragment
 import app.appworks.school.publisher.factory.PlanViewModelFactory
@@ -45,10 +45,3 @@ fun Fragment.getVmFactory(schedule: Schedule?): ScheduleViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return ScheduleViewModelFactory(repository, schedule)
 }
-
-
-
-//fun Fragment.getVmFactory(author: Author?): AuthorViewModelFactory {
-//    val repository = (requireContext().applicationContext as TripMoodApplication).repository
-//    return AuthorViewModelFactory(repository, author)
-//}

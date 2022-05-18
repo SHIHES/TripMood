@@ -23,5 +23,28 @@
         tools:itemCount="6"
         tools:listitem="@layout/item_plan" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/earthAnimation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_earth" />
+
+    <TextView
+        android:id="@+id/noPlanHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="現在沒有任何計畫唷!"
+        android:textColor="@color/tripMood_dark_blue"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/earthAnimation" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

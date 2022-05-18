@@ -15,9 +15,9 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import app.appworks.school.publisher.ext.getVmFactory
 import com.google.android.material.navigation.NavigationBarView
 import com.shihs.tripmood.databinding.ActivityMainBinding
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.util.CurrentFragmentType
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.currentFragmentType.observe(
             this, Observer {
+                when(it){
+                    CurrentFragmentType.PLAN_MODE ->{
+                    }
+                }
 
             }
         )
@@ -84,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
                 R.id.navigation_home -> CurrentFragmentType.HOME
                 R.id.navigation_search -> CurrentFragmentType.SEARCH
-//                R.id.      -> CurrentFragmentType.NOTIFICATION
+                R.id.planModeDialog -> CurrentFragmentType.PLAN_MODE
                 R.id.mapFragment -> CurrentFragmentType.FIND_SPOT_MAP
                 R.id.detailFragment -> CurrentFragmentType.MY_PLAN
                 R.id.showAllLocationFragment -> CurrentFragmentType.MY_PLAN_MAP
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_addPlan ->{
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
-                        MobileNavigationDirections.actionGlobalPlanModeDialog()
+                        MobileNavigationDirections.actionGlobalCreatePlanFragment()
                     )
                 }
             }
@@ -142,6 +146,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNotificationsChannels() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 getString(R.string.reminders_notification_channel_id),

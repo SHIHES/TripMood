@@ -8,10 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmetUserPlanChildViewpagerBinding
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.home.HomeFragmentDirections
 import com.shihs.tripmood.user.adapter.MemoryPlanAdapter
+import com.shihs.tripmood.util.DetailPageFilter
 import com.shihs.tripmood.util.UserPlanFilter
 
 class UserChildFragment(private val userPlanFilter: UserPlanFilter) : Fragment() {
@@ -39,9 +40,10 @@ class UserChildFragment(private val userPlanFilter: UserPlanFilter) : Fragment()
             context, 2,GridLayoutManager.VERTICAL,false)
 
 
+
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom,it))
                 viewModel.onPlanNavigated()
             }
         }

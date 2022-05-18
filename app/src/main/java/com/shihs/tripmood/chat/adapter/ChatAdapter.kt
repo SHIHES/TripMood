@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import app.appworks.school.publisher.ext.toDisplayDateFormat
-import app.appworks.school.publisher.ext.toDisplayTimeFormat
 import com.bumptech.glide.Glide
 import com.shihs.tripmood.databinding.ItemChatMeBinding
 import com.shihs.tripmood.databinding.ItemChatOtherBinding
 import com.shihs.tripmood.dataclass.Chat
+import com.shihs.tripmood.ext.toDisplayTimeFormat
 import com.shihs.tripmood.util.UserManager
 
 class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){

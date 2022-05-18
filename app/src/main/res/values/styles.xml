@@ -8,4 +8,22 @@
 <!--        <item name="android:textStyle">bold</item>-->
     </style>
 
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+
+        <item name="android:typeface">monospace</item>
+        <item name="android:background">@drawable/cornercircle</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:typeface">monospace</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <style name="Dialog">
+        <item name="android:windowBackground">@color/transparent_black</item>
+    </style>
+
 </resources>

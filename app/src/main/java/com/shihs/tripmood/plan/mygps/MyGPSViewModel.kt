@@ -17,7 +17,13 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
+class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
+
+    var argPlan = arg1
+
+    var argSchedule = arg2
+
+    var argPosition = arg3?.plus(1)
 
     private var viewModelJob = Job()
 
@@ -33,17 +39,6 @@ class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val nearbyLocation: LiveData<List<Location>>
         get() = _nearbyLocation
 
-    private val _userSaveLocation = MutableLiveData<List<Location>>()
-
-    val userSaveLocation: LiveData<List<Location>>
-        get() = _userSaveLocation
-
-    private val _planTitle = MutableLiveData<String>()
-
-    val planTitle: LiveData<String>
-        get() = _planTitle
-
-
     private val _status = MutableLiveData<LoadApiStatus>()
 
     val status: LiveData<LoadApiStatus>
@@ -53,26 +48,8 @@ class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val error: LiveData<String?>
         get() = _error
 
-
-    var planID = ""
-
-
-
-
-
-
-    fun getPlanTitle(title: String){
-        _planTitle.value = title
-    }
-
-
     fun clearNearbyLocation(){
         _nearbyLocation.value = null
-    }
-
-    fun clearUserAddLocationList(){
-        _userSaveLocation.value = null
-        userAddLocationList.clear()
     }
 
     fun getNearbyLocation(locations: List<Location>){
@@ -84,91 +61,28 @@ class MyGPSViewModel(private val repository: TripMoodRepo) : ViewModel() {
         _selectedLocation.value = location
     }
 
+    fun packageGPSSchedule(location: Location){
 
-    var userAddLocationList = mutableListOf<Location>()
+        val schedule = Schedule()
 
-    fun userAddLocation(location: Location){
-        userAddLocationList.add(location)
-        _userSaveLocation.value = userAddLocationList
-    }
+        val fmt = SimpleDateFormat("HH:mm")
+        val schedultTime = fmt.parse("12:00")?.time
+        val postTime = argSchedule?.time?.let { it -> schedultTime?.plus(it) }
 
-    fun packageGPSPlan(plan: Plan){
-
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
-        val date = calendar.get(Calendar.DATE)
-        val startTimeString = "$year/$month/$date"
-        val startTimeMilli = SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH).parse(startTimeString).time
-
-        val endTime = startTimeMilli
-
-        plan.startDate = startTimeMilli
-        plan.endDate = endTime
-        plan.title = _planTitle.value
-
-    }
-
-    fun uploadScheduleAndGPSLocation(){
-        var schedule = Schedule()
-
-        for(location in _userSaveLocation.value!!){
-            Log.d("QAQ, ","uploadScheduleAndGPSLocation ${location}")
-            postNewSchedule(schedule, location)
-        }
-
-    }
-
-    fun packageGPSSchedule(schedule: Schedule, location: Location){
-
-        val now = Calendar.getInstance().timeInMillis
-
-
-        schedule.planID = planID
-        schedule.time = now
+        schedule.theDay = argPosition!!
+        schedule.planID = argPlan?.id
+        schedule.time = postTime
         schedule.location = location
 
         Log.d("QAQ, ","packageGPSSchedule ${location}")
 
+        postNewSchedule(schedule = schedule)
 
     }
 
-
-
-    fun postNewPlan(plan: Plan){
-
-        coroutineScope.launch {
-
-            _status.value = LoadApiStatus.LOADING
-
-            when (val result = repository.postPlan(plan = plan)) {
-                is Result.Success -> {
-
-                    planID = result.data
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
-                }
-                is Result.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                }
-                is Result.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                }
-                else -> {
-                    _status.value = LoadApiStatus.ERROR
-                }
-            }
-
-        }
-    }
-
-    fun postNewSchedule(schedule: Schedule, location: Location){
+    fun postNewSchedule(schedule: Schedule){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-
-            packageGPSSchedule(schedule = schedule, location = location)
 
             when (val result =
                 repository.postSchedule(schedule = schedule, planID = schedule.planID!!)

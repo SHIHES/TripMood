@@ -33,7 +33,7 @@ class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapte
 
             binding.spotAddress.text = item.address
             binding.spotTitile.text = item.name
-            Glide.with(binding.spotIcon.context).load(item.icon).error(R.drawable.the_professor_digital_painting_money_heist_ke)
+            Glide.with(binding.spotIcon.context).load(item.icon).error(R.drawable.tripmood_logo)
                 .override(56,56)
                 .into(binding.spotIcon)
 
@@ -46,7 +46,7 @@ class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapte
 
 
             if(item.image == null){
-                binding.spotPhoto.setImageResource(R.drawable.the_professor_digital_painting_money_heist_ke)
+                binding.spotPhoto.setImageResource(R.drawable.tripmood_logo)
             } else {
                 val imageBytes = Base64.decode(item.image, Base64.DEFAULT)
                 val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.MainViewModel
 
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
+import com.shihs.tripmood.favorite.FavoriteViewModel
+import com.shihs.tripmood.home.HomeViewModel
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.login.LoginViewModel
 import com.shihs.tripmood.notification.NotificationViewModel
@@ -24,8 +26,6 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-                isAssignableFrom(MyGPSViewModel::class.java) ->
-                    MyGPSViewModel(repository)
 
                 isAssignableFrom(CreatePlanViewModel::class.java) ->
                     CreatePlanViewModel(repository)
@@ -41,6 +41,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repository)
+
+                isAssignableFrom(HomeViewModel::class.java) ->
+                    HomeViewModel(repository)
+
+                isAssignableFrom(FavoriteViewModel::class.java) ->
+                    FavoriteViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

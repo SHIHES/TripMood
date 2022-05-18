@@ -1,6 +1,7 @@
 package com.shihs.tripmood.dataclass.source.local
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
@@ -107,6 +108,36 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     }
 
     override suspend fun getUserInfo(userID: String): Result<User> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun sendMyLocation(
+        userLocation: UserLocation
+    ): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadImage(localUri: Uri): Result<Uri> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addFavoritePlan(plan: Plan): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
 

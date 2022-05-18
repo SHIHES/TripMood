@@ -1,14 +1,21 @@
 package com.shihs.tripmood.dataclass.source.remote
 
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 import com.shihs.tripmood.util.InviteFilter
 import com.shihs.tripmood.util.Logger
 import com.shihs.tripmood.util.UserManager
+import java.io.FileInputStream
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -20,8 +27,15 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     private const val PATH_USERS = "users"
     private const val PATH_CHATS = "chats"
     private const val PATH_INVITES = "invites"
+    private const val PATH_COWORKLOCATION = "coworkLocation"
+    private const val PATH_FAVORITE = "favoritePlan"
 
 
+
+    private const val KEY_FAVORITEPLANSID = "favoritePlansID"
+    private const val KEY_PLAN_TITLE = "title"
+    private const val KEY_LATITUDE = "lat"
+    private const val KEY_LONGTITUDE = "lng"
     private const val KEY_CHATS_CREATEDTIME = "createdTime"
     private const val KEY_OWNER = "ownerID"
     private const val KEY_UID = "uid"
@@ -692,5 +706,176 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
             }
     }
+
+    override suspend fun sendMyLocation(userLocation: UserLocation ) : Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_COWORKLOCATION)
+            .document(UserManager.userUID!!)
+            .set(userLocation)
+            .addOnCompleteListener{ task ->
+            if (task.isSuccessful){
+
+                Logger.i("sendMyLocation: $userLocation")
+
+                continuation.resume(Result.Success(true))
+            } else{
+                task.exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error sendMyLocation. ${it.message}")
+                    continuation.resume(Result.Error(it))
+                    return@addOnCompleteListener
+                }
+                continuation.resume(Result.Fail("sendMyLocation Fail"))
+            }
+        }
+    }
+
+
+    override suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean> = suspendCoroutine { continuation ->
+
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.collection(PATH_COWORKLOCATION).document(UserManager.userUID!!)
+
+        db.runBatch { batch ->
+            batch.update(ref, KEY_LONGTITUDE, lng)
+            batch.update(ref, KEY_LATITUDE, lat)
+        }
+            .addOnSuccessListener{
+                Logger.i("updateMyLocation addOnSuccessListener")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error acceptInvite documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+    }
+
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+
+        val liveData = MutableLiveData<List<UserLocation>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_COWORKLOCATION)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLiveCoworkLocation addSnapshotLister success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<UserLocation>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    val userLocation = document.toObject(UserLocation::class.java)
+                    list.add(userLocation)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
+    override suspend fun uploadImage(localUri: Uri) : Result<Uri> = suspendCoroutine { continuation ->
+
+        val time = Calendar.getInstance().timeInMillis
+        val fileName = "${UserManager.userName}&$time"
+        val storageReference = FirebaseStorage.getInstance().reference.child("$fileName")
+
+        val uploadTask = storageReference.putFile(localUri)
+
+        uploadTask.continueWith{ task ->
+            if(!task.isSuccessful){
+                task.exception?.let {
+                    throw it
+                }
+            }
+            storageReference.downloadUrl
+        }.addOnCompleteListener {  task ->
+            if (task.isSuccessful){
+                task.result.addOnSuccessListener {
+                    continuation.resume(Result.Success(it))
+                }
+
+            } else {
+
+            }
+        }
+    }
+
+    override suspend fun addFavoritePlan(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .collection(PATH_FAVORITE)
+            .document(plan.id.toString())
+            .set(plan)
+            .addOnSuccessListener{
+
+                Logger.i("addFavoritePlan: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error addFavoritePlan documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+
+    }
+
+    override suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .collection(PATH_FAVORITE)
+            .document(plan.id.toString())
+            .delete()
+            .addOnSuccessListener{
+
+                Logger.i("addFavoritePlan: $it")
+
+                continuation.resume(Result.Success(true))
+            }
+            .addOnFailureListener {
+                Logger.w("[${this::class.simpleName}] Error addFavoritePlan documents. ${it.message}")
+                continuation.resume(Result.Error(it))
+            }
+
+    }
+
+    override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
+
+        val liveData = MutableLiveData<List<Plan>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USERS)
+            .document(UserManager.userUID.toString())
+            .collection(PATH_FAVORITE)
+            .addSnapshotListener{ snapshot, exception ->
+
+                Logger.i("getLiveCoworkLocation addSnapshotLister success")
+
+                exception?.let {
+                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Plan>()
+                for (document in snapshot!!){
+                    Logger.d(document.id + " => " + document.data)
+
+                    val plan = document.toObject(Plan::class.java)
+                    list.add(plan)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
+
+
+
 
 }

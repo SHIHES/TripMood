@@ -14,9 +14,10 @@
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/actionBarLayout"
+            android:id="@+id/actionEditBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -28,7 +29,7 @@
 
 
             <ImageButton
-                android:id="@+id/backButton"
+                android:id="@+id/editBackButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
@@ -42,21 +43,21 @@
                 app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
             <ImageButton
-                android:id="@+id/addPictureButton"
+                android:id="@+id/editPictureButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@color/white"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/addLocationButton"
+                app:layout_constraintStart_toEndOf="@+id/editBackButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_camera_24" />
 
             <ImageButton
-                android:id="@+id/addScheduleBtn"
+                android:id="@+id/editScheduleBtn"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="8dp"
@@ -69,19 +70,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_check_24" />
 
-            <ImageButton
-                android:id="@+id/addLocationButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/white"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backButton"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_add_location_24" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -129,8 +118,10 @@
             android:textSize="50sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.517"
             app:layout_constraintStart_toEndOf="@+id/scheduleDayTv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.523" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -156,7 +147,7 @@
         app:layout_constraintTop_toBottomOf="@+id/notificationSwitch">
 
         <AutoCompleteTextView
-            android:id="@+id/catalogEditText"
+            android:id="@+id/editCatalogEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -214,7 +205,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addressEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:focusable="false"
+            android:cursorVisible="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

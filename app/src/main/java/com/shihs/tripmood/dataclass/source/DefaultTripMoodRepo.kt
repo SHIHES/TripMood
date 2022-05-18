@@ -1,5 +1,6 @@
 package com.shihs.tripmood.dataclass.source
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
@@ -108,6 +109,36 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
 
     override suspend fun getUserInfo(userID: String): Result<User> {
         return remoteDataSource.getUserInfo(userID = userID)
+    }
+
+    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+        return remoteDataSource.getLiveCoworkLocation()
+    }
+
+    override suspend fun sendMyLocation(
+        userLocation: UserLocation
+    ): Result<Boolean> {
+        return remoteDataSource.sendMyLocation( userLocation = userLocation)
+    }
+
+    override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
+        return remoteDataSource.updateMyLocation(lat, lng)
+    }
+
+    override suspend fun uploadImage(localUri: Uri): Result<Uri> {
+        return remoteDataSource.uploadImage(localUri = localUri)
+    }
+
+    override suspend fun addFavoritePlan(plan: Plan): Result<Boolean> {
+        return remoteDataSource.addFavoritePlan(plan)
+    }
+
+    override suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean> {
+        return remoteDataSource.cancelFavoritePlan(plan)
+    }
+
+    override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
+        return remoteDataSource.getLiveFavoritePlan()
     }
 
 }

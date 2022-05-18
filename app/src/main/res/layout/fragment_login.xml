@@ -11,7 +11,7 @@
         android:id="@+id/loginBackgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/bright_blue_sky_with_puffy_clouds_bgfoto"
+        android:src="@drawable/blue_sky"
         android:scaleType="centerCrop"/>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -22,6 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appName"
+        android:scaleType="centerCrop"
         app:lottie_autoPlay="true"
         android:elevation="10dp"
         app:lottie_loop="true"
@@ -56,10 +57,9 @@
 
         <Button
         android:id="@+id/johnBtn"
-        android:layout_margin="@dimen/View_margin"
-        android:layout_width="wrap_content"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
-        android:text="John"
+        android:text="J"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

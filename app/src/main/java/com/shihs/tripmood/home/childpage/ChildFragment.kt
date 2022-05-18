@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.appworks.school.publisher.ext.getVmFactory
 import com.shihs.tripmood.databinding.FragmentPlanChildViewpagerBinding
+import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.home.HomeFragmentDirections
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.home.adapter.PlanAdapter
+import com.shihs.tripmood.util.DetailPageFilter
 
 class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
@@ -55,8 +56,14 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(it))
+                if (HomePlanFilter.INDIVIDUAL.value == homePlanType.value){
+                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom,it))
                 viewModel.onPlanNavigated()
+                }
+                if (HomePlanFilter.COWORK.value == homePlanType.value){
+                    findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom,it))
+                    viewModel.onPlanNavigated()
+                }
             }
         }
 
@@ -74,6 +81,13 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         } }
 
         viewModel.viewpagerPlans.observe(viewLifecycleOwner){it?.let {
+            if (!it.isNullOrEmpty()){
+                binding.earthAnimation.visibility = View.GONE
+                binding.noPlanHint.visibility = View.GONE
+            } else{
+                binding.earthAnimation.visibility = View.VISIBLE
+                binding.noPlanHint.visibility = View.VISIBLE
+            }
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
         } }

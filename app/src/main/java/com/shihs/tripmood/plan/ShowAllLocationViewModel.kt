@@ -1,15 +1,14 @@
 package com.shihs.tripmood.plan
 
-import android.text.BoringLayout
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.shihs.tripmood.dataclass.Location
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.UserLocation
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,9 +48,43 @@ class ShowAllLocationViewModel(private val repository: TripMoodRepo, arg: Plan?)
 
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
+    var liveUsersLocation = MutableLiveData<List<UserLocation>>()
+
+    var realCoworkUsersLocation = MutableLiveData<List<UserLocation>>()
+
+    var realCoworkUsers = mutableListOf<UserLocation>()
+
 
     init {
         getAllSchedule()
+        getAllUserLocation()
+    }
+
+    private fun getAllUserLocation(){
+
+        liveUsersLocation = repository.getLiveCoworkLocation()
+
+    }
+
+    fun sortUserLocation(){
+
+        if (!_plan.value?.coworkList.isNullOrEmpty()) {
+
+            realCoworkUsers.clear()
+            realCoworkUsersLocation.value = realCoworkUsers
+
+            _plan.value?.coworkList?.forEach {
+
+                for (userLocation in liveUsersLocation.value!!) {
+                    if (it == userLocation.userUID) {
+
+                        realCoworkUsers.add(userLocation)
+                        realCoworkUsersLocation.value = realCoworkUsers
+                    }
+
+                }
+            }
+        }
     }
 
 

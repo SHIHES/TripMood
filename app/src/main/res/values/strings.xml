@@ -20,8 +20,12 @@
 
     <string name="add_spot_title">加入行程?</string>
     <string name="add_spot_support_msg">點選確認後會將景點儲存至此次旅程中</string>
+
+
     <string name="decline">否</string>
     <string name="accept">是</string>
+
+
     <string name="title_notification_reminder">旅程通知</string>
     <string name="description_notification_reminder">時間快到囉</string>
     <string name="reminders_notification_channel_id">channelID</string>
@@ -32,5 +36,11 @@
     <string name="refusedInvite">已回覆: 拒絕</string>
 
     <string name="server_client_id">268286594391-i6qonn8pu347chhg8u3pelscqu9sqndt.apps.googleusercontent.com</string>
+    <string name="home_individual">獨自規劃</string>
+    <string name="home_cowork">共同編輯</string>
+    <string name="home_hint_dialog_content">開啟GPS功能以獲得更好的體驗</string>
+    <string name="home_hint_dialog_title">小提醒</string>
+    <string name="home_hint_dialog_refused">下次再說</string>
+    <string name="home_hint_dialog_setting">前往設定</string>
 
 </resources>

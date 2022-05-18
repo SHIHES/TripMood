@@ -36,11 +36,13 @@ class EventAdapter(private val onClickListener: OnClickListener, private val vie
             binding.ScheduleTitle.text = item.title
             binding.locationText.text = item.location?.name
 
-            if (viewModel.showAnimation(item, adapterPosition)){
-                binding.locationAnimate.visibility = View.VISIBLE
-            } else {
-                binding.locationAnimate.visibility = View.GONE
-            }
+            binding.locationAnimate.visibility = View.GONE
+
+//            if (viewModel.showAnimation(item, adapterPosition)){
+//                binding.locationAnimate.visibility = View.VISIBLE
+//            } else {
+//                binding.locationAnimate.visibility = View.GONE
+//            }
 
             itemView.let{
 

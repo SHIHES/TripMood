@@ -2,9 +2,9 @@ package com.shihs.tripmood.home.adapter
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.*
 import android.widget.EditText
@@ -12,6 +12,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.databinding.ItemPlanCoworkImageBinding
@@ -19,6 +22,7 @@ import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: ChildHomeViewModel) :
     ListAdapter<Plan, PlanAdapter.PlanVH>(
@@ -30,13 +34,19 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         val moreBtn = binding.moreBtn
         val statusTv = binding.statusTextView
 
-        var flag = false
-
 
         fun bind(item: Plan, viewModel: ChildHomeViewModel) {
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
 
+            binding.favoriteBtn.visibility = View.GONE
+
+
             binding.planTitle.text = item.title
+
+            Glide.with(itemView.context).load(item.image)
+                .placeholder(R.drawable.placeholder)
+                .centerCrop()
+                .into(binding.planCoverPic)
 
             if (item.startDate == item.endDate) {
                 binding.tripDate.text = "${formatTime.format(item.startDate)}"
@@ -48,31 +58,19 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             if (!item.coworkList.isNullOrEmpty()) {
 
-//                item.coworkList!!.forEach {
-//
-//                    for (user in viewModel.realUserDataList){
-//                        if (user.uid == it){
-//                            val itemPlanCoworkImageBinding = ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
-//
-//                            Glide.with(itemView.context).load(user.image).override(100,100).into(itemPlanCoworkImageBinding.coworkImage)
-//                            binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
-//                        }s
-//                    }
-//
-//                }
 
-        viewModel.realUserDataList.forEach {
-            if (item.coworkList!!.contains(it.uid)) {
-                val itemPlanCoworkImageBinding =
-                    ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
+                viewModel.realUserDataList.forEach {
+                    if (item.coworkList!!.contains(it.uid)) {
+                        val itemPlanCoworkImageBinding =
+                            ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
 
-                Log.d("SS", "count function run times")
-                Glide.with(itemView.context).load(it.image).override(100, 100)
-                    .into(itemPlanCoworkImageBinding.coworkImage)
-                binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
-            }
+                        Log.d("SS", "count function run times")
+                        Glide.with(itemView.context).load(it.image).override(100, 100)
+                            .into(itemPlanCoworkImageBinding.coworkImage)
+                        binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
+                    }
 
-        }
+                }
 
             }
 
