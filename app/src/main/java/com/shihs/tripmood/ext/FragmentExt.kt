@@ -45,10 +45,3 @@ fun Fragment.getVmFactory(schedule: Schedule?): ScheduleViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return ScheduleViewModelFactory(repository, schedule)
 }
-
-
-
-//fun Fragment.getVmFactory(author: Author?): AuthorViewModelFactory {
-//    val repository = (requireContext().applicationContext as TripMoodApplication).repository
-//    return AuthorViewModelFactory(repository, author)
-//}
