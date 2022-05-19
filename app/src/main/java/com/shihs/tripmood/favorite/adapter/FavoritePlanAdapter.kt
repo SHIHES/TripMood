@@ -55,6 +55,7 @@ class FavoritePlanAdapter (private val onClickListener: OnClickListener, val vie
 //                }
             }
 
+
         }
     }
 

@@ -68,7 +68,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
 
-            <CheckBox
+            <com.google.android.material.checkbox.MaterialCheckBox
+                app:useMaterialThemeColors="false"
                 android:id="@+id/favoriteBtn"
                 android:layout_width="36dp"
                 android:layout_height="36dp"

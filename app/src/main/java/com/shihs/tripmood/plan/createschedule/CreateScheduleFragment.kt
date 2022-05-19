@@ -97,16 +97,6 @@ class CreateScheduleFragment : Fragment() {
         }
     }
 
-//    private fun NotificationSwitch(time: Long){
-//        if(!binding.notificationSwitch.isChecked){
-//            return
-//            } else{
-//                ReminderManager.startReminder(requireContext(), time, 123)
-//            }
-//
-//    }
-
-
     private fun setupBtn(){
 
         val calendar = Calendar.getInstance(Locale.TAIWAN)
@@ -128,8 +118,11 @@ class CreateScheduleFragment : Fragment() {
             val notification = binding.notificationSwitch.isChecked
             val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
             val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
+            val planId = arg.myPlan?.id
 
-            val postSchedule = Schedule(time = postTime,
+            val postSchedule = Schedule(
+                planID = planId,
+                time = postTime,
                 title = title,
                 note = content,
                 location = locationResult,
@@ -140,9 +133,7 @@ class CreateScheduleFragment : Fragment() {
 
             Log.d("QAQ", "schedultTime$schedultTime")
 
-
             viewModel.postNewSchedule(postSchedule)
-
 
             findNavController().navigateUp()
         }

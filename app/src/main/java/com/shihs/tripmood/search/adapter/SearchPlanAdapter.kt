@@ -43,7 +43,11 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
             } else {
                 binding.tripDate.text =
                     "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
+            }
 
+
+            if (viewModel.userLikePlanLists.value?.contains(item) == true){
+                binding.favoriteBtn.isChecked = true
             }
 
             binding.favoriteBtn.setOnCheckedChangeListener { compoundButton, b ->
@@ -55,7 +59,6 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
                     item.let { viewModel.cancelFavoritePlan(it) }
                 }
             }
-
         }
     }
 

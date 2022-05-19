@@ -26,4 +26,5 @@
         <item name="android:windowBackground">@color/transparent_black</item>
     </style>
 
+
 </resources>
