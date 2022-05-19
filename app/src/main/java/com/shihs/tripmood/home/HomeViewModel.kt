@@ -1,5 +1,6 @@
 package com.shihs.tripmood.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,12 +24,16 @@ class HomeViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val status: LiveData<LoadApiStatus>
         get() = _status
 
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableLiveData<String?>()
 
-    val error: LiveData<String>
+    val error: LiveData<String?>
         get() = _error
 
-
+//    override fun onCleared() {
+//        super.onCleared()
+//        viewModelJob.cancel()
+//        Log.d("SS", "HomeViewModel onCleared")
+//    }
 
     fun upLoadUserLocation(userLocation: UserLocation) {
         coroutineScope.launch {

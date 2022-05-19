@@ -168,6 +168,7 @@ class MyPlanFragment : Fragment() {
         Glide.with(requireContext()).load(image).placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(binding.coworkLocationImage)
+
     }
 
 

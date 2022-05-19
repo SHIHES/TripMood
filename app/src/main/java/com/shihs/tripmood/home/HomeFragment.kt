@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -34,7 +33,7 @@ import com.shihs.tripmood.util.UserManager
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
-    private val viewModel by viewModels<HomeViewModel> { getVmFactory() }
+    private val viewModel by viewModels <HomeViewModel> { getVmFactory() }
     lateinit var client: FusedLocationProviderClient
 
     companion object {
@@ -46,7 +45,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        client = LocationServices.getFusedLocationProviderClient(requireContext())
+        client = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     override fun onCreateView(
@@ -56,11 +55,11 @@ class HomeFragment : Fragment() {
     ): View {
 
         /** When Location permission granted, start uploading user location **/
-        if (isLocationPermissionGranted()) {
-            keepTrackingUser()
-        } else {
-            requestLocationPermission()
-        }
+//        if (isLocationPermissionGranted()) {
+//            keepTrackingUser()
+//        } else {
+//            requestLocationPermission()
+//        }
 
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -77,9 +76,11 @@ class HomeFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             when (HomePlanFilter.values()[position]) {
+
                 HomePlanFilter.INDIVIDUAL -> {
                     tab.text = getString(R.string.home_individual)
                 }
+
                 else -> {
                     tab.text = getString(R.string.home_cowork)
                 }
@@ -90,14 +91,14 @@ class HomeFragment : Fragment() {
     private fun openAppSettingsIntent() {
         val intent = Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.fromParts("package", requireContext().packageName, null)
+            Uri.fromParts("package", requireActivity().packageName, null)
         )
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
 
     private fun showDialog() {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireActivity())
 
         builder.setMessage(getString(R.string.home_hint_dialog_content))
             .setTitle(getString(R.string.home_hint_dialog_title))
@@ -115,7 +116,7 @@ class HomeFragment : Fragment() {
 
     private fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
+            requireActivity(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
@@ -128,39 +129,39 @@ class HomeFragment : Fragment() {
         )
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-
-                /** User refused to turn on GPS permission, show dialog  **/
-                showDialog()
-
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-                ) {
-                    /** User refused to turn on GPS permission again, show dialog  **/
-                    showDialog()
-                }
-
-            }
-
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//
+//        if (requestCode == LOCATION_REQUEST_CODE) {
+//            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//
+//                /** User refused to turn on GPS permission, show dialog  **/
+//                showDialog()
+//
+//                if (!ActivityCompat.shouldShowRequestPermissionRationale(
+//                        requireActivity(),
+//                        Manifest.permission.ACCESS_FINE_LOCATION
+//                    )
+//                ) {
+//                    /** User refused to turn on GPS permission again, show dialog  **/
+//                    showDialog()
+//                }
+//
+//            }
+//
+//        }
+//    }
 
     @SuppressLint("MissingPermission")
     fun keepTrackingUser() {
 
         val locationRequest = LocationRequest.create().apply {
             this.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            this.interval = requireContext().resources.getInteger(R.integer.gps_request_interval).toLong()
+            this.interval = requireActivity().resources.getInteger(R.integer.gps_request_interval).toLong()
         }
 
 
@@ -176,14 +177,15 @@ class HomeFragment : Fragment() {
                     lng = currentLocation.longitude
                 )
 
-                Log.d("SS", "currentLocation$currentLocation")
 
-                viewModel.upLoadUserLocation(userLocation)
+                Log.d("SS", "currentLocation $currentLocation")
+
+//                viewModel.upLoadUserLocation(userLocation)
 
             }
         }
 
-        client.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+//        client.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
 
     }
 

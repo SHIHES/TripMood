@@ -16,6 +16,7 @@ import com.shihs.tripmood.util.UserPlanFilter
 /**
  * Extension functions for Fragment.
  */
+
 fun Fragment.getVmFactory(): ViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return ViewModelFactory(repository)

@@ -1,15 +1,25 @@
 package com.shihs.tripmood
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.*
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.provider.Settings
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -18,29 +28,176 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationBarView
 import com.shihs.tripmood.databinding.ActivityMainBinding
 import com.shihs.tripmood.ext.getVmFactory
+import com.shihs.tripmood.service.UserLocatedService
 import com.shihs.tripmood.util.CurrentFragmentType
+import com.shihs.tripmood.util.UserManager.isLoggedIn
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private var locationPermissionGranted = false
+    private lateinit var mContext: Context
+    private var userLocatedServiceBound = false
+    private var userLocatedService: UserLocatedService? = null
+    private lateinit var tripMoodBroadcastReceiver: TripMoodBroadcastReceiver
+    val viewModel by viewModels <MainViewModel> { getVmFactory() }
 
-//    private var PERMISSION_ID = 1000
-//    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val userLocatedServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
 
+            val binder = service as UserLocatedService.LocalBinder
+            userLocatedService = binder.service
+            userLocatedServiceBound = true
+            viewModel.getUserLocatedServiceStatus(userLocatedServiceBound)
+        }
 
-    val viewModel by viewModels<MainViewModel> { getVmFactory() }
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            userLocatedService = null
+            userLocatedServiceBound = false
+            viewModel.getUserLocatedServiceStatus(userLocatedServiceBound)
+        }
 
-
-
+    }
     companion object {
+
         lateinit var myLocation: String
+        var LOCATION_REQUEST_CODE = 999
     }
 
+
+    private inner class TripMoodBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val location = intent.getParcelableExtra<Location>(
+                UserLocatedService.EXTRA_LOCATION
+            )
+
+            if (location != null){
+                viewModel.setUserLocation(location)
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        bindService()
+    }
+
+    private fun bindService() {
+        val serviceIntent = Intent(this, UserLocatedService::class.java)
+        if (isLoggedIn) bindService(serviceIntent, userLocatedServiceConnection, BIND_AUTO_CREATE)
+    }
+
+    override fun onResume() {
+        super.onResume()
+            registerLocationReceiver()
+            viewModel.resetBroadcastStatus()
+    }
+
+    private fun registerLocationReceiver() {
+        if (isLoggedIn && viewModel.isBroadcastRegistered.value != true) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                tripMoodBroadcastReceiver,
+                IntentFilter(
+                    UserLocatedService.ACTION_TRIPMOOD_LOCATION_BROADCAST
+                )
+            )
+
+            viewModel.setBroadcastRegistered()
+        }
+    }
+
+    override fun onPause() {
+        if (isLoggedIn) {
+            LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(tripMoodBroadcastReceiver)
+            viewModel.resetBroadcastStatus()
+        }
+
+        super.onPause()
+    }
+
+    override fun onStop() {
+        if (userLocatedServiceBound && isLoggedIn) {
+            unbindService(userLocatedServiceConnection)
+            userLocatedServiceBound = false
+        }
+        super.onStop()
+    }
+
+    private fun getLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissionGranted = true
+
+        } else {
+            requestLocationPermission()
+        }
+    }
+
+    private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            AlertDialog.Builder(this)
+                .setMessage(getString(R.string.home_hint_dialog_title))
+                .setPositiveButton(getString(R.string.accept)) { _, _ ->
+                    ActivityCompat.requestPermissions(
+                        this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        LOCATION_REQUEST_CODE
+                    )
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> requestLocationPermission() }
+                .show()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            LOCATION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        locationPermissionGranted = true
+                        bindService()
+                        registerLocationReceiver()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            LOCATION_REQUEST_CODE -> {
+                getLocationPermission()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mContext = this
+
+        tripMoodBroadcastReceiver = TripMoodBroadcastReceiver()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -71,10 +228,25 @@ class MainActivity : AppCompatActivity() {
 
             }
         )
+
+        viewModel.isUserLocatedServiceReady.observe(this){
+            it?.let {
+                userLocatedService?.subscribeToLocationUpdates()
+                viewModel.resetUserLocateServiceStatus()
+            }
+        }
+
+        viewModel.userLocation.observe(this){
+            viewModel.updateUserLocation(it)
+            viewModel.onUpdateUserLocation()
+        }
+
         setBtn()
         setupBottomNav()
         createNotificationsChannels()
         setupNavController()
+
+        if (isLoggedIn) getLocationPermission()
     }
 
     private fun setBtn() {
