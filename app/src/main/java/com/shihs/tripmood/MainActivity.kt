@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -60,18 +61,18 @@ class MainActivity : AppCompatActivity() {
 
     }
     companion object {
-
-        lateinit var myLocation: String
         var LOCATION_REQUEST_CODE = 999
     }
 
 
     private inner class TripMoodBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            val location = intent.getParcelableExtra<Location>(
+            Log.d("SS", "TripMoodBroadcastReceiver intent $p1")
+            val location = p1?.getParcelableExtra<Location>(
                 UserLocatedService.EXTRA_LOCATION
             )
 
+            Log.d("SS", "TripMoodBroadcastReceiver $location")
             if (location != null){
                 viewModel.setUserLocation(location)
             }
@@ -88,13 +89,14 @@ class MainActivity : AppCompatActivity() {
         if (isLoggedIn) bindService(serviceIntent, userLocatedServiceConnection, BIND_AUTO_CREATE)
     }
 
-    override fun onResume() {
-        super.onResume()
-            registerLocationReceiver()
-            viewModel.resetBroadcastStatus()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//            registerLocationReceiver()
+//            viewModel.resetBroadcastStatus()
+//    }
 
     private fun registerLocationReceiver() {
+        Log.d("SS", "registerLocationReceiver $isLoggedIn && ${viewModel.isBroadcastRegistered.value}")
         if (isLoggedIn && viewModel.isBroadcastRegistered.value != true) {
             LocalBroadcastManager.getInstance(this).registerReceiver(
                 tripMoodBroadcastReceiver,
@@ -102,7 +104,6 @@ class MainActivity : AppCompatActivity() {
                     UserLocatedService.ACTION_TRIPMOOD_LOCATION_BROADCAST
                 )
             )
-
             viewModel.setBroadcastRegistered()
         }
     }
@@ -113,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                 .unregisterReceiver(tripMoodBroadcastReceiver)
             viewModel.resetBroadcastStatus()
         }
-
         super.onPause()
     }
 
@@ -132,6 +132,8 @@ class MainActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             locationPermissionGranted = true
+            bindService()
+            registerLocationReceiver()
 
         } else {
             requestLocationPermission()
@@ -188,6 +190,8 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             LOCATION_REQUEST_CODE -> {
                 getLocationPermission()
+                bindService()
+                registerLocationReceiver()
             }
         }
     }
@@ -225,20 +229,26 @@ class MainActivity : AppCompatActivity() {
                     CurrentFragmentType.PLAN_MODE ->{
                     }
                 }
-
             }
         )
 
         viewModel.isUserLocatedServiceReady.observe(this){
             it?.let {
-                userLocatedService?.subscribeToLocationUpdates()
-                viewModel.resetUserLocateServiceStatus()
+                if(it) {
+                    Log.d("SS", "isUserLocatedServiceReady $it")
+                    userLocatedService?.subscribeToLocationUpdates()
+                    viewModel.resetUserLocateServiceStatus()
+                }
             }
         }
 
         viewModel.userLocation.observe(this){
-            viewModel.updateUserLocation(it)
-            viewModel.onUpdateUserLocation()
+            it?.let {
+                Log.d("SS", "userLocation $it")
+                viewModel.updateUserLocation(it)
+                viewModel.onUpdateUserLocation()
+            }
+
         }
 
         setBtn()
@@ -348,35 +358,5 @@ class MainActivity : AppCompatActivity() {
     fun showBottomNavBar(){
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
-
-
-//    private fun checkPermission(): Boolean {
-//        if (
-//            ActivityCompat.checkSelfPermission(
-//                this,
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED ||
-//            ActivityCompat.checkSelfPermission(
-//                this,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return true
-//        }
-//        return false
-//    }
-//
-//
-//    private fun requestPermission() {
-//
-//        ActivityCompat.requestPermissions(
-//            this,
-//            arrayOf(
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            ),
-//            PERMISSION_ID
-//        )
-//    }
 
 }

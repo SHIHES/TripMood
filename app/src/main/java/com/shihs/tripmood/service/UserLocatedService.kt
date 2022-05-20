@@ -10,6 +10,7 @@ import android.location.Location
 import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
@@ -21,8 +22,6 @@ class UserLocatedService : Service() {
     private var isServiceRunningInForeground = false
 
     private val localBinder = LocalBinder()
-
-    private lateinit var notificationManager: NotificationManager
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -38,7 +37,6 @@ class UserLocatedService : Service() {
     }
 
     override fun onCreate() {
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -46,9 +44,9 @@ class UserLocatedService : Service() {
 
             interval = TimeUnit.SECONDS.toMillis(10)
 
-            fastestInterval = TimeUnit.SECONDS.toMillis(5)
+            fastestInterval = TimeUnit.SECONDS.toMillis(6)
 
-            maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+            maxWaitTime = TimeUnit.MINUTES.toMillis(1)
 
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
@@ -57,10 +55,14 @@ class UserLocatedService : Service() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
 
+                Log.d("SS", "onLocationResult $locationResult")
+
                 currentLocation = locationResult.lastLocation
 
                 val intent = Intent(ACTION_TRIPMOOD_LOCATION_BROADCAST)
+
                 intent.putExtra(EXTRA_LOCATION, currentLocation)
+
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
             }
         }
@@ -90,21 +92,22 @@ class UserLocatedService : Service() {
         startService(Intent(applicationContext, UserLocatedService::class.java))
 
         try {
+            Log.d("SS", "subscribeToLocationUpdates succuss")
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest, locationCallback, Looper.getMainLooper()
             )
-        } catch (unlikely: SecurityException) {
-
+        } catch (e: Exception) {
+            Log.d("SS", "subscribeToLocationUpdates $e")
         }
     }
 
     companion object {
 
-        private const val PACKAGE_NAME = "com.shihs.tripmood"
+        const val PACKAGE_NAME = "com.shihs.tripmood"
 
-        internal const val ACTION_TRIPMOOD_LOCATION_BROADCAST = "$PACKAGE_NAME.action.TRIPMOOD_LOCATION_BROADCAST"
+        const val ACTION_TRIPMOOD_LOCATION_BROADCAST = "$PACKAGE_NAME.action.TRIPMOOD_LOCATION_BROADCAST"
 
-        internal const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
+        const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
 
     }
 
