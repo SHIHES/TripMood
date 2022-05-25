@@ -15,7 +15,6 @@ import kotlinx.coroutines.Job
 
 class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: UserPlanFilter) : ViewModel() {
 
-
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -42,13 +41,11 @@ class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: U
 
     var livePlans = MutableLiveData<List<Plan>>()
 
-
     var viewpagerPlans = MutableLiveData<List<Plan>>()
 
     init {
 
         getLivePlansResult()
-
     }
 
     fun navigateToDetail(plan: Plan) {
@@ -59,7 +56,6 @@ class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: U
     private fun getLivePlansResult() {
 
         livePlans = repository.getLivePlans()
-
     }
 
     fun onPlanNavigated() {
@@ -68,24 +64,14 @@ class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: U
 
     val plan = mutableListOf<Plan>()
 
-    fun planSorter(userPlanType: UserPlanFilter){
+    fun planSorter(userPlanType: UserPlanFilter) {
 
-        viewpagerPlans.value  = when (userPlanType) {
+        viewpagerPlans.value = when (userPlanType) {
 
             UserPlanFilter.MEMORY -> livePlans.value?.filter {
                 it.status == PlanStatusFilter.END.code
             }
             UserPlanFilter.COLLECTION -> livePlans.value
-
         }
-
     }
-
-
-
-
-
-
-
-
 }

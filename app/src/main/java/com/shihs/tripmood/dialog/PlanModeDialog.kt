@@ -17,9 +17,7 @@ class PlanModeDialog : AppCompatDialogFragment() {
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog)
         setCancelable(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +39,6 @@ class PlanModeDialog : AppCompatDialogFragment() {
 
         binding.seriousModeBtn.setOnClickListener {
             findNavController().navigate(R.id.action_global_createScheduleFragment)
-
         }
     }
 }

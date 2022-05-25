@@ -13,12 +13,10 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
     private var initXWhenInActive = 0f
     private var firstInActive = false
 
-
     override fun isItemViewSwipeEnabled(): Boolean {
 
         return true
     }
-
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
 
@@ -29,7 +27,11 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
         return makeMovementFlags(dragFlags, swipeFlags)
     }
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
 
 //        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
 
@@ -54,30 +56,30 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
         isCurrentlyActive: Boolean
     ) {
 
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-            if(dX == 0f){
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            if (dX == 0f) {
                 currentSrollX = viewHolder.itemView.scrollX
                 firstInActive = true
             }
 
-            if(isCurrentlyActive){
+            if (isCurrentlyActive) {
 
                 var scrollOffset = currentSrollX + (-dX).toInt()
-                if(scrollOffset > limitScrollX){
+                if (scrollOffset > limitScrollX) {
                     scrollOffset = limitScrollX
-                } else if (scrollOffset < 0){
+                } else if (scrollOffset < 0) {
                     scrollOffset = 0
                 }
 
                 viewHolder.itemView.scrollTo(scrollOffset, 0)
             } else {
-                if(firstInActive){
+                if (firstInActive) {
                     firstInActive = false
                     currentScrollXwhenInActive = viewHolder.itemView.scrollX
                     initXWhenInActive = dX
                 }
-                if (viewHolder.itemView.scrollX < limitScrollX){
-                    viewHolder.itemView.scrollTo((currentScrollXwhenInActive * dX / initXWhenInActive).toInt(),0)
+                if (viewHolder.itemView.scrollX < limitScrollX) {
+                    viewHolder.itemView.scrollTo((currentScrollXwhenInActive * dX / initXWhenInActive).toInt(), 0)
                 }
             }
         }
@@ -86,21 +88,18 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
 
-        if (viewHolder.itemView.scrollX > limitScrollX){
+        if (viewHolder.itemView.scrollX > limitScrollX) {
             viewHolder.itemView.scrollTo(limitScrollX, 0)
-        } else if (viewHolder.itemView.scrollX < 0){
+        } else if (viewHolder.itemView.scrollX < 0) {
             viewHolder.itemView.scrollTo(0, 0)
         }
     }
-
-
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         adapter.onItemDelete(viewHolder.adapterPosition)
     }
 
-    private fun dipToPx(dipValue: Float, context: Context): Int{
-        return  (dipValue * context.resources.displayMetrics.density).toInt()
+    private fun dipToPx(dipValue: Float, context: Context): Int {
+        return (dipValue * context.resources.displayMetrics.density).toInt()
     }
 }
-

@@ -11,17 +11,19 @@ import com.shihs.tripmood.dataclass.Invite
 import com.shihs.tripmood.notification.NotificationViewModel
 import com.shihs.tripmood.util.Util.getString
 
-class InviteAdapter(private val onClickListener: OnClickListener, private val viewModel: NotificationViewModel) :
+class InviteAdapter(
+    private val onClickListener: OnClickListener,
+    private val viewModel: NotificationViewModel
+) :
     ListAdapter<Invite, InviteAdapter.InviteVH>(DiffUtil()) {
 
     class OnClickListener(val clickListener: (invite: Invite) -> Unit) {
         fun onClick(invite: Invite) = clickListener(invite)
     }
 
-    class InviteVH(private var binding: ItemInviteNotificationBinding) : RecyclerView.ViewHolder(binding.root){
+    class InviteVH(private var binding: ItemInviteNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
-        fun bind(invite: Invite, viewModel: NotificationViewModel){
+        fun bind(invite: Invite, viewModel: NotificationViewModel) {
 
             val inviteName = invite.senderName
             val inviteTitle = invite.invitePlanTitle
@@ -45,7 +47,7 @@ class InviteAdapter(private val onClickListener: OnClickListener, private val vi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InviteVH {
-        return InviteVH(ItemInviteNotificationBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return InviteVH(ItemInviteNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: InviteVH, position: Int) {
@@ -56,7 +58,7 @@ class InviteAdapter(private val onClickListener: OnClickListener, private val vi
         holder.itemView.setOnClickListener { onClickListener.onClick(notification) }
     }
 
-    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Invite>(){
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Invite>() {
         override fun areItemsTheSame(oldItem: Invite, newItem: Invite): Boolean {
             return oldItem === newItem
         }
@@ -64,6 +66,5 @@ class InviteAdapter(private val onClickListener: OnClickListener, private val vi
         override fun areContentsTheSame(oldItem: Invite, newItem: Invite): Boolean {
             return oldItem == newItem
         }
-
     }
 }

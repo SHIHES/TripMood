@@ -18,7 +18,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     private var _publicPlans = MutableLiveData<List<Plan>>()
 
     val publicPlans: LiveData<List<Plan>>
@@ -33,7 +32,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     val error: LiveData<String>
         get() = _error
-
 
     private val _selectedPlan = MutableLiveData<Plan>()
 
@@ -64,16 +62,12 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
         _publicPlans = repository.getLivePublicPlan()
         Log.d("QAQ", "plansvalue ${_publicPlans.value}")
-
     }
 
-    private fun getLiveUserLikeList(){
+    private fun getLiveUserLikeList() {
 
         _userLikePlanLists = repository.getLiveFavoritePlan()
-
     }
-
-
 
     fun onPlanNavigated() {
         _selectedPlan.value = null
@@ -88,22 +82,22 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
                 it.title!!.contains(query.toString())
             }
         }
-
     }
 
-    fun addFavoritePlan(plan: Plan) {  coroutineScope.launch {
-        repository.addFavoritePlan(plan)
-    }
-    }
-
-    fun cancelFavoritePlan(plan: Plan) { coroutineScope.launch {
-        repository.cancelFavoritePlan(plan)
-    }
+    fun addFavoritePlan(plan: Plan) {
+        coroutineScope.launch {
+            repository.addFavoritePlan(plan)
+        }
     }
 
-    fun checkPlanInLikeList(){ coroutineScope.launch {
-
+    fun cancelFavoritePlan(plan: Plan) {
+        coroutineScope.launch {
+            repository.cancelFavoritePlan(plan)
+        }
     }
-    }
 
+    fun checkPlanInLikeList() {
+        coroutineScope.launch {
+        }
+    }
 }

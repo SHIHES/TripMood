@@ -12,7 +12,6 @@ import com.shihs.tripmood.databinding.FragmentFavoriteBinding
 import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.favorite.adapter.FavoritePlanAdapter
 import com.shihs.tripmood.home.HomeFragmentDirections
-import com.shihs.tripmood.search.adapter.SearchPlanAdapter
 import com.shihs.tripmood.util.DetailPageFilter
 
 class FavoriteFragment : Fragment() {
@@ -29,36 +28,37 @@ class FavoriteFragment : Fragment() {
 
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
-        val adapter = FavoritePlanAdapter(FavoritePlanAdapter.OnClickListener{
-            viewModel.navigateToDetail(it)
-        }, viewModel)
+        val adapter = FavoritePlanAdapter(
+            FavoritePlanAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            },
+            viewModel
+        )
 
         val recyclerview = binding.favoritePlanRv
 
         recyclerview.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerview.adapter = adapter
 
-
-        viewModel.favoritePlans.observe(viewLifecycleOwner){it?.let {
-            if(it.isNullOrEmpty()){
-                binding.noplanAnimation.visibility = View.VISIBLE
-                binding.noPlanHints.visibility = View.VISIBLE
-            } else {
-                adapter.submitList(it)
-                binding.noplanAnimation.visibility = View.INVISIBLE
-                binding.noPlanHints.visibility = View.INVISIBLE
+        viewModel.favoritePlans.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it.isNullOrEmpty()) {
+                    binding.noplanAnimation.visibility = View.VISIBLE
+                    binding.noPlanHints.visibility = View.VISIBLE
+                } else {
+                    adapter.submitList(it)
+                    binding.noplanAnimation.visibility = View.INVISIBLE
+                    binding.noPlanHints.visibility = View.INVISIBLE
+                }
             }
+        }
 
-        }}
-
-        viewModel.selectedPlan.observe(viewLifecycleOwner){
+        viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
                 findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_OTHERS.navigateFrom, it))
                 viewModel.onPlanNavigated()
             }
         }
-
-
 
         return binding.root
     }

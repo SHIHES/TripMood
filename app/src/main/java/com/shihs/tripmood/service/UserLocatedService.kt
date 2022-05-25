@@ -1,9 +1,7 @@
 package com.shihs.tripmood.service
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.location.Location
@@ -108,8 +106,5 @@ class UserLocatedService : Service() {
         const val ACTION_TRIPMOOD_LOCATION_BROADCAST = "$PACKAGE_NAME.action.TRIPMOOD_LOCATION_BROADCAST"
 
         const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
-
     }
-
-
 }

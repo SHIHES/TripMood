@@ -7,7 +7,6 @@ import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.plan.MyPlanViewModel
 import com.shihs.tripmood.plan.ShowAllLocationViewModel
-import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
 
 /**
  * Factory for all ViewModels which need [plan].
@@ -35,5 +34,4 @@ class PlanViewModelFactory(
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
-
 }

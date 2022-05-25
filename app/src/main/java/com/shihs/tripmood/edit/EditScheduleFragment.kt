@@ -10,10 +10,9 @@ import com.shihs.tripmood.databinding.FragmentScheduleEditBinding
 import com.shihs.tripmood.dataclass.Schedule
 import java.text.SimpleDateFormat
 
+class EditScheduleFragment : Fragment() {
 
-class EditScheduleFragment: Fragment() {
-
-    lateinit var binding:FragmentScheduleEditBinding
+    lateinit var binding: FragmentScheduleEditBinding
 
     val arg: EditScheduleFragmentArgs by navArgs()
 
@@ -27,20 +26,13 @@ class EditScheduleFragment: Fragment() {
 
         binding = FragmentScheduleEditBinding.inflate(inflater, container, false)
 
-
-
         setupUI()
         setupBtn()
-
-
-
-
 
         return binding.root
     }
 
-
-    private fun setupUI(){
+    private fun setupUI() {
 
         val time = arg.selectedSchedule?.time
         val catalog = arg.selectedSchedule?.catalog
@@ -63,16 +55,13 @@ class EditScheduleFragment: Fragment() {
         binding.addressEditText.setText(address)
         binding.scheduleDayTv.setText("Day$dayInt")
         binding.scheduleDateTv.text = fmt
-
     }
 
-    private fun setupBtn(){
+    private fun setupBtn() {
         binding.editScheduleBtn.setOnClickListener {
-
         }
 
         binding.scheduleTimeTv.setOnClickListener {
-
         }
     }
 }

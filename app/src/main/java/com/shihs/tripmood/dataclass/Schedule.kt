@@ -16,4 +16,3 @@ data class Schedule(
     var notification: Boolean = false,
     var theDay: Int = -1
 ) : Parcelable
-

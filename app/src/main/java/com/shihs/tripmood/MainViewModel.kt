@@ -4,14 +4,14 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.User
+import com.shihs.tripmood.dataclass.UserLocation
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
 import com.shihs.tripmood.util.CurrentFragmentType
 import com.shihs.tripmood.util.Logger
 import com.shihs.tripmood.util.UserManager
-import com.shihs.tripmood.dataclass.Result
-import com.shihs.tripmood.dataclass.UserLocation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,9 +56,7 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val isLoggedIn
         get() = UserManager.isLoggedIn
 
-
     val currentFragmentType = MutableLiveData<CurrentFragmentType>()
-
 
     fun setupUser(user: User) {
 
@@ -68,7 +66,6 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
         Logger.i("user=$user")
         Logger.i("MainViewModel=$this")
         Logger.i("=============")
-
     }
 
     fun setBroadcastRegistered() {
@@ -107,8 +104,9 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
                 lng = location?.longitude
             )
 
-            when (val result =
-                repository.sendMyLocation(userLocation = userLocation)
+            when (
+                val result =
+                    repository.sendMyLocation(userLocation = userLocation)
             ) {
                 is Result.Success -> {
                     _error.value = null
@@ -173,6 +171,4 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
 //            }
 //        }
 //    }
-
-
 }

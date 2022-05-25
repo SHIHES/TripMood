@@ -7,11 +7,9 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -58,12 +56,10 @@ class MainActivity : AppCompatActivity() {
             userLocatedServiceBound = false
             viewModel.getUserLocatedServiceStatus(userLocatedServiceBound)
         }
-
     }
     companion object {
         var LOCATION_REQUEST_CODE = 999
     }
-
 
     private inner class TripMoodBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -73,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             Log.d("SS", "TripMoodBroadcastReceiver $location")
-            if (location != null){
+            if (location != null) {
                 viewModel.setUserLocation(location)
             }
         }
@@ -89,14 +85,17 @@ class MainActivity : AppCompatActivity() {
         if (isLoggedIn) bindService(serviceIntent, userLocatedServiceConnection, BIND_AUTO_CREATE)
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//            registerLocationReceiver()
-//            viewModel.resetBroadcastStatus()
-//    }
+    override fun onResume() {
+        super.onResume()
+        registerLocationReceiver()
+        viewModel.resetBroadcastStatus()
+    }
 
     private fun registerLocationReceiver() {
-        Log.d("SS", "registerLocationReceiver $isLoggedIn && ${viewModel.isBroadcastRegistered.value}")
+        Log.d(
+            "SS",
+            "registerLocationReceiver $isLoggedIn && ${viewModel.isBroadcastRegistered.value}"
+        )
         if (isLoggedIn && viewModel.isBroadcastRegistered.value != true) {
             LocalBroadcastManager.getInstance(this).registerReceiver(
                 tripMoodBroadcastReceiver,
@@ -134,7 +133,6 @@ class MainActivity : AppCompatActivity() {
             locationPermissionGranted = true
             bindService()
             registerLocationReceiver()
-
         } else {
             requestLocationPermission()
         }
@@ -208,7 +206,6 @@ class MainActivity : AppCompatActivity() {
 
         val navView: NavigationBarView = binding.bottomNavigationView
 
-
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -224,17 +221,18 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         viewModel.currentFragmentType.observe(
-            this, Observer {
-                when(it){
-                    CurrentFragmentType.PLAN_MODE ->{
+            this,
+            Observer {
+                when (it) {
+                    CurrentFragmentType.PLAN_MODE -> {
                     }
                 }
             }
         )
 
-        viewModel.isUserLocatedServiceReady.observe(this){
+        viewModel.isUserLocatedServiceReady.observe(this) {
             it?.let {
-                if(it) {
+                if (it) {
                     Log.d("SS", "isUserLocatedServiceReady $it")
                     userLocatedService?.subscribeToLocationUpdates()
                     viewModel.resetUserLocateServiceStatus()
@@ -242,13 +240,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.userLocation.observe(this){
+        viewModel.userLocation.observe(this) {
             it?.let {
                 Log.d("SS", "userLocation $it")
                 viewModel.updateUserLocation(it)
                 viewModel.onUpdateUserLocation()
             }
-
         }
 
         setBtn()
@@ -266,7 +263,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavController() {
-        findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener{navController: NavController, _: NavDestination, _:Bundle? ->
+        findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
             viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
                 R.id.navigation_home -> CurrentFragmentType.HOME
                 R.id.navigation_search -> CurrentFragmentType.SEARCH
@@ -309,14 +306,14 @@ class MainActivity : AppCompatActivity() {
                     )
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_user-> {
+                R.id.navigation_user -> {
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalNavigationUser()
                     )
                     return@setOnItemSelectedListener false
                 }
-                R.id.navigation_addPlan ->{
+                R.id.navigation_addPlan -> {
 
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalCreatePlanFragment()
@@ -351,12 +348,11 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.visibility = View.VISIBLE
     }
 
-    fun hideBottomNavBar(){
+    fun hideBottomNavBar() {
         binding.bottomNavigationView.visibility = View.GONE
     }
 
-    fun showBottomNavBar(){
+    fun showBottomNavBar() {
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
-
 }

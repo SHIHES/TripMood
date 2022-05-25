@@ -27,17 +27,17 @@ fun Fragment.getVmFactory(plan: Plan?): PlanViewModelFactory {
     return PlanViewModelFactory(repository, plan)
 }
 
-fun Fragment.getVmFactory(plan: Plan?, schedule: Schedule?, adapterPosition: Int?):CreateScheduleViewModelFactory {
+fun Fragment.getVmFactory(plan: Plan?, schedule: Schedule?, adapterPosition: Int?): CreateScheduleViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return CreateScheduleViewModelFactory(repository, plan, schedule, adapterPosition)
 }
 
-fun Fragment.getVmFactory(homePlanType: HomePlanFilter):PlanTypeViewModelFactory {
+fun Fragment.getVmFactory(homePlanType: HomePlanFilter): PlanTypeViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return PlanTypeViewModelFactory(repository, homePlanType)
 }
 
-fun Fragment.getVmFactory(userPlanFilter: UserPlanFilter):UserPlanTypeViewModelFactory {
+fun Fragment.getVmFactory(userPlanFilter: UserPlanFilter): UserPlanTypeViewModelFactory {
     val repository = (requireContext().applicationContext as TripMoodApplication).repository
     return UserPlanTypeViewModelFactory(repository, userPlanFilter)
 }

@@ -4,9 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
-class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
-                           private val localDataSource: TripMoodDataSource
-                           ): TripMoodRepo {
+class DefaultTripMoodRepo(
+    private val remoteDataSource: TripMoodDataSource,
+    private val localDataSource: TripMoodDataSource
+) : TripMoodRepo {
     override suspend fun getPlans(): Result<List<Plan>> {
         return remoteDataSource.getPlans()
     }
@@ -23,7 +24,7 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.deletePlan(planID)
     }
 
-    override suspend fun deleteSchedule(planID: String, scheduleID: String): Result<Boolean>{
+    override suspend fun deleteSchedule(planID: String, scheduleID: String): Result<Boolean> {
         return remoteDataSource.deleteSchedule(planID, scheduleID)
     }
 
@@ -35,7 +36,7 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
         return remoteDataSource.postSchedule(planID, schedule)
     }
 
-    override suspend fun updatePlan(plan: Plan): Result<Boolean>{
+    override suspend fun updatePlan(plan: Plan): Result<Boolean> {
         return remoteDataSource.updatePlan(plan)
     }
 
@@ -118,7 +119,7 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
     override suspend fun sendMyLocation(
         userLocation: UserLocation
     ): Result<Boolean> {
-        return remoteDataSource.sendMyLocation( userLocation = userLocation)
+        return remoteDataSource.sendMyLocation(userLocation = userLocation)
     }
 
     override suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean> {
@@ -140,5 +141,4 @@ class DefaultTripMoodRepo (private val remoteDataSource: TripMoodDataSource,
     override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
         return remoteDataSource.getLiveFavoritePlan()
     }
-
 }

@@ -1,10 +1,6 @@
 package com.shihs.tripmood.search.adapter
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.*
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,17 +8,17 @@ import com.bumptech.glide.Glide
 import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.search.SearchViewModel
 import java.text.SimpleDateFormat
 
-class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewModel: SearchViewModel) : ListAdapter<Plan, SearchPlanAdapter.PlanVH>(
+class SearchPlanAdapter(
+    private val onClickListener: OnClickListener,
+    val viewModel: SearchViewModel
+) : ListAdapter<Plan, SearchPlanAdapter.PlanVH>(
     (DiffUtil())
 ) {
 
     class PlanVH(private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root) {
-
-
 
         fun bind(item: Plan, viewModel: SearchViewModel) {
 
@@ -36,26 +32,22 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
 
             binding.statusTextView.visibility = View.INVISIBLE
 
-
             if (item.startDate == item.endDate) {
                 binding.tripDate.text = "${formatTime.format(item.startDate)}"
-
             } else {
                 binding.tripDate.text =
                     "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
             }
 
-
-            if (viewModel.userLikePlanLists.value?.contains(item) == true){
+            if (viewModel.userLikePlanLists.value?.contains(item) == true) {
                 binding.favoriteBtn.isChecked = true
             }
 
             binding.favoriteBtn.setOnCheckedChangeListener { compoundButton, b ->
 
-                if (compoundButton.isChecked){
+                if (compoundButton.isChecked) {
                     item.let { viewModel.addFavoritePlan(it) }
-                }
-                else{
+                } else {
                     item.let { viewModel.cancelFavoritePlan(it) }
                 }
             }
@@ -70,7 +62,6 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
         return PlanVH(ItemPlanBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-
     override fun onBindViewHolder(holder: PlanVH, position: Int) {
         val plan = getItem(position)
         holder.bind(plan, viewModel)
@@ -80,16 +71,13 @@ class SearchPlanAdapter(private val onClickListener: OnClickListener, val viewMo
         }
     }
 
-
-        class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>() {
-            override fun areItemsTheSame(oldItem: Plan, newItem: Plan): Boolean {
-                return oldItem === newItem
-            }
-
-            override fun areContentsTheSame(oldItem: Plan, newItem: Plan): Boolean {
-                return oldItem == newItem
-            }
-
+    class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Plan>() {
+        override fun areItemsTheSame(oldItem: Plan, newItem: Plan): Boolean {
+            return oldItem === newItem
         }
 
+        override fun areContentsTheSame(oldItem: Plan, newItem: Plan): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

@@ -1,14 +1,14 @@
 package com.shihs.tripmood.util
 //
-//import android.annotation.SuppressLint
-//import android.app.AlarmManager
-//import android.app.PendingIntent
-//import android.content.Context
-//import android.content.Intent
-//import java.text.SimpleDateFormat
-//import java.util.*
+// import android.annotation.SuppressLint
+// import android.app.AlarmManager
+// import android.app.PendingIntent
+// import android.content.Context
+// import android.content.Intent
+// import java.text.SimpleDateFormat
+// import java.util.*
 //
-//object ReminderManager {
+// object ReminderManager {
 //    const val REMINDER_NOTIFICATION_REQUEST_CODE = 123
 //
 //    @SuppressLint("MissingPermission")
@@ -74,4 +74,4 @@ package com.shihs.tripmood.util
 //        }
 //        alarmManager.cancel(intent)
 //    }
-//}
+// }

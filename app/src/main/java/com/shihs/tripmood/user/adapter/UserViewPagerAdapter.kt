@@ -13,7 +13,7 @@ class UserViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycl
     override fun getItemCount() = UserPlanFilter.values().size
 
     override fun createFragment(position: Int): Fragment {
-        Log.d("Steven", "createFragment${position}")
+        Log.d("Steven", "createFragment$position")
         return UserChildFragment(UserPlanFilter.values()[position])
     }
 }

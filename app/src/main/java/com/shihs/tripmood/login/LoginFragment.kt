@@ -1,19 +1,14 @@
 package com.shihs.tripmood.login
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.LottieCompositionFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -28,7 +23,6 @@ import com.shihs.tripmood.databinding.FragmentLoginBinding
 import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.util.UserManager
-
 
 class LoginFragment : Fragment() {
 
@@ -46,7 +40,6 @@ class LoginFragment : Fragment() {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-
         val serverClientId = getString(R.string.server_client_id)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -60,7 +53,7 @@ class LoginFragment : Fragment() {
 
         googleSignInBtn.apply {
 
-            this.setOnClickListener{
+            this.setOnClickListener {
 
                 val signInIntent = mGoogleSignInClient.signInIntent
                 startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -68,24 +61,21 @@ class LoginFragment : Fragment() {
             this.setSize(SignInButton.SIZE_WIDE)
         }
 
-
-
-        viewModel.navigateToLoginSuccess.observe(viewLifecycleOwner){ it?.let {
-          findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
-          viewModel.navigateToLoginSuccessEnd()
-        }}
+        viewModel.navigateToLoginSuccess.observe(viewLifecycleOwner) {
+            it?.let {
+                findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+                viewModel.navigateToLoginSuccessEnd()
+            }
+        }
 
         binding.johnBtn.setOnClickListener {
             UserManager.userUID = "8787878787"
             UserManager.userName = "皮卡皮卡!"
             UserManager.userPhotoUrl = "https://browsecat.net/sites/default/files/the-professor-money-heist-wallpapers-87259-579206-1832331.png"
             findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
-
         }
 
-        Log.d("SS","userToken ${UserManager.userUID}")
-
-
+        Log.d("SS", "userToken ${UserManager.userUID}")
 
         return binding.root
     }
@@ -117,7 +107,6 @@ class LoginFragment : Fragment() {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
             handleSignInResult(task)
-
         }
     }
 
@@ -132,18 +121,13 @@ class LoginFragment : Fragment() {
                 uid = account.id ?: ""
             )
             viewModel.checkUserExist(user)
-
-
-
         } catch (e: ApiException) {
 
             Log.w("SS", "Sign-in failed", e)
         }
     }
 
-    companion object{
+    companion object {
         const val RC_SIGN_IN = 123
     }
-
-
 }

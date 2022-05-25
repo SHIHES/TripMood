@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Plan
+import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import com.shihs.tripmood.dataclass.Result
 
 class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
@@ -33,18 +33,16 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val imageStatus: LiveData<LoadApiStatus>
         get() = _imageStatus
 
-
     val imageUriCallback = MutableLiveData<Uri>()
 
-
-    fun uploadImage(uri: Uri){
+    fun uploadImage(uri: Uri) {
         coroutineScope.launch {
 
             _imageStatus.value = LoadApiStatus.LOADING
 
-            when(val result = repository.uploadImage(localUri = uri)){
-                is Result.Success ->{
-                     imageUriCallback.value = result.data!!
+            when (val result = repository.uploadImage(localUri = uri)) {
+                is Result.Success -> {
+                    imageUriCallback.value = result.data!!
                     _imageStatus.value = LoadApiStatus.DONE
                 }
                 is Result.Fail -> {
@@ -60,8 +58,7 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
         }
     }
 
-
-    fun postNewPlan(plan: Plan){
+    fun postNewPlan(plan: Plan) {
 
         coroutineScope.launch {
 
@@ -84,8 +81,6 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
                     _status.value = LoadApiStatus.ERROR
                 }
             }
-
         }
     }
-
 }

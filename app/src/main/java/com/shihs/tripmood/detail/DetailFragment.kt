@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,20 +14,21 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.shihs.tripmood.MobileNavigationDirections
 import com.shihs.tripmood.databinding.FragmentScheduleDetailBinding
 import com.shihs.tripmood.ext.getVmFactory
 import java.text.SimpleDateFormat
 
-class DetailFragment: Fragment(), OnMapReadyCallback {
+class DetailFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var binding: FragmentScheduleDetailBinding
 
     private var map: GoogleMap? = null
 
-    private val viewModel by viewModels <DetailViewModel> { getVmFactory(
-        DetailFragmentArgs.fromBundle(requireArguments()).selectedSchedule
-    ) }
+    private val viewModel by viewModels <DetailViewModel> {
+        getVmFactory(
+            DetailFragmentArgs.fromBundle(requireArguments()).selectedSchedule
+        )
+    }
 
     val arg: DetailFragmentArgs by navArgs()
 
@@ -39,14 +39,12 @@ class DetailFragment: Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentScheduleDetailBinding.inflate(inflater, container, false)
 
-
-
         binding.detailMap.onCreate(savedInstanceState)
         binding.detailMap.getMapAsync(this)
 
         val recyclerView = binding.imageRecycler
 
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         setupUI()
         setBtn()
@@ -54,16 +52,18 @@ class DetailFragment: Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun setBtn(){
+    private fun setBtn() {
         binding.editBtn.setOnClickListener {
-            findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToEditScheduleFragment(
-                arg.selectedSchedule, arg.selectedPosition
-            ))
+            findNavController().navigate(
+                DetailFragmentDirections.actionDetailFragmentToEditScheduleFragment(
+                    arg.selectedSchedule, arg.selectedPosition
+                )
+            )
         }
     }
 
-    private  fun setupUI(){
-        if (arg.selectedSchedule != null){
+    private fun setupUI() {
+        if (arg.selectedSchedule != null) {
             val selectedSchedule = arg.selectedSchedule
 
             binding.catalogTextView.text = selectedSchedule?.catalog
@@ -74,38 +74,36 @@ class DetailFragment: Fragment(), OnMapReadyCallback {
             val fmt = SimpleDateFormat("yyyy/MM/dd EE hh:mm a").format(selectedSchedule?.time)
             binding.timeTextView.text = fmt
 
-            if (arg.selectedSchedule?.location != null ){
+            if (arg.selectedSchedule?.location != null) {
 
                 binding.addressTextView.text = selectedSchedule?.location?.address
-
             }
         }
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         var markerOptions = MarkerOptions()
-        if(arg.selectedSchedule?.location != null &&
+        if (arg.selectedSchedule?.location != null &&
             arg.selectedSchedule?.location?.latitude != null &&
-                arg.selectedSchedule?.location?.longitude != null){
+            arg.selectedSchedule?.location?.longitude != null
+        ) {
 
             val lat = arg.selectedSchedule?.location?.latitude
             val lng = arg.selectedSchedule?.location?.longitude
             val name = arg.selectedSchedule?.location?.name
-            val position = LatLng(lat!!,lng!!)
+            val position = LatLng(lat!!, lng!!)
 
-            map?.addMarker(markerOptions
-                .position(position)
-                .title(name))
+            map?.addMarker(
+                markerOptions
+                    .position(position)
+                    .title(name)
+            )
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(position, 15F)
             map?.moveCamera(cameraUpdate)
 
             map?.uiSettings?.setCompassEnabled(true)
-
         }
-
-
     }
 
     override fun onStart() {
@@ -137,7 +135,4 @@ class DetailFragment: Fragment(), OnMapReadyCallback {
         super.onLowMemory()
         binding.detailMap.onLowMemory()
     }
-
-
-
 }

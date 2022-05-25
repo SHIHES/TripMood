@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,10 +23,6 @@ class FavoriteViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val selectedPlan: LiveData<Plan>
         get() = _selectedPlan
 
-
-
-
-
     init {
         getFavoriteLivePlans()
     }
@@ -35,7 +30,6 @@ class FavoriteViewModel(private val repository: TripMoodRepo) : ViewModel() {
     private fun getFavoriteLivePlans() {
 
         favoritePlans = repository.getLiveFavoritePlan()
-
     }
 
     fun navigateToDetail(plan: Plan) {
@@ -46,10 +40,4 @@ class FavoriteViewModel(private val repository: TripMoodRepo) : ViewModel() {
     fun onPlanNavigated() {
         _selectedPlan.value = null
     }
-
-
-
-
-
-
 }

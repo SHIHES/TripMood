@@ -9,19 +9,18 @@ import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
+import java.lang.Exception
+import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.util.*
 
 class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : ViewModel() {
 
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
 
     private val _status = MutableLiveData<LoadApiStatus>()
     val status: LiveData<LoadApiStatus>
@@ -31,7 +30,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     val error: LiveData<String>
         get() = _error
-
 
     private val _plan = MutableLiveData<Plan>().apply {
         value = arguments
@@ -43,7 +41,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     val schedules: LiveData<List<Schedule>>
         get() = _schedules
-
 
     private val _dayOfSchedule = MutableLiveData<List<Schedule>>()
 
@@ -59,17 +56,14 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     var adapterPosition = MutableLiveData(0)
 
-
     private val _postitionControlSchedule = MutableLiveData<Schedule>()
 
     val positionControlSchedule: LiveData<Schedule>
         get() = _postitionControlSchedule
 
-
     init {
         getLiveSchedule()
         daysCalculator()
-
     }
 
     fun getLiveSchedule() {
@@ -98,14 +92,12 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
                 _schedules.value = list
             }
             Log.d("QAQ", "${_schedules.value}")
-
         } catch (e: Exception) {
             Log.d("QAQ", "daysCalculator error $e")
         }
-
     }
 
-    fun getPositionAndDate(position: Int){
+    fun getPositionAndDate(position: Int) {
         _postitionControlSchedule.value = _schedules.value!![position]
     }
 
@@ -118,10 +110,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
             }?.sortedBy {
                 it.time
             }
-
         } catch (e: Exception) {
             Log.d("QAQ", "findTimeRangeSchedule error $e")
-
         }
     }
 
@@ -132,7 +122,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     fun selectedScheduleClear() {
         _dayOfSchedule.value = null
     }
-
 
     fun navigationToDetail(schedule: Schedule) {
         _navigationToDetail.value = schedule
@@ -146,19 +135,20 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
         val calendar = Calendar.getInstance(Locale.TAIWAN).timeInMillis
 
-        //判斷data不為空
+        // 判斷data不為空
         if (!_dayOfSchedule.value!!.isNullOrEmpty()) {
-            //判斷list大小大於1個
+            // 判斷list大小大於1個
             if (_dayOfSchedule.value?.size!! > 1) {
-                //判斷list的最後一個位置
+                // 判斷list的最後一個位置
                 if (position == _dayOfSchedule.value?.size?.minus(1) ?: 0) {
-                    //判斷list最後一個位置在行程時間的區間
+                    // 判斷list最後一個位置在行程時間的區間
                     if (schedule.time!! < calendar) {
                         return false
                     } else if (schedule.time!! >= calendar &&
-                        schedule.time!! <= _dayOfSchedule.value!![position - 1].time!!){
+                        schedule.time!! <= _dayOfSchedule.value!![position - 1].time!!
+                    ) {
                         return true
-                    } else{
+                    } else {
                         return false
                     }
                 } else {
@@ -175,35 +165,32 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
             } else {
                 return false
             }
-
         } else {
             return true
         }
-
     }
 
-    fun scheulesDelete(schedule: Schedule) { coroutineScope.launch {
-        _status.value = LoadApiStatus.LOADING
+    fun scheulesDelete(schedule: Schedule) {
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
 
-        when (val result =  repository.deleteSchedule(planID = schedule.planID!!, scheduleID = schedule.scheduleId!!) ) {
-            is Result.Success -> {
-                _error.value = null
-                _status.value = LoadApiStatus.DONE
-            }
-            is Result.Fail -> {
-                _error.value = result.error
-                _status.value = LoadApiStatus.ERROR
-            }
-            is Result.Error -> {
-                _error.value = result.exception.toString()
-                _status.value = LoadApiStatus.ERROR
-            }
-            else -> {
-                _status.value = LoadApiStatus.ERROR
+            when (val result = repository.deleteSchedule(planID = schedule.planID!!, scheduleID = schedule.scheduleId!!)) {
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
             }
         }
-    }
-
-
     }
 }

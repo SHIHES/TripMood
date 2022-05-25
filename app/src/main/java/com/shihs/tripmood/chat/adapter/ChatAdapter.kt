@@ -12,7 +12,7 @@ import com.shihs.tripmood.dataclass.Chat
 import com.shihs.tripmood.ext.toDisplayTimeFormat
 import com.shihs.tripmood.util.UserManager
 
-class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
+class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback) {
 
     class MeChatViewHolder(private var binding: ItemChatMeBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -20,7 +20,6 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
 
             binding.textGchatMessageMe.text = chat.msg
             binding.textGchatTimestampMe.text = chat.createdTime?.toDisplayTimeFormat()
-
         }
     }
 
@@ -33,9 +32,6 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
             binding.textGchatMessageOther.text = chat.msg
             binding.textGchatTimestampOther.text = chat.createdTime?.toDisplayTimeFormat()
             binding.textGchatUserOther.text = chat.speaker?.name
-
-
-
         }
     }
 
@@ -85,15 +81,12 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback){
 
         val speakerID = getItem(position)
 
-        if( speakerID.speaker?.uid == UserManager.userUID){
+        if (speakerID.speaker?.uid == UserManager.userUID) {
 
             return ITEM_CHAT_ME
-
-        } else{
+        } else {
 
             return ITEM_CHAT_OTHER
-
         }
     }
-
 }

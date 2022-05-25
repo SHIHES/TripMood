@@ -19,13 +19,11 @@ class ChatViewModel(private val repository: TripMoodRepo, arguments: Plan?) : Vi
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     private val _plan = MutableLiveData<Plan>().apply {
         value = arguments
     }
     val plan: LiveData<Plan>
         get() = _plan
-
 
     private var _chats = MutableLiveData<List<Chat>>()
     val chat: LiveData<List<Chat>>
@@ -44,7 +42,6 @@ class ChatViewModel(private val repository: TripMoodRepo, arguments: Plan?) : Vi
     init {
         getLiveChats()
     }
-
 
     fun getLiveChats() {
 
@@ -79,6 +76,4 @@ class ChatViewModel(private val repository: TripMoodRepo, arguments: Plan?) : Vi
             }
         }
     }
-
-
 }

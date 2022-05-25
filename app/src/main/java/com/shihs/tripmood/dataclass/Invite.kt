@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Invite (
+data class Invite(
     var id: String? = null,
     var invitePlanID: String? = "",
     var invitePlanTitle: String? = "",

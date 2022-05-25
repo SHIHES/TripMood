@@ -26,7 +26,6 @@ import com.shihs.tripmood.util.DetailPageFilter
 import com.shihs.tripmood.util.ItemTouchHelperCallback
 import com.shihs.tripmood.util.MapViewType
 
-
 class MyPlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanBinding
@@ -54,16 +53,18 @@ class MyPlanFragment : Fragment() {
 
         val recyclerPlanDays = binding.daysRv
 
-        val scheduleAdapter = ScheduleAdapter(ScheduleAdapter.OnClickListener{
+        val scheduleAdapter = ScheduleAdapter(
+            ScheduleAdapter.OnClickListener {
 //               viewModel.getSelectedSchedule(it)
-        }, viewModel )
+            },
+            viewModel
+        )
 
         recyclerPlanDays.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerPlanDays.adapter = scheduleAdapter
 
-
-        when(args.navigateFrom){
+        when (args.navigateFrom) {
 
             DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom -> {
                 binding.chatBtn.visibility = View.VISIBLE
@@ -82,15 +83,15 @@ class MyPlanFragment : Fragment() {
                 binding.mapWholeSchedule.visibility = View.VISIBLE
                 binding.friendsLocation.visibility = View.INVISIBLE
             }
-
         }
 
-
-
         val recyclerEvents = binding.scheduleRv
-        val eventAdapter = EventAdapter(EventAdapter.OnClickListener{
-            viewModel.navigationToDetail(it)
-        }, viewModel)
+        val eventAdapter = EventAdapter(
+            EventAdapter.OnClickListener {
+                viewModel.navigationToDetail(it)
+            },
+            viewModel
+        )
 
         recyclerEvents.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -103,21 +104,22 @@ class MyPlanFragment : Fragment() {
 
         itemTouchHelper.attachToRecyclerView(recyclerEvents)
 
-        viewModel.liveSchedules.observe(viewLifecycleOwner){it?.let {
-            viewModel.getPositionAndDate(position).let {
-                viewModel.findTimeRangeSchedule()
+        viewModel.liveSchedules.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.getPositionAndDate(position).let {
+                    viewModel.findTimeRangeSchedule()
+                }
             }
+        }
 
-        }}
+        viewModel.schedules.observe(viewLifecycleOwner) {
+            it?.let {
+                scheduleAdapter.submitList(it)
+            }
+        }
 
-
-        viewModel.schedules.observe(viewLifecycleOwner){it?.let{
-            scheduleAdapter.submitList(it)
-        }}
-
-
-        viewModel.adapterPosition.observe(viewLifecycleOwner){
-            Log.d("SS", "adapterPosition.observe${it}")
+        viewModel.adapterPosition.observe(viewLifecycleOwner) {
+            Log.d("SS", "adapterPosition.observe$it")
             position = it
             viewModel.getPositionAndDate(it).let {
                 viewModel.findTimeRangeSchedule()
@@ -125,16 +127,18 @@ class MyPlanFragment : Fragment() {
             scheduleAdapter.notifyDataSetChanged()
         }
 
-        viewModel.navigationToDetail.observe(viewLifecycleOwner){it?.let{
-            findNavController().navigate(MobileNavigationDirections.actionGlobalDetailFragment(it))
-            viewModel.navigationToDetailEnd()
-        }}
+        viewModel.navigationToDetail.observe(viewLifecycleOwner) {
+            it?.let {
+                findNavController().navigate(MobileNavigationDirections.actionGlobalDetailFragment(it))
+                viewModel.navigationToDetailEnd()
+            }
+        }
 
-        viewModel.dayOfSchedule.observe(viewLifecycleOwner){
+        viewModel.dayOfSchedule.observe(viewLifecycleOwner) {
             it?.let {
 
                 Log.d("QAQ", "dayOfSchedule $it")
-                if (it.isEmpty() ){
+                if (it.isEmpty()) {
                     Log.d("QAQ", "dayOfSchedule empty $it")
                     binding.hintAnimation.visibility = View.VISIBLE
                     binding.hintTv.visibility = View.VISIBLE
@@ -156,7 +160,7 @@ class MyPlanFragment : Fragment() {
         return binding.root
     }
 
-    fun setView(){
+    fun setView() {
 
         val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
         val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
@@ -168,12 +172,9 @@ class MyPlanFragment : Fragment() {
         Glide.with(requireContext()).load(image).placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(binding.coworkLocationImage)
-
     }
 
-
-
-    fun setUpBtn(){
+    fun setUpBtn() {
         binding.addActivityBtn.setOnClickListener {
             onAddButtonClicked()
         }
@@ -189,29 +190,37 @@ class MyPlanFragment : Fragment() {
         }
 
         binding.addMode2Btn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMyGPSFragment(
-                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
-                viewModel.positionControlSchedule.value,
-                position
-            ))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalMyGPSFragment(
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
+                    viewModel.positionControlSchedule.value,
+                    position
+                )
+            )
         }
 
         binding.friendsLocation.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
-                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_COWORKLOCATION.value
-            ))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalShowAllLocationFragment(
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_COWORKLOCATION.value
+                )
+            )
         }
 
         binding.mapWholeSchedule.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalShowAllLocationFragment(
-                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_SHOWALLLOCATION.value
-            ))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalShowAllLocationFragment(
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_SHOWALLLOCATION.value
+                )
+            )
         }
 
         binding.chatBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalChatFragment(
-                MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
-            ))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalChatFragment(
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
+                )
+            )
         }
     }
 
@@ -223,7 +232,7 @@ class MyPlanFragment : Fragment() {
     }
 
     private fun setAnimation(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.addMode1Btn.visibility = View.VISIBLE
             binding.addMode2Btn.visibility = View.VISIBLE
         } else {
@@ -233,7 +242,7 @@ class MyPlanFragment : Fragment() {
     }
 
     private fun setVisibility(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.addMode1Btn.startAnimation(fromBottom)
             binding.addMode2Btn.startAnimation(fromBottom)
             binding.addActivityBtn.startAnimation(rotateOpen)
@@ -244,8 +253,8 @@ class MyPlanFragment : Fragment() {
         }
     }
 
-    private fun setClickable(clicked: Boolean){
-        if(!clicked){
+    private fun setClickable(clicked: Boolean) {
+        if (!clicked) {
             binding.addMode1Btn.isClickable = true
             binding.addMode2Btn.isClickable = true
         } else {
@@ -253,8 +262,6 @@ class MyPlanFragment : Fragment() {
             binding.addMode2Btn.isClickable = false
         }
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -265,5 +272,4 @@ class MyPlanFragment : Fragment() {
         super.onDestroy()
         (requireActivity() as MainActivity).showToolBar()
     }
-
 }

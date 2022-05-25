@@ -11,7 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
+class CreateScheduleViewModel(
+    private val repository: TripMoodRepo,
+    arg1: Plan?,
+    arg2: Schedule?,
+    arg3: Int?
+) : ViewModel() {
 
     private val _plan = MutableLiveData<Plan>().apply {
         value = arg1
@@ -32,16 +37,16 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     val location = MutableLiveData<Double>()
 
-    fun postNewSchedule(schedule: Schedule){
+    fun postNewSchedule(schedule: Schedule) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result =
-                schedule.planID?.let { repository.postSchedule(schedule = schedule, planID = it) }
-                ) {
+            when (
+                val result =
+                    schedule.planID?.let { repository.postSchedule(schedule = schedule, planID = it) }
+            ) {
                 is Result.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
@@ -59,7 +64,5 @@ class CreateScheduleViewModel(private val repository: TripMoodRepo, arg1: Plan?,
                 }
             }
         }
-
     }
-
 }

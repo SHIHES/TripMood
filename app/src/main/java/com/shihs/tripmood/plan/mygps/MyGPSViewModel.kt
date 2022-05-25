@@ -6,16 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shihs.tripmood.dataclass.Location
 import com.shihs.tripmood.dataclass.Plan
-import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
+import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
 
@@ -48,20 +48,19 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
     val error: LiveData<String?>
         get() = _error
 
-    fun clearNearbyLocation(){
+    fun clearNearbyLocation() {
         _nearbyLocation.value = null
     }
 
-    fun getNearbyLocation(locations: List<Location>){
+    fun getNearbyLocation(locations: List<Location>) {
         _nearbyLocation.value = locations
     }
 
-
-    fun getLocationFromCard(location: Location){
+    fun getLocationFromCard(location: Location) {
         _selectedLocation.value = location
     }
 
-    fun packageGPSSchedule(location: Location){
+    fun packageGPSSchedule(location: Location) {
 
         val schedule = Schedule()
 
@@ -74,21 +73,21 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
         schedule.time = postTime
         schedule.location = location
 
-        Log.d("QAQ, ","packageGPSSchedule ${location}")
+        Log.d("QAQ, ", "packageGPSSchedule $location")
 
         postNewSchedule(schedule = schedule)
-
     }
 
-    fun postNewSchedule(schedule: Schedule){
+    fun postNewSchedule(schedule: Schedule) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result =
-                repository.postSchedule(schedule = schedule, planID = schedule.planID!!)
+            when (
+                val result =
+                    repository.postSchedule(schedule = schedule, planID = schedule.planID!!)
             ) {
                 is Result.Success -> {
-                    Log.d("QAQ, ","postNewSchedule ${schedule.location}")
+                    Log.d("QAQ, ", "postNewSchedule ${schedule.location}")
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -105,7 +104,5 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
                 }
             }
         }
-
     }
-
 }
