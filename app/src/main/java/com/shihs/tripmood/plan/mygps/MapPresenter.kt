@@ -16,7 +16,6 @@ class MapPresenter(private val fragment: Fragment) {
     private val permissionsManager = PermissionsManager(fragment, locationProvider)
 
     fun onViewCreated() {
-
         locationProvider.liveLocations.observe(fragment.viewLifecycleOwner) { locations ->
             val current = ui.value
             ui.value = current?.copy(userPath = locations)

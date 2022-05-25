@@ -8,7 +8,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.shihs.tripmood.home.childpage.ChildFragment
 import com.shihs.tripmood.util.HomePlanFilter
 
-class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(
+    fragmentManager,
+    lifecycle
+) {
 
     override fun getItemCount() = HomePlanFilter.values().size
 

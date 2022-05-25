@@ -9,12 +9,12 @@ import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
-import java.lang.Exception
-import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.util.*
 
 class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : ViewModel() {
 
@@ -76,7 +76,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
     fun daysCalculator() {
         try {
-
             var start = _plan.value?.startDate
             var end = _plan.value?.endDate
 
@@ -84,7 +83,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
 
             if (start != null && end != null) {
                 while (start <= end) {
-
                     list.add(Schedule(time = start))
 
                     start += 86400000
@@ -132,7 +130,6 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     }
 
     fun showAnimation(schedule: Schedule, position: Int): Boolean {
-
         val calendar = Calendar.getInstance(Locale.TAIWAN).timeInMillis
 
         // 判斷data不為空
@@ -174,7 +171,12 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.deleteSchedule(planID = schedule.planID!!, scheduleID = schedule.scheduleId!!)) {
+            when (
+                val result = repository.deleteSchedule(
+                    planID = schedule.planID!!,
+                    scheduleID = schedule.scheduleId!!
+                )
+            ) {
                 is Result.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE

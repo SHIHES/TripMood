@@ -48,7 +48,11 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         )
 
         recyclerPlan.adapter = adapter
-        recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerPlan.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
 //        viewModel.coworkTotalLiveData.observe(viewLifecycleOwner){it?.let {
 //
@@ -57,11 +61,21 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
                 if (HomePlanFilter.INDIVIDUAL.value == homePlanType.value) {
-                    findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom, it))
+                    findNavController().navigate(
+                        HomeFragmentDirections.actionGlobalMyPlanFragment(
+                            DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom,
+                            it
+                        )
+                    )
                     viewModel.onPlanNavigated()
                 }
                 if (HomePlanFilter.COWORK.value == homePlanType.value) {
-                    findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom, it))
+                    findNavController().navigate(
+                        HomeFragmentDirections.actionGlobalMyPlanFragment(
+                            DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom,
+                            it
+                        )
+                    )
                     viewModel.onPlanNavigated()
                 }
             }

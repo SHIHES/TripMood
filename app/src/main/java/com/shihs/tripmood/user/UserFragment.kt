@@ -25,7 +25,6 @@ class UserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentUserBinding.inflate(inflater, container, false)
 
         val root: View = binding.root

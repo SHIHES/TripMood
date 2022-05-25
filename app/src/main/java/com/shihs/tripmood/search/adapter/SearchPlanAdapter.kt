@@ -1,7 +1,6 @@
 package com.shihs.tripmood.search.adapter
 
 import android.view.*
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,8 +20,9 @@ class SearchPlanAdapter(
     class PlanVH(private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Plan, viewModel: SearchViewModel) {
-
-            Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(binding.planCoverPic)
+            Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(
+                binding.planCoverPic
+            )
 
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
 

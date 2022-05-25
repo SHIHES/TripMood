@@ -15,7 +15,6 @@ class PlanTypeViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
-
                 isAssignableFrom(ChildHomeViewModel::class.java) ->
                     ChildHomeViewModel(repository, homePlanType)
 

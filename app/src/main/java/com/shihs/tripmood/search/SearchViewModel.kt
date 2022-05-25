@@ -59,13 +59,11 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     private fun getLivePlansResult() {
-
         _publicPlans = repository.getLivePublicPlan()
         Log.d("QAQ", "plansvalue ${_publicPlans.value}")
     }
 
     private fun getLiveUserLikeList() {
-
         _userLikePlanLists = repository.getLiveFavoritePlan()
     }
 
@@ -74,7 +72,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     fun filterSearch(query: String?) {
-
         if (query.isNullOrBlank()) {
             _searchPlans.value = _publicPlans.value
         } else {

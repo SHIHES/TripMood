@@ -37,7 +37,6 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     fun uploadImage(uri: Uri) {
         coroutineScope.launch {
-
             _imageStatus.value = LoadApiStatus.LOADING
 
             when (val result = repository.uploadImage(localUri = uri)) {
@@ -59,9 +58,7 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     fun postNewPlan(plan: Plan) {
-
         coroutineScope.launch {
-
             _status.value = LoadApiStatus.LOADING
 
             when (val result = repository.postPlan(plan = plan)) {

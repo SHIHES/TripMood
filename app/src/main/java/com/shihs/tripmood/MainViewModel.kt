@@ -59,7 +59,6 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val currentFragmentType = MutableLiveData<CurrentFragmentType>()
 
     fun setupUser(user: User) {
-
         _user.value = user
         Logger.i("=============")
         Logger.i("| setupUser |")

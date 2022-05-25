@@ -1,5 +1,6 @@
 package com.shihs.tripmood.favorite.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.shihs.tripmood.databinding.ItemPlanBinding
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.favorite.FavoriteViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
 class FavoritePlanAdapter(
     private val onClickListener: OnClickListener,
@@ -21,11 +23,13 @@ class FavoritePlanAdapter(
 
     class PlanVH(private var binding: ItemPlanBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Plan, viewModel: FavoriteViewModel) {
+        @SuppressLint("SetTextI18n")
+        fun bind(item: Plan) {
+            Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(
+                binding.planCoverPic
+            )
 
-            Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(binding.planCoverPic)
-
-            val formatTime = SimpleDateFormat("yyyy.MM.dd")
+            val formatTime = SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN)
 
             binding.planTitle.text = item.title
 
@@ -36,20 +40,14 @@ class FavoritePlanAdapter(
             binding.statusTextView.visibility = View.INVISIBLE
 
             if (item.startDate == item.endDate) {
-                binding.tripDate.text = "${formatTime.format(item.startDate)}"
+                binding.tripDate.text = formatTime.format(item.startDate)
             } else {
                 binding.tripDate.text =
                     "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
             }
 
-            binding.favoriteBtn.setOnCheckedChangeListener { compoundButton, b ->
-
-//                if (compoundButton.isChecked){
-//                    item.id?.let { viewModel.addFavoritePlan(it) }
-//                }
-//                else{
-//                    item.id?.let { viewModel.cancelFavoritePlan(it) }
-//                }
+            binding.favoriteBtn.setOnCheckedChangeListener { _, _ ->
+            
             }
         }
     }
@@ -64,7 +62,7 @@ class FavoritePlanAdapter(
 
     override fun onBindViewHolder(holder: PlanVH, position: Int) {
         val plan = getItem(position)
-        holder.bind(plan, viewModel)
+        holder.bind(plan)
 
         holder.itemView.setOnClickListener {
             onClickListener.onClick(plan)

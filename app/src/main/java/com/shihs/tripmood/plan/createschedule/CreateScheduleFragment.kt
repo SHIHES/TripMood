@@ -27,7 +27,7 @@ class CreateScheduleFragment : Fragment() {
 
     lateinit var binding: FragmentScheduleCreateBinding
 
-    private val viewModel by activityViewModels <CreateScheduleViewModel> {
+    private val viewModel by activityViewModels<CreateScheduleViewModel> {
         getVmFactory(
             CreateScheduleFragmentArgs.fromBundle(requireArguments()).myPlan,
             CreateScheduleFragmentArgs.fromBundle(requireArguments()).selectedSchedule,
@@ -46,7 +46,6 @@ class CreateScheduleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentScheduleCreateBinding.inflate(inflater, container, false)
 
         val item = listOf<String>("美食", "住宿", "交通", "逛街", "景點")
@@ -92,7 +91,6 @@ class CreateScheduleFragment : Fragment() {
     }
 
     private fun setupBtn() {
-
         val calendar = Calendar.getInstance(Locale.TAIWAN)
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)

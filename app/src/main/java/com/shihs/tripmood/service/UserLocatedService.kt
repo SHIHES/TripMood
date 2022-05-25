@@ -35,11 +35,9 @@ class UserLocatedService : Service() {
     }
 
     override fun onCreate() {
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationRequest = LocationRequest.create().apply {
-
             interval = TimeUnit.SECONDS.toMillis(10)
 
             fastestInterval = TimeUnit.SECONDS.toMillis(6)
@@ -92,7 +90,9 @@ class UserLocatedService : Service() {
         try {
             Log.d("SS", "subscribeToLocationUpdates succuss")
             fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest, locationCallback, Looper.getMainLooper()
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
             )
         } catch (e: Exception) {
             Log.d("SS", "subscribeToLocationUpdates $e")

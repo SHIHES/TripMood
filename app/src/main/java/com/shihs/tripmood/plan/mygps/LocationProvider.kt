@@ -11,14 +11,17 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
-import java.util.*
 import kotlin.math.roundToInt
 
 @SuppressLint("MissingPermission")
 class LocationProvider(private val fragment: Fragment) {
 
     // The entry point to the Fused Location Provider. Construct a FusedLocationProviderClient.
-    private val client by lazy { LocationServices.getFusedLocationProviderClient(fragment.requireActivity()) }
+    private val client by lazy {
+        LocationServices.getFusedLocationProviderClient(
+            fragment.requireActivity()
+        )
+    }
 
 //    private val placesClient by lazy { Places.createClient(fragment.requireActivity()) }
 

@@ -21,10 +21,11 @@ class InviteAdapter(
         fun onClick(invite: Invite) = clickListener(invite)
     }
 
-    class InviteVH(private var binding: ItemInviteNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
+    class InviteVH(private var binding: ItemInviteNotificationBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
         fun bind(invite: Invite, viewModel: NotificationViewModel) {
-
             val inviteName = invite.senderName
             val inviteTitle = invite.invitePlanTitle
 
@@ -47,7 +48,13 @@ class InviteAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InviteVH {
-        return InviteVH(ItemInviteNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return InviteVH(
+            ItemInviteNotificationBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: InviteVH, position: Int) {

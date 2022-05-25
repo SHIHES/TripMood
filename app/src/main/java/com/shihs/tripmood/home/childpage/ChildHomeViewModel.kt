@@ -13,8 +13,8 @@ import com.shihs.tripmood.network.LoadApiStatus
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.util.PlanStatusFilter
 import com.shihs.tripmood.util.UserManager
-import java.util.*
 import kotlinx.coroutines.*
+import java.util.*
 
 class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: HomePlanFilter) : ViewModel() {
 
@@ -70,11 +70,9 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun updatePlanStatus(plans: List<Plan>) {
-
         val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
 
         coroutineScope.launch {
-
             for (plan in plans) {
                 if (calendar > plan.startDate!! && calendar < plan.endDate!!) {
                     repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.ONGOING.code)
@@ -88,22 +86,19 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     private fun getLivePlansResult() {
-
         livePlans = repository.getLivePlans()
     }
 
     private fun getCoworkPlansResult() {
-        liveCoworkPlans = repository.getCoWorkLivePlan()
+        liveCoworkPlans = repository.getCoworkingLivePlan()
         Log.d("QAQQQ", "liveCoworkPlans ${liveCoworkPlans.value}")
     }
 
     var userQueryCount = MutableLiveData(0)
 
     fun getAllCoworkerInfo(coworkPlans: List<Plan>) {
-
         for (plan in coworkPlans) {
-
-            for (userID in plan.coworkList!!) {
+            for (userID in plan.coworkingList!!) {
                 getUserInfo(userID = userID)
 //                userQueryCount.value?.plus(1)
 //                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
@@ -117,11 +112,9 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun planSorter(homePlanType: HomePlanFilter) {
-
         viewpagerPlans.value = when (homePlanType) {
-
             HomePlanFilter.INDIVIDUAL -> livePlans.value?.filter {
-                it.coworkList.isNullOrEmpty() &&
+                it.coworkingList.isNullOrEmpty() &&
                     it.status != PlanStatusFilter.END.code
             }
             HomePlanFilter.COWORK -> liveCoworkPlans.value
@@ -133,7 +126,6 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun deletePlan(plan: Plan?) {
-
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -158,7 +150,6 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun changeToPersonal(plan: Plan) {
-
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -207,7 +198,6 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun inviteFriend(receiver: User) {
-
         val invite = Invite(
             invitePlanID = dialogSelectedPlan.id,
             invitePlanTitle = dialogSelectedPlan.title,

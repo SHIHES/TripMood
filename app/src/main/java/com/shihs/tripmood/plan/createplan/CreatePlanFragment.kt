@@ -27,7 +27,7 @@ class CreatePlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanCreateBinding
 
-    private val viewModel by viewModels <CreatePlanViewModel> { getVmFactory() }
+    private val viewModel by viewModels<CreatePlanViewModel> { getVmFactory() }
 
     lateinit var progressDialog: ProgressDialog
 
@@ -38,19 +38,16 @@ class CreatePlanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentPlanCreateBinding.inflate(inflater, container, false)
 
         progressDialog = ProgressDialog(requireContext())
 
         viewModel.imageStatus.observe(viewLifecycleOwner) {
             it?.let {
-
                 progressDialog.setMessage("Uploading file")
                 progressDialog.setCancelable(false)
 
                 when (it) {
-
                     LoadApiStatus.LOADING -> {
                         progressDialog.show()
                     }
@@ -83,7 +80,6 @@ class CreatePlanFragment : Fragment() {
     }
 
     private fun setCalendarBtn() {
-
         val constraintsBuilder = CalendarConstraints.Builder()
         val startDatePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Select dates")
@@ -91,7 +87,6 @@ class CreatePlanFragment : Fragment() {
             .build()
 
         binding.startDateBtn.setOnClickListener {
-
             val fmt = SimpleDateFormat("yyyy/MM/dd")
             val planDateRange = binding.startDateBtn
 
@@ -108,7 +103,6 @@ class CreatePlanFragment : Fragment() {
         }
 
         binding.createBtn.setOnClickListener {
-
             postPlan.title = binding.planET.text.toString()
 
             if (!postPlan.title.isNullOrEmpty() &&
@@ -116,9 +110,13 @@ class CreatePlanFragment : Fragment() {
                 postPlan.startDate != null &&
                 postPlan.endDate != null
             ) {
-
                 viewModel.postNewPlan(plan = postPlan)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom, postPlan))
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalMyPlanFragment(
+                        DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom,
+                        postPlan
+                    )
+                )
             } else {
                 Toast.makeText(requireContext(), "還有訊息沒填哦!", Toast.LENGTH_SHORT).show()
             }
@@ -139,7 +137,6 @@ class CreatePlanFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 100 && data != null && data.data != null) {
-
             val imageUri = data.data!!
 
             viewModel.uploadImage(imageUri)

@@ -24,8 +24,7 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
         val adapter = FavoritePlanAdapter(
@@ -37,12 +36,16 @@ class FavoriteFragment : Fragment() {
 
         val recyclerview = binding.favoritePlanRv
 
-        recyclerview.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        recyclerview.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         recyclerview.adapter = adapter
 
         viewModel.favoritePlans.observe(viewLifecycleOwner) {
             it?.let {
-                if (it.isNullOrEmpty()) {
+                if (it.isEmpty()) {
                     binding.noplanAnimation.visibility = View.VISIBLE
                     binding.noPlanHints.visibility = View.VISIBLE
                 } else {
@@ -55,7 +58,12 @@ class FavoriteFragment : Fragment() {
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_OTHERS.navigateFrom, it))
+                findNavController().navigate(
+                    HomeFragmentDirections.actionGlobalMyPlanFragment(
+                        DetailPageFilter.FROM_OTHERS.navigateFrom,
+                        it
+                    )
+                )
                 viewModel.onPlanNavigated()
             }
         }

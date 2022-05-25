@@ -54,11 +54,11 @@ interface TripMoodRepo {
 
     suspend fun checkUserExist(userID: String): Result<User>
 
-    fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
+    fun getCoworkingLivePlan(): MutableLiveData<List<Plan>>
 
     suspend fun getUserInfo(userID: String): Result<User>
 
-    fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>>
+    fun getLiveCoworkingLocation(): MutableLiveData<List<UserLocation>>
 
     suspend fun sendMyLocation(userLocation: UserLocation): Result<Boolean>
 

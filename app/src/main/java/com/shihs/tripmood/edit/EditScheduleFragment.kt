@@ -1,5 +1,6 @@
 package com.shihs.tripmood.edit
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,13 @@ import androidx.navigation.fragment.navArgs
 import com.shihs.tripmood.databinding.FragmentScheduleEditBinding
 import com.shihs.tripmood.dataclass.Schedule
 import java.text.SimpleDateFormat
+import java.util.*
 
 class EditScheduleFragment : Fragment() {
 
     lateinit var binding: FragmentScheduleEditBinding
 
-    val arg: EditScheduleFragmentArgs by navArgs()
+    private val arg: EditScheduleFragmentArgs by navArgs()
 
     val schedule = Schedule()
 
@@ -22,8 +24,7 @@ class EditScheduleFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = FragmentScheduleEditBinding.inflate(inflater, container, false)
 
         setupUI()
@@ -32,8 +33,8 @@ class EditScheduleFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupUI() {
-
         val time = arg.selectedSchedule?.time
         val catalog = arg.selectedSchedule?.catalog
         val title = arg.selectedSchedule?.title
@@ -46,14 +47,14 @@ class EditScheduleFragment : Fragment() {
         val scheduleID = arg.selectedSchedule?.scheduleId
         val address = arg.selectedSchedule?.location?.address
 
-        val fmt = SimpleDateFormat("yyyy-MM-dd").format(time)
+        val fmt = SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN).format(time)
 
         binding.editCatalogEditText.setText(catalog)
         binding.contentEditText.setText(note)
         binding.titleEditText.setText(title)
         binding.costEditText.setText(cost)
         binding.addressEditText.setText(address)
-        binding.scheduleDayTv.setText("Day$dayInt")
+        binding.scheduleDayTv.text = "Day$dayInt"
         binding.scheduleDateTv.text = fmt
     }
 

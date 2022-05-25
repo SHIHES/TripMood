@@ -30,12 +30,36 @@ class MyPlanFragment : Fragment() {
 
     lateinit var binding: FragmentPlanBinding
 
-    private val viewModel by viewModels <MyPlanViewModel> { getVmFactory(MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan) }
+    private val viewModel by viewModels<MyPlanViewModel> {
+        getVmFactory(
+            MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan
+        )
+    }
 
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
+    private val rotateOpen: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.rotate_open_anim
+        )
+    }
+    private val rotateClose: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.rotate_close_anim
+        )
+    }
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.from_bottom_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.to_bottom_anim
+        )
+    }
 
     private var fabClicked = false
 
@@ -48,7 +72,6 @@ class MyPlanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentPlanBinding.inflate(inflater, container, false)
 
         val recyclerPlanDays = binding.daysRv
@@ -65,7 +88,6 @@ class MyPlanFragment : Fragment() {
         recyclerPlanDays.adapter = scheduleAdapter
 
         when (args.navigateFrom) {
-
             DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom -> {
                 binding.chatBtn.visibility = View.VISIBLE
                 binding.mapWholeSchedule.visibility = View.VISIBLE
@@ -129,14 +151,15 @@ class MyPlanFragment : Fragment() {
 
         viewModel.navigationToDetail.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalDetailFragment(it))
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalDetailFragment(it)
+                )
                 viewModel.navigationToDetailEnd()
             }
         }
 
         viewModel.dayOfSchedule.observe(viewLifecycleOwner) {
             it?.let {
-
                 Log.d("QAQ", "dayOfSchedule $it")
                 if (it.isEmpty()) {
                     Log.d("QAQ", "dayOfSchedule empty $it")
@@ -161,7 +184,6 @@ class MyPlanFragment : Fragment() {
     }
 
     fun setView() {
-
         val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
         val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
         val startDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.startDate?.toDisplayDateFormat()
@@ -202,7 +224,8 @@ class MyPlanFragment : Fragment() {
         binding.friendsLocation.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalShowAllLocationFragment(
-                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_COWORKLOCATION.value
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
+                    MapViewType.MAP_COWORKLOCATION.value
                 )
             )
         }
@@ -210,7 +233,8 @@ class MyPlanFragment : Fragment() {
         binding.mapWholeSchedule.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalShowAllLocationFragment(
-                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan, MapViewType.MAP_SHOWALLLOCATION.value
+                    MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan,
+                    MapViewType.MAP_SHOWALLLOCATION.value
                 )
             )
         }

@@ -14,12 +14,10 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
     private var firstInActive = false
 
     override fun isItemViewSwipeEnabled(): Boolean {
-
         return true
     }
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-
         val dragFlags = 0
 
         val swipeFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -32,7 +30,6 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-
 //        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
 
         return true
@@ -55,7 +52,6 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (dX == 0f) {
                 currentSrollX = viewHolder.itemView.scrollX
@@ -63,7 +59,6 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
             }
 
             if (isCurrentlyActive) {
-
                 var scrollOffset = currentSrollX + (-dX).toInt()
                 if (scrollOffset > limitScrollX) {
                     scrollOffset = limitScrollX
@@ -79,7 +74,10 @@ class ItemTouchHelperCallback(var adapter: ItemTouchHelperInterface, context: Co
                     initXWhenInActive = dX
                 }
                 if (viewHolder.itemView.scrollX < limitScrollX) {
-                    viewHolder.itemView.scrollTo((currentScrollXwhenInActive * dX / initXWhenInActive).toInt(), 0)
+                    viewHolder.itemView.scrollTo(
+                        (currentScrollXwhenInActive * dX / initXWhenInActive).toInt(),
+                        0
+                    )
                 }
             }
         }

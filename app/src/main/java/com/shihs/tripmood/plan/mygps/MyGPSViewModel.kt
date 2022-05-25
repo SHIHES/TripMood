@@ -10,12 +10,11 @@ import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.network.LoadApiStatus
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
 
@@ -61,7 +60,6 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
     }
 
     fun packageGPSSchedule(location: Location) {
-
         val schedule = Schedule()
 
         val fmt = SimpleDateFormat("HH:mm")

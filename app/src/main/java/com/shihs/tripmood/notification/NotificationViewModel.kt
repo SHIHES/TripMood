@@ -117,7 +117,6 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
     }
 
     fun addInvites() {
-
         allInvitesList.clear()
 
         Log.d("QAQQQQQ", "$receiveInvitesList, $replyInvitesList")
@@ -155,8 +154,17 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
     fun acceptInviteAddUserToPlan(invite: Invite) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            val inviter = User(name = invite.senderName, image = invite.senderPhotoUrl, uid = invite.senderID)
-            when (val result = repository.acceptInviteAddUserToPlan(planID = invite.invitePlanID!!, user = inviter)) {
+            val inviter = User(
+                name = invite.senderName,
+                image = invite.senderPhotoUrl,
+                uid = invite.senderID
+            )
+            when (
+                val result = repository.acceptInviteAddUserToPlan(
+                    planID = invite.invitePlanID!!,
+                    user = inviter
+                )
+            ) {
                 is Result.Success -> {
                     Log.d("QAQQQQQ", "acceptInviteAddUserToPlan ${result.data}")
                     _error.value = null

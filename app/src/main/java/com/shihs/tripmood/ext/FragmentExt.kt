@@ -1,15 +1,10 @@
 package com.shihs.tripmood.ext
 
 import androidx.fragment.app.Fragment
-import app.appworks.school.publisher.factory.PlanViewModelFactory
-import app.appworks.school.publisher.factory.ViewModelFactory
 import com.shihs.tripmood.TripMoodApplication
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Schedule
-import com.shihs.tripmood.factory.CreateScheduleViewModelFactory
-import com.shihs.tripmood.factory.PlanTypeViewModelFactory
-import com.shihs.tripmood.factory.ScheduleViewModelFactory
-import com.shihs.tripmood.factory.UserPlanTypeViewModelFactory
+import com.shihs.tripmood.factory.*
 import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.util.UserPlanFilter
 

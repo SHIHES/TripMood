@@ -54,7 +54,6 @@ class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: U
     }
 
     private fun getLivePlansResult() {
-
         livePlans = repository.getLivePlans()
     }
 
@@ -65,9 +64,7 @@ class UserChildViewModel(private val repository: TripMoodRepo, userPlanFilter: U
     val plan = mutableListOf<Plan>()
 
     fun planSorter(userPlanType: UserPlanFilter) {
-
         viewpagerPlans.value = when (userPlanType) {
-
             UserPlanFilter.MEMORY -> livePlans.value?.filter {
                 it.status == PlanStatusFilter.END.code
             }

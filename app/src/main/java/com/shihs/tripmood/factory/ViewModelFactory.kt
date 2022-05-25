@@ -1,4 +1,4 @@
-package app.appworks.school.publisher.factory
+package com.shihs.tripmood.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +22,6 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-
                 isAssignableFrom(CreatePlanViewModel::class.java) ->
                     CreatePlanViewModel(repository)
 

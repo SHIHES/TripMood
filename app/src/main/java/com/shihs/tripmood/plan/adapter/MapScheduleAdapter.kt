@@ -22,13 +22,14 @@ class MapScheduleAdapter(
         fun onClick(schedule: Schedule) = clickListener(schedule)
     }
 
-    class ScheduleLocationVH(private var binding: ItemScheduleInfoMapBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ScheduleLocationVH(private var binding: ItemScheduleInfoMapBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
         val layout = binding.daysMapInfoLayout
         val icon = binding.catalogIcon
 
         fun bind(item: Schedule, onClickListener: OnClickListener) {
-
             val fmt = SimpleDateFormat("HH:mm").format(item.time)
 
             binding.root.setOnClickListener { onClickListener.onClick(item) }
@@ -38,8 +39,9 @@ class MapScheduleAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleLocationVH {
-
-        return ScheduleLocationVH(ItemScheduleInfoMapBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ScheduleLocationVH(
+            ItemScheduleInfoMapBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ScheduleLocationVH, position: Int) {
@@ -48,7 +50,6 @@ class MapScheduleAdapter(
         holder.bind(getItem(position), onClickListener)
 
         when (schedule.theDay) {
-
             1 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day1))
             2 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day2))
             3 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day3))
@@ -61,7 +62,6 @@ class MapScheduleAdapter(
         }
 
         when (schedule.catalog) {
-
             CatalogFilter.FOOD.value -> {
                 holder.icon.setImageResource(R.drawable.dish)
             }

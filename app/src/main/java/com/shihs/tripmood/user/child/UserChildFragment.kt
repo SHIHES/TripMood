@@ -19,14 +19,13 @@ class UserChildFragment(private val userPlanFilter: UserPlanFilter) : Fragment()
 
     lateinit var binding: FragmetUserPlanChildViewpagerBinding
 
-    private val viewModel by viewModels <UserChildViewModel> { getVmFactory(userPlanFilter) }
+    private val viewModel by viewModels<UserChildViewModel> { getVmFactory(userPlanFilter) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmetUserPlanChildViewpagerBinding.inflate(inflater, container, false)
 
         val adapter = MemoryPlanAdapter(
@@ -38,12 +37,20 @@ class UserChildFragment(private val userPlanFilter: UserPlanFilter) : Fragment()
         val recyclerViewPlan = binding.userPlanRv
         recyclerViewPlan.adapter = adapter
         recyclerViewPlan.layoutManager = GridLayoutManager(
-            context, 2, GridLayoutManager.VERTICAL, false
+            context,
+            2,
+            GridLayoutManager.VERTICAL,
+            false
         )
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom, it))
+                findNavController().navigate(
+                    HomeFragmentDirections.actionGlobalMyPlanFragment(
+                        DetailPageFilter.FROM_MYPLAN_COWORK.navigateFrom,
+                        it
+                    )
+                )
                 viewModel.onPlanNavigated()
             }
         }

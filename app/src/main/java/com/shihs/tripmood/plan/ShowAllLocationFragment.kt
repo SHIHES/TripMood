@@ -40,7 +40,11 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var binding: FragmentPlanMapBinding
 
-    private val viewModel by viewModels <ShowAllLocationViewModel> { getVmFactory(ShowAllLocationFragmentArgs.fromBundle(requireArguments()).myPlan) }
+    private val viewModel by viewModels<ShowAllLocationViewModel> {
+        getVmFactory(
+            ShowAllLocationFragmentArgs.fromBundle(requireArguments()).myPlan
+        )
+    }
 
     private val markerRef = mutableListOf<Marker>()
 
@@ -51,14 +55,12 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentPlanMapBinding.inflate(inflater, container, false)
 
         binding.theMapView.onCreate(savedInstanceState)
         binding.theMapView.getMapAsync(this)
 
         if (arg.mapViewType == MapViewType.MAP_SHOWALLLOCATION.value) {
-
             val adapter = MapScheduleAdapter(
                 MapScheduleAdapter.OnClickListener {
                     viewModel.getCLickData(it)
@@ -116,7 +118,6 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         } else {
-
             viewModel.liveUsersLocation.observe(viewLifecycleOwner) {
                 it?.let {
                     viewModel.sortUserLocation()
@@ -170,7 +171,6 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun createMarker(schedules: List<Schedule>) {
-
         val day1 = PolylineOptions()
         val day2 = PolylineOptions()
         val day3 = PolylineOptions()
@@ -181,15 +181,12 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
         val other = PolylineOptions()
 
         for (schedule in schedules) {
-
             val marker: Marker? = map?.addMarker(
                 MarkerOptions().apply {
-
                     title("${schedule.location?.name}")
                     position(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
 
                     when (schedule.catalog) {
-
                         CatalogFilter.FOOD.value -> {
                             icon(BitmapDescriptorFactory.fromResource(R.drawable.dish))
                         }
@@ -213,11 +210,12 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             )
             when (schedule.theDay) {
-
                 1 -> {
                     map?.addPolyline(
                         day1
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day1))
                     )
                 }
@@ -225,42 +223,59 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
                 2 -> {
                     map?.addPolyline(
                         day2
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day2))
                     )
                 }
+
                 3 -> {
                     map?.addPolyline(
                         day3
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day3))
                     )
                 }
+
                 4 -> {
                     map?.addPolyline(
                         day4
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day4))
                     )
                 }
+
                 5 -> {
                     map?.addPolyline(
                         day5
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day5))
                     )
                 }
+
                 6 -> {
                     map?.addPolyline(
                         day6
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day6))
                     )
                 }
+
                 7 -> {
                     map?.addPolyline(
                         day7
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.day7))
                     )
                 }
@@ -268,7 +283,9 @@ class ShowAllLocationFragment : Fragment(), OnMapReadyCallback {
                 else -> {
                     map?.addPolyline(
                         other
-                            .add(LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!))
+                            .add(
+                                LatLng(schedule.location?.latitude!!, schedule.location?.longitude!!)
+                            )
                             .color(resources.getColor(R.color.white))
                     )
                 }

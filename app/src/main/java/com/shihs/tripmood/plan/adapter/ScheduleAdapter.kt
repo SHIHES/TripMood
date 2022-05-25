@@ -26,7 +26,6 @@ class ScheduleAdapter(
     class DateVH(private var binding: ItemDayBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Schedule, onClickListener: OnClickListener, viewModel: MyPlanViewModel) {
-
             val fm1 = SimpleDateFormat("MM月dd日", Locale.getDefault())
 
             binding.daysTv.text = "Day ${adapterPosition.plus(1)}"
@@ -38,12 +37,15 @@ class ScheduleAdapter(
             }
 
             if (adapterPosition == viewModel.adapterPosition.value) {
-
-                binding.dayConstraintLayout.setBackgroundColor(itemView.context.getColor(R.color.tripMood_blue))
+                binding.dayConstraintLayout.setBackgroundColor(
+                    itemView.context.getColor(R.color.tripMood_blue)
+                )
                 binding.daysTv.setTextColor(itemView.context.getColor(R.color.white))
                 binding.dateTv.setTextColor(itemView.context.getColor(R.color.white))
             } else {
-                binding.dayConstraintLayout.setBackgroundColor(itemView.context.getColor(R.color.tripMood_light_purple))
+                binding.dayConstraintLayout.setBackgroundColor(
+                    itemView.context.getColor(R.color.tripMood_light_purple)
+                )
                 binding.daysTv.setTextColor(itemView.context.getColor(R.color.white))
                 binding.dateTv.setTextColor(itemView.context.getColor(R.color.white))
             }

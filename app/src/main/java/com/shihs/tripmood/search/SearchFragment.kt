@@ -23,14 +23,13 @@ class SearchFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels <SearchViewModel> { getVmFactory() }
+    private val viewModel by viewModels<SearchViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         val adapter = SearchPlanAdapter(
@@ -41,14 +40,17 @@ class SearchFragment : Fragment() {
         )
 
         val recyclerPlan = binding.planRecyclerView
-        recyclerPlan.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerPlan.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         recyclerPlan.adapter = adapter
 
         val searchView = binding.searchView
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
                 return false
             }
 
@@ -79,7 +81,12 @@ class SearchFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    findNavController().navigate(HomeFragmentDirections.actionGlobalMyPlanFragment(DetailPageFilter.FROM_OTHERS.navigateFrom, it))
+                    findNavController().navigate(
+                        HomeFragmentDirections.actionGlobalMyPlanFragment(
+                            DetailPageFilter.FROM_OTHERS.navigateFrom,
+                            it
+                        )
+                    )
                     viewModel.onPlanNavigated()
                 }
             }

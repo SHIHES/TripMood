@@ -55,22 +55,17 @@ class ShowAllLocationViewModel(private val repository: TripMoodRepo, arg: Plan?)
     }
 
     private fun getAllUserLocation() {
-
-        liveUsersLocation = repository.getLiveCoworkLocation()
+        liveUsersLocation = repository.getLiveCoworkingLocation()
     }
 
     fun sortUserLocation() {
-
-        if (!_plan.value?.coworkList.isNullOrEmpty()) {
-
+        if (!_plan.value?.coworkingList.isNullOrEmpty()) {
             realCoworkUsers.clear()
             realCoworkUsersLocation.value = realCoworkUsers
 
-            _plan.value?.coworkList?.forEach {
-
+            _plan.value?.coworkingList?.forEach {
                 for (userLocation in liveUsersLocation.value!!) {
                     if (it == userLocation.userUID) {
-
                         realCoworkUsers.add(userLocation)
                         realCoworkUsersLocation.value = realCoworkUsers
                     }
@@ -80,7 +75,6 @@ class ShowAllLocationViewModel(private val repository: TripMoodRepo, arg: Plan?)
     }
 
     private fun getAllSchedule() {
-
         if (_plan.value != null) {
             _plan.value!!.id?.let {
                 liveSchedules = repository.getLiveSchedule(it)

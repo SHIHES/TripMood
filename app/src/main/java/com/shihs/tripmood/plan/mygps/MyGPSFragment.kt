@@ -82,7 +82,9 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
         placesClient = Places.createClient(requireActivity())
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
+            requireActivity()
+        )
 
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
@@ -130,7 +132,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun showInterestDialog(location: com.shihs.tripmood.dataclass.Location) {
-
         MaterialAlertDialogBuilder(requireActivity())
             .setTitle(resources.getString(R.string.add_spot_title))
             .setMessage(resources.getString(R.string.add_spot_support_msg))
@@ -144,7 +145,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             .show()
     }
     private fun startTracking() {
-
         map?.clear()
 
         presenter.startTracking()
@@ -200,7 +200,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun showCurrentPlace() {
-
         recommendPlace.clear()
         viewModel.clearNearbyLocation()
 
@@ -289,7 +288,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addMarker(locations: List<com.shihs.tripmood.dataclass.Location>) {
-
         for (location in locations) {
             val latlng = LatLng(location.latitude!!, location.longitude!!)
 
@@ -309,7 +307,10 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun isLocationPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermission() {
@@ -331,7 +332,11 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             if (grantResults.size > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 // 被拒絕惹
                 Toast.makeText(requireContext(), "QQQQQQQ", Toast.LENGTH_LONG).show()
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                        requireActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                ) {
                     // 被拒絕惹 + 按了never ask again
                 }
             }

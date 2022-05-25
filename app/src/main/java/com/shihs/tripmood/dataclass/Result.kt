@@ -18,6 +18,3 @@ sealed class Result<out R> {
         }
     }
 }
-
-val Result<*>.succeeded
-    get() = this is Result.Success && data != null

@@ -37,7 +37,6 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         val serverClientId = getString(R.string.server_client_id)
@@ -52,9 +51,7 @@ class LoginFragment : Fragment() {
         val googleSignInBtn = binding.signInButton
 
         googleSignInBtn.apply {
-
             this.setOnClickListener {
-
                 val signInIntent = mGoogleSignInClient.signInIntent
                 startActivityForResult(signInIntent, RC_SIGN_IN)
             }
@@ -63,7 +60,9 @@ class LoginFragment : Fragment() {
 
         viewModel.navigateToLoginSuccess.observe(viewLifecycleOwner) {
             it?.let {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalNavigationHome()
+                )
                 viewModel.navigateToLoginSuccessEnd()
             }
         }
@@ -103,7 +102,6 @@ class LoginFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
             handleSignInResult(task)
@@ -122,7 +120,6 @@ class LoginFragment : Fragment() {
             )
             viewModel.checkUserExist(user)
         } catch (e: ApiException) {
-
             Log.w("SS", "Sign-in failed", e)
         }
     }

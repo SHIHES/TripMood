@@ -39,7 +39,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentScheduleMapBinding.inflate(inflater, container, false)
 
         binding.mapView.onCreate(savedInstanceState)
@@ -85,7 +84,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun setupAutoCompleteFragment() {
-
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
                 (activity as MainActivity).packageName,
@@ -120,7 +118,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onPlaceSelected(place: Place) {
-
                 if (place.latLng != null) {
                     Log.d("QAQ", "onPlaceSelected selected${place.types}")
                     selectedLocation.latitude = place.latLng?.latitude

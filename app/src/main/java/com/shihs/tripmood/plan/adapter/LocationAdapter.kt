@@ -10,16 +10,19 @@ import com.shihs.tripmood.R
 import com.shihs.tripmood.databinding.ItemPlaceInfoBinding
 import com.shihs.tripmood.dataclass.Location
 
-class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapter<Location, LocationAdapter.LocationVH>(DiffUtil()) {
+class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapter<Location, LocationAdapter.LocationVH>(
+    DiffUtil()
+) {
 
     class OnClickListener(val clickListener: (location: Location) -> Unit) {
         fun onClick(location: Location) = clickListener(location)
     }
 
-    class LocationVH(private var binding: ItemPlaceInfoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class LocationVH(private var binding: ItemPlaceInfoBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
         fun bind(item: Location) {
-
             binding.spotAddress.text = item.address
             binding.spotTitile.text = item.name
             Glide.with(binding.spotIcon.context).load(item.icon).error(R.drawable.tripmood_logo)
@@ -44,8 +47,9 @@ class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationVH {
-
-        val locationVH = LocationVH(ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val locationVH = LocationVH(
+            ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
         return locationVH
     }

@@ -44,10 +44,8 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             when (val result = repository.checkUserExist(userID = user.uid!!)) {
-
                 is Result.Success -> {
                     if (result.data.uid == null) {
-
                         createNewUser(user = user)
                     } else {
                         Log.d("SS", "${result.data}")
@@ -80,9 +78,7 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     fun createNewUser(user: User) {
-
         coroutineScope.launch {
-
             _status.value = LoadApiStatus.LOADING
 
             when (val result = repository.postUser(user)) {

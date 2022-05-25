@@ -1,28 +1,33 @@
 package com.shihs.tripmood.user.adapter
 
+import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shihs.tripmood.databinding.ItemUserpagePlanBinding
 import com.shihs.tripmood.dataclass.Plan
 import java.text.SimpleDateFormat
-import java.util.*
 
 class MemoryPlanAdapter(private val onClickListener: OnClickListener) : ListAdapter<Plan, MemoryPlanAdapter.PlanVH>(
     DiffUtil()
 ) {
 
-    class PlanVH(private var binding: ItemUserpagePlanBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PlanVH(private var binding: ItemUserpagePlanBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
+        @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind(item: Plan) {
             val formatTime = SimpleDateFormat("yyyy.MM.dd")
 
             binding.memoryTitle.text = item.title
 
             if (item.startDate == item.endDate) {
-                binding.memoryDateTv.text = "${formatTime.format(item.startDate)}"
+                binding.memoryDateTv.text = formatTime.format(item.startDate)
             } else {
-                binding.memoryDateTv.text = "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
+                binding.memoryDateTv.text = "${formatTime.format(item.startDate)} - ${formatTime.format(
+                    item.endDate
+                )}"
             }
         }
     }
@@ -32,7 +37,9 @@ class MemoryPlanAdapter(private val onClickListener: OnClickListener) : ListAdap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanVH {
-        return PlanVH(ItemUserpagePlanBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return PlanVH(
+            ItemUserpagePlanBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: PlanVH, position: Int) {

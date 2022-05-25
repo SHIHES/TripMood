@@ -45,8 +45,13 @@ android {
     }
 
     ktlint {
-        android.set(true)
+        debug.set(true)
+        verbose.set(true)
+        android.set(false)
+        outputToConsole.set(true)
         outputColorName.set("RED")
+        ignoreFailures.set(true)
+        enableExperimentalRules.set(true)
     }
 }
 
@@ -124,6 +129,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.8'
+
 
 
 

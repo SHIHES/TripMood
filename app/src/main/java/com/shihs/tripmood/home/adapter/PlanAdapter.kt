@@ -48,12 +48,13 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
                     "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
             }
 
-            if (!item.coworkList.isNullOrEmpty()) {
-
+            if (!item.coworkingList.isNullOrEmpty()) {
                 viewModel.realUserDataList.forEach {
-                    if (item.coworkList!!.contains(it.uid)) {
+                    if (item.coworkingList!!.contains(it.uid)) {
                         val itemPlanCoworkImageBinding =
-                            ItemPlanCoworkImageBinding.inflate(LayoutInflater.from(itemView.context))
+                            ItemPlanCoworkImageBinding.inflate(
+                                LayoutInflater.from(itemView.context)
+                            )
 
                         Log.d("SS", "count function run times")
                         Glide.with(itemView.context).load(it.image).override(100, 100)
@@ -108,7 +109,6 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         }
 
         holder.moreBtn.setOnClickListener {
-
             val dialogContext = dialog.context
 
             dialog.window?.setLayout(
@@ -134,7 +134,6 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
             dialog.findViewById<View>(R.id.editLayout).setOnClickListener {
             }
             dialog.findViewById<View>(R.id.inviteFriendLayout).setOnClickListener {
-
                 AlertDialog.Builder(dialogContext).apply {
                     setTitle(dialogContext.getString(R.string.inviteTitle))
                     setView(editTextLayout)

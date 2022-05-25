@@ -23,7 +23,6 @@ class NotificationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentNotificationBinding.inflate(inflater, container, false)
 
         val adapter = InviteAdapter(
@@ -35,7 +34,11 @@ class NotificationFragment : Fragment() {
         val recyclerNotification = binding.notificationRV
 
         recyclerNotification.adapter = adapter
-        recyclerNotification.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerNotification.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
         viewModel.receiveInvites.observe(viewLifecycleOwner) {
             it?.let {

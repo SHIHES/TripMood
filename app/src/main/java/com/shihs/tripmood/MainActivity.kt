@@ -40,11 +40,10 @@ class MainActivity : AppCompatActivity() {
     private var userLocatedServiceBound = false
     private var userLocatedService: UserLocatedService? = null
     private lateinit var tripMoodBroadcastReceiver: TripMoodBroadcastReceiver
-    val viewModel by viewModels <MainViewModel> { getVmFactory() }
+    val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
     private val userLocatedServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-
             val binder = service as UserLocatedService.LocalBinder
             userLocatedService = binder.service
             userLocatedServiceBound = true
@@ -148,7 +147,8 @@ class MainActivity : AppCompatActivity() {
                 .setMessage(getString(R.string.home_hint_dialog_title))
                 .setPositiveButton(getString(R.string.accept)) { _, _ ->
                     ActivityCompat.requestPermissions(
-                        this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         LOCATION_REQUEST_CODE
                     )
                 }
@@ -156,7 +156,8 @@ class MainActivity : AppCompatActivity() {
                 .show()
         } else {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_REQUEST_CODE
             )
         }
@@ -286,35 +287,30 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalNavigationHome()
                     )
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_collect -> {
-
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalNavigationCollect()
                     )
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_search -> {
-
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalNavigationSearch()
                     )
                     return@setOnItemSelectedListener true
                 }
                 R.id.navigation_user -> {
-
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalNavigationUser()
                     )
                     return@setOnItemSelectedListener false
                 }
                 R.id.navigation_addPlan -> {
-
                     findNavController(R.id.nav_host_fragment_activity_main).navigate(
                         MobileNavigationDirections.actionGlobalCreatePlanFragment()
                     )
@@ -325,7 +321,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNotificationsChannels() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 getString(R.string.reminders_notification_channel_id),

@@ -16,15 +16,14 @@ class PlanModeDialog : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog)
-        setCancelable(true)
+        isCancelable = true
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = DialogPlanModeBinding.inflate(inflater, container, false)
 
         setBtn()

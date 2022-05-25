@@ -15,7 +15,6 @@ class UserPlanTypeViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
-
                 isAssignableFrom(UserChildViewModel::class.java) ->
                     UserChildViewModel(repository, userPlanFilter)
 

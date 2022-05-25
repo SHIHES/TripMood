@@ -29,7 +29,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -44,7 +43,6 @@ class HomeFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             when (HomePlanFilter.values()[position]) {
-
                 HomePlanFilter.INDIVIDUAL -> {
                     tab.text = getString(R.string.home_individual)
                 }

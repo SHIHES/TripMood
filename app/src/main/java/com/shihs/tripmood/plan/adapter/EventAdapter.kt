@@ -23,7 +23,9 @@ class EventAdapter(
         fun onClick(schedule: Schedule) = clickListener(schedule)
     }
 
-    class ScheduleVH(private var binding: ItemScheduleBinding, viewModel: MyPlanViewModel) : RecyclerView.ViewHolder(binding.root) {
+    class ScheduleVH(private var binding: ItemScheduleBinding, viewModel: MyPlanViewModel) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
         val dashline = binding.dashLine
         val cardView = binding.cardView
@@ -45,16 +47,13 @@ class EventAdapter(
 //            }
 
             itemView.let {
-
                 it.setOnClickListener {
-
                     if (itemView.scrollX != 0) {
                         itemView.scrollTo(0, 0)
                     }
                 }
 
                 binding.hideDelete.setOnClickListener {
-
                     viewModel.findTimeRangeSchedule()
 
                     viewModel.scheulesDelete(item)
@@ -64,7 +63,10 @@ class EventAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleVH {
-        return ScheduleVH(ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false), viewModel)
+        return ScheduleVH(
+            ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            viewModel
+        )
     }
 
     override fun onBindViewHolder(holder: ScheduleVH, position: Int) {
@@ -95,7 +97,6 @@ class EventAdapter(
     }
 
     override fun onItemDelete(position: Int) {
-
         Log.d("ss", "position")
     }
 }

@@ -22,7 +22,6 @@ class CreateScheduleViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
-
                 isAssignableFrom(CreateScheduleViewModel::class.java) ->
                     CreateScheduleViewModel(repository, plan, schedule, adapterPosition)
 

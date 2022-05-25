@@ -103,7 +103,7 @@ class TripMoodLocalDataSource(val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getCoWorkLivePlan(): MutableLiveData<List<Plan>> {
+    override fun getCoworkingLivePlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
 
@@ -111,7 +111,7 @@ class TripMoodLocalDataSource(val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+    override fun getLiveCoworkingLocation(): MutableLiveData<List<UserLocation>> {
         TODO("Not yet implemented")
     }
 
