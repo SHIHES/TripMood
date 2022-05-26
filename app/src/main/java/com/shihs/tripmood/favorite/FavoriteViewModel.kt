@@ -1,6 +1,5 @@
 package com.shihs.tripmood.favorite
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,7 +25,6 @@ class FavoriteViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     fun navigateToDetail(plan: Plan) {
         _selectedPlan.value = plan
-        Log.d("QAQ", "${_selectedPlan.value}")
     }
 
     fun onPlanNavigated() {

@@ -93,14 +93,14 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         val markerOptions = MarkerOptions()
-        if (arg.selectedSchedule?.location != null &&
-                arg.selectedSchedule?.location?.latitude != null &&
-                arg.selectedSchedule?.location?.longitude != null
+        if (arg.selectedSchedule?.location != null
+                && arg.selectedSchedule?.location?.latitude != null
+                && arg.selectedSchedule?.location?.longitude != null
         ) {
             val lat = arg.selectedSchedule?.location?.latitude
             val lng = arg.selectedSchedule?.location?.longitude
             val name = arg.selectedSchedule?.location?.name
-            val position = LatLng(lat!!, lng!!)
+            val position = LatLng(lat ?: return, lng?: return)
             
             map?.addMarker(
                 markerOptions

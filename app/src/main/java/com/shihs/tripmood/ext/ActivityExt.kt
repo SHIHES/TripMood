@@ -1,8 +1,8 @@
 package com.shihs.tripmood.ext
 
 import android.app.Activity
-import app.appworks.school.publisher.factory.ViewModelFactory
 import com.shihs.tripmood.TripMoodApplication
+import com.shihs.tripmood.factory.ViewModelFactory
 
 /**
  * Extension functions for Activity.

@@ -16,7 +16,7 @@ class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
 
-    lateinit var client: FusedLocationProviderClient
+    private lateinit var client: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
                 }
 
                 else -> {
-                    tab.text = getString(R.string.home_cowork)
+                    tab.text = getString(R.string.home_coworking)
                 }
             }
         }.attach()

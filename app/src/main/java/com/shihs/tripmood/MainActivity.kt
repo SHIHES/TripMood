@@ -268,9 +268,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.currentFragmentType.value = when (navController.currentDestination?.id) {
                 R.id.navigation_home -> CurrentFragmentType.HOME
                 R.id.navigation_search -> CurrentFragmentType.SEARCH
-                R.id.planModeDialog -> CurrentFragmentType.PLAN_MODE
                 R.id.mapFragment -> CurrentFragmentType.FIND_SPOT_MAP
-                R.id.detailFragment -> CurrentFragmentType.MY_PLAN
                 R.id.showAllLocationFragment -> CurrentFragmentType.MY_PLAN_MAP
                 R.id.createScheduleFragment -> CurrentFragmentType.CREATE_SCHEDULE
                 R.id.createPlanFragment -> CurrentFragmentType.CREATE_PLAN

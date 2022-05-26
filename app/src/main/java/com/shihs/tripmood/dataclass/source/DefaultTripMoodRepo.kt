@@ -6,6 +6,7 @@ import com.shihs.tripmood.dataclass.*
 
 class DefaultTripMoodRepo(
     private val remoteDataSource: TripMoodDataSource,
+    private val localDataSource: TripMoodDataSource
 ) : TripMoodRepo {
     override suspend fun getPlans(): Result<List<Plan>> {
         return remoteDataSource.getPlans()

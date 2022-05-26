@@ -5,7 +5,7 @@
     <string name="title_user">user</string>
 
 
-    <string name="map_key" translatable="false"></string>
+    <string name="map_key" translatable="false" />
 
     <string name="default_info_title">Default Location</string>
     <string name="default_info_snippet">No places found, because location permission is disabled.</string>
@@ -37,10 +37,12 @@
 
     <string name="server_client_id">268286594391-i6qonn8pu347chhg8u3pelscqu9sqndt.apps.googleusercontent.com</string>
     <string name="home_individual">獨自規劃</string>
-    <string name="home_cowork">共同編輯</string>
+    <string name="home_coworking">共同編輯</string>
     <string name="home_hint_dialog_content">開啟GPS功能以獲得更好的體驗</string>
     <string name="home_hint_dialog_title">小提醒</string>
     <string name="home_hint_dialog_refused">下次再說</string>
     <string name="home_hint_dialog_setting">前往設定</string>
+
+    <string name="invite_msg_title">%1$s邀請你一同參加 \n%2$s旅程</string>
 
 </resources>

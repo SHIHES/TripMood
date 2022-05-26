@@ -6,6 +6,10 @@ import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.detail.DetailViewModel
 
+
+/**
+ * Factory for all ViewModels which need [plan], [schedule].
+ */
 @Suppress("UNCHECKED_CAST")
 class ScheduleViewModelFactory(
     private val repository: TripMoodRepo,

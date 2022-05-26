@@ -83,11 +83,13 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
 
                 val list = mutableListOf<Plan>()
-                for (document in snapshot!!) {
-                    Logger.d(document.id + " => " + document.data)
-
-                    val article = document.toObject(Plan::class.java)
-                    list.add(article)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        Logger.d(document.id + " => " + document.data)
+        
+                        val article = document.toObject(Plan::class.java)
+                        list.add(article)
+                    }
                 }
                 liveData.value = list
             }
@@ -110,11 +112,13 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
 
                 val list = mutableListOf<Schedule>()
-                for (document in snapshot!!) {
-                    Logger.d(document.id + " => " + document.data)
-
-                    val schedule = document.toObject(Schedule::class.java)
-                    list.add(schedule)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        Logger.d(document.id + " => " + document.data)
+        
+                        val schedule = document.toObject(Schedule::class.java)
+                        list.add(schedule)
+                    }
                 }
                 liveData.value = list
             }
@@ -238,13 +242,11 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
     override suspend fun updateSchedule(planID: String, schedule: Schedule): Result<Boolean> =
         suspendCoroutine { continuation ->
-            planID.let {
-                schedule.scheduleId?.let { it1 ->
                     FirebaseFirestore.getInstance()
                         .collection(PATH_PLANS)
-                        .document(it)
+                        .document(planID)
                         .collection(PATH_SCHEDULES)
-                        .document(it1)
+                        .document(schedule.scheduleId ?: return@suspendCoroutine)
                         .set(schedule)
                         .addOnSuccessListener {
                             Logger.i("Update: $schedule")
@@ -257,8 +259,8 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                             )
                             continuation.resume(Result.Error(it))
                         }
-                }
-            }
+                
+            
         }
 
     override suspend fun updatePlanToPersonal(planID: String): Result<Boolean> =
@@ -397,10 +399,8 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                                 Logger.d(document.id + " => " + document.data)
 
                                 val user = document.toObject(User::class.java)
-//                            list.add(user)
                                 continuation.resume(Result.Success(user))
                             }
-//                        val userID = list[0].id.toString()
                         } else {
                             task.exception?.let {
                                 Logger.w(
@@ -589,11 +589,13 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
 
                 val list = mutableListOf<Chat>()
-                for (document in snapshot!!) {
-                    Logger.d(document.id + " => " + document.data)
-
-                    val chat = document.toObject(Chat::class.java)
-                    list.add(chat)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        Logger.d(document.id + " => " + document.data)
+        
+                        val chat = document.toObject(Chat::class.java)
+                        list.add(chat)
+                    }
                 }
                 liveData.value = list
             }
@@ -601,14 +603,18 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     }
 
     override suspend fun postChats(chat: Chat): Result<Boolean> = suspendCoroutine { continuation ->
-        val chats = FirebaseFirestore.getInstance().collection(PATH_PLANS).document(chat.planID!!)
-            .collection(PATH_CHATS)
+        val chats = chat.planID?.let {
+            FirebaseFirestore.getInstance()
+                .collection(PATH_PLANS)
+                .document(it)
+                .collection(PATH_CHATS)
+        }
 
-        val document = chats.document()
+        val document = chats?.document()
 
-        chat.id = document.id
+        chat.id = document?.id
 
-        document.set(chat).addOnCompleteListener { task ->
+        document?.set(chat)?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Logger.i("postChats: $chat")
 
@@ -627,7 +633,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
     override suspend fun postUser(user: User): Result<String> = suspendCoroutine { continuation ->
         val users = FirebaseFirestore.getInstance().collection(PATH_USERS)
 
-        val document = users.document(user.uid!!)
+        val document = users.document(user.uid ?: return@suspendCoroutine)
 
         document.set(user).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -715,7 +721,7 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
 
             FirebaseFirestore.getInstance()
                 .collection(PATH_COWORKING_LOCATION)
-                .document(UserManager.userUID!!)
+                .document(UserManager.userUID ?: return@suspendCoroutine)
                 .set(userLocation)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -739,7 +745,8 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
         suspendCoroutine { continuation ->
 
             val db = FirebaseFirestore.getInstance()
-            val ref = db.collection(PATH_COWORKING_LOCATION).document(UserManager.userUID!!)
+            val ref = db.collection(PATH_COWORKING_LOCATION)
+                .document(UserManager.userUID ?: return@suspendCoroutine)
 
             db.runBatch { batch ->
                 batch.update(ref, KEY_LONGITUDE, lng)
@@ -772,11 +779,13 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
 
                 val list = mutableListOf<UserLocation>()
-                for (document in snapshot!!) {
-                    Logger.d(document.id + " => " + document.data)
-
-                    val userLocation = document.toObject(UserLocation::class.java)
-                    list.add(userLocation)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        Logger.d(document.id + " => " + document.data)
+        
+                        val userLocation = document.toObject(UserLocation::class.java)
+                        list.add(userLocation)
+                    }
                 }
                 liveData.value = list
             }
@@ -870,11 +879,13 @@ object TripMoodRemoteDataSource : TripMoodDataSource {
                 }
 
                 val list = mutableListOf<Plan>()
-                for (document in snapshot!!) {
-                    Logger.d(document.id + " => " + document.data)
-
-                    val plan = document.toObject(Plan::class.java)
-                    list.add(plan)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        Logger.d(document.id + " => " + document.data)
+        
+                        val plan = document.toObject(Plan::class.java)
+                        list.add(plan)
+                    }
                 }
                 liveData.value = list
             }

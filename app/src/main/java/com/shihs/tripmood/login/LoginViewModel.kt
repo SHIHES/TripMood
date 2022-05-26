@@ -20,9 +20,9 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _user = MutableLiveData<User>()
+    private val _user = MutableLiveData<User?>()
 
-    val user: LiveData<User>
+    val user: LiveData<User?>
         get() = _user
 
     private val _status = MutableLiveData<LoadApiStatus>()
@@ -30,20 +30,20 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val status: LiveData<LoadApiStatus>
         get() = _status
 
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableLiveData<String?>()
 
-    val error: LiveData<String>
+    val error: LiveData<String?>
         get() = _error
 
-    private val _navigateToLoginSuccess = MutableLiveData<String>()
+    private val _navigateToLoginSuccess = MutableLiveData<String?>()
 
-    val navigateToLoginSuccess: LiveData<String>
+    val navigateToLoginSuccess: LiveData<String?>
         get() = _navigateToLoginSuccess
 
     fun checkUserExist(user: User) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            when (val result = repository.checkUserExist(userID = user.uid!!)) {
+            when (val result = user.uid?.let { repository.checkUserExist(userID = it) }) {
                 is Result.Success -> {
                     if (result.data.uid == null) {
                         createNewUser(user = user)
@@ -52,9 +52,9 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
                         UserManager.userName = result.data.name
                         UserManager.userUID = result.data.uid
                         UserManager.userPhotoUrl = result.data.image
-                        _error.value = "1"
+                        _error.value = null
                         _status.value = LoadApiStatus.DONE
-                        _user.value = result.data!!
+                        _user.value = result.data
                         _navigateToLoginSuccess.value = UserManager.userUID
                     }
                 }
@@ -77,7 +77,7 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
         }
     }
 
-    fun createNewUser(user: User) {
+    private fun createNewUser(user: User) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -86,7 +86,7 @@ class LoginViewModel(private val repository: TripMoodRepo) : ViewModel() {
                     UserManager.userName = user.name
                     UserManager.userUID = user.uid
                     UserManager.userPhotoUrl = user.image
-                    _error.value = "1"
+                    _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _user.value = user
                     _navigateToLoginSuccess.value = UserManager.userUID

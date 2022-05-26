@@ -30,13 +30,13 @@ class LoginFragment : Fragment() {
 
     private val viewModel by viewModels<LoginViewModel> { getVmFactory() }
 
-    lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         val serverClientId = getString(R.string.server_client_id)

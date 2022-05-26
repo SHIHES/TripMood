@@ -17,13 +17,13 @@ import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.util.UserManager
 import java.util.*
 
-class ChatFragment : Fragment() { //    KeyEvent.Callback
+class ChatFragment : Fragment() {
     
     lateinit var binding: FragmentChatDetailBinding
     
     private val viewModel by viewModels<ChatViewModel> {
         getVmFactory(
-            ChatFragmentArgs.fromBundle(requireArguments()).myPlan
+            ChatFragmentArgs.fromBundle(requireArguments()).selectedPlan
         )
     }
     
@@ -38,6 +38,7 @@ class ChatFragment : Fragment() { //    KeyEvent.Callback
         
         val adapter = ChatAdapter()
         val recyclerViewChats = binding.recyclerChat
+        
         recyclerViewChats.adapter = adapter
         recyclerViewChats.layoutManager = LinearLayoutManager(
             context,
@@ -88,7 +89,7 @@ class ChatFragment : Fragment() { //    KeyEvent.Callback
                 createdTime = time,
                 speaker = user,
                 msg = msg,
-                planID = arg.myPlan?.id,
+                planID = arg.selectedPlan?.id,
             )
             
             viewModel.postChats(chat)

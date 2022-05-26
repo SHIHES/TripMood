@@ -6,6 +6,10 @@ import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.user.child.UserChildViewModel
 import com.shihs.tripmood.util.UserPlanFilter
 
+
+/**
+ * Factory for all ViewModels which need [userPlanFilter].
+ */
 @Suppress("UNCHECKED_CAST")
 class UserPlanTypeViewModelFactory(
     private val repository: TripMoodRepo,

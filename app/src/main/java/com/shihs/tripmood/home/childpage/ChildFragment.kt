@@ -1,10 +1,11 @@
 package com.shihs.tripmood.home.childpage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,24 +23,15 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
     private val viewModel by viewModels<ChildHomeViewModel> { getVmFactory(homePlanType) }
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        viewModel.waitProgressLiveData()
-//
-//    }
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlanChildViewpagerBinding.inflate(inflater, container, false)
 
-        Log.d("SS", "ChildFragment $homePlanType")
-
         val recyclerPlan = binding.planRV
-
         val adapter = PlanAdapter(
             PlanAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
@@ -53,10 +45,6 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
             LinearLayoutManager.VERTICAL,
             false
         )
-
-//        viewModel.coworkTotalLiveData.observe(viewLifecycleOwner){it?.let {
-//
-//        } }
 
         viewModel.selectedPlan.observe(viewLifecycleOwner) {
             it?.let {
@@ -89,7 +77,7 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
             }
         }
 
-        viewModel.liveCoworkPlans.observe(viewLifecycleOwner) {
+        viewModel.liveCoworkingPlans.observe(viewLifecycleOwner) {
             it?.let {
                 viewModel.planSorter(homePlanType)
                 viewModel.updatePlanStatus(it)
@@ -100,7 +88,7 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
         viewModel.viewpagerPlans.observe(viewLifecycleOwner) {
             it?.let {
-                if (!it.isNullOrEmpty()) {
+                if (it.isNotEmpty()) {
                     binding.earthAnimation.visibility = View.GONE
                     binding.noPlanHint.visibility = View.GONE
                 } else {
@@ -113,16 +101,16 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
         }
 
         viewModel.inviteUser.observe(viewLifecycleOwner) {
-            it?.let {
-                Log.d("QAQ", "inviteUserID$it")
+            if (it == null){
+                Toast.makeText(requireContext(),"Cannot find this user", Toast.LENGTH_SHORT).show()
+            } else {
                 viewModel.inviteFriend(it)
             }
         }
 
-        viewModel.coworkUser.observe(viewLifecycleOwner) {
+        viewModel.coworkingUser.observe(viewLifecycleOwner) {
             it?.let {
-                Log.d("QAQ", "coworkUser$it")
-                viewModel.saveCoworkUserInfo(it)
+                viewModel.saveCoworkingUserInfo(it)
                 adapter.notifyDataSetChanged()
             }
         }
@@ -131,13 +119,11 @@ class ChildFragment(private val homePlanType: HomePlanFilter) : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         viewModel.realUserDataList.clear()
     }
 
     override fun onStop() {
         super.onStop()
-
         viewModel.realUserDataList.clear()
     }
 }

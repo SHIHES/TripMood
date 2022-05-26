@@ -28,9 +28,7 @@ class FavoritePlanAdapter(
             Glide.with(itemView.context).load(item.image).placeholder(R.drawable.placeholder).into(
                 binding.planCoverPic
             )
-
-            val formatTime = SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN)
-
+            
             binding.planTitle.text = item.title
 
             binding.favoriteBtn.visibility = View.INVISIBLE
@@ -38,6 +36,8 @@ class FavoritePlanAdapter(
             binding.moreBtn.visibility = View.INVISIBLE
 
             binding.statusTextView.visibility = View.INVISIBLE
+    
+            val formatTime = SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN)
 
             if (item.startDate == item.endDate) {
                 binding.tripDate.text = formatTime.format(item.startDate)

@@ -6,6 +6,10 @@ import com.shihs.tripmood.dataclass.source.TripMoodRepo
 import com.shihs.tripmood.home.childpage.ChildHomeViewModel
 import com.shihs.tripmood.util.HomePlanFilter
 
+/**
+ * Factory for all ViewModels which need [homePlanType].
+ */
+
 @Suppress("UNCHECKED_CAST")
 class PlanTypeViewModelFactory(
     private val repository: TripMoodRepo,

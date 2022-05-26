@@ -1,6 +1,5 @@
 package com.shihs.tripmood.home.adapter
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -16,7 +15,6 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     override fun getItemCount() = HomePlanFilter.values().size
 
     override fun createFragment(position: Int): Fragment {
-        Log.d("Steven", "createFragment$position")
         return ChildFragment(HomePlanFilter.values()[position])
     }
 }

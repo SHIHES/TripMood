@@ -1,5 +1,6 @@
 package com.shihs.tripmood.home.adapter
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
@@ -29,8 +30,9 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         val moreBtn = binding.moreBtn
         val statusTv = binding.statusTextView
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: Plan, viewModel: ChildHomeViewModel) {
-            val formatTime = SimpleDateFormat("yyyy.MM.dd")
+            val formatTime = SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN)
 
             binding.favoriteBtn.visibility = View.GONE
 
@@ -42,7 +44,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
                 .into(binding.planCoverPic)
 
             if (item.startDate == item.endDate) {
-                binding.tripDate.text = "${formatTime.format(item.startDate)}"
+                binding.tripDate.text = formatTime.format(item.startDate)
             } else {
                 binding.tripDate.text =
                     "${formatTime.format(item.startDate)} - ${formatTime.format(item.endDate)}"
@@ -51,15 +53,15 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
             if (!item.coworkingList.isNullOrEmpty()) {
                 viewModel.realUserDataList.forEach {
                     if (item.coworkingList!!.contains(it.uid)) {
-                        val itemPlanCoworkImageBinding =
+                        val itemPlanCoworkingImageBinding =
                             ItemPlanCoworkImageBinding.inflate(
                                 LayoutInflater.from(itemView.context)
                             )
 
                         Log.d("SS", "count function run times")
                         Glide.with(itemView.context).load(it.image).override(100, 100)
-                            .into(itemPlanCoworkImageBinding.coworkImage)
-                        binding.coworkerImageLayoutChild.addView(itemPlanCoworkImageBinding.root)
+                            .into(itemPlanCoworkingImageBinding.coworkImage)
+                        binding.coworkerImageLayoutChild.addView(itemPlanCoworkingImageBinding.root)
                     }
                 }
             }
@@ -81,6 +83,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
         val dialog = Dialog(context)
         val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
         val editTextLayout = LayoutInflater.from(context).inflate(R.layout.view_edittext, null)
+        val oneDayMillisecond = 86400000
 
         if (editTextLayout.parent != null) {
             editTextLayout.parent
@@ -91,12 +94,12 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
             holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
         }
 
-        if (plan.startDate!! >= calendar && plan.endDate!!.plus(86400000) <= calendar) {
+        if (plan.startDate!! >= calendar && plan.endDate!!.plus(oneDayMillisecond) <= calendar) {
             holder.statusTv.text = "進行中"
             holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_green))
         }
 
-        if (plan.endDate!!.plus(86400000) < calendar) {
+        if (plan.endDate!!.plus(oneDayMillisecond) < calendar) {
             holder.statusTv.text = "已結束"
             holder.statusTv.setBackgroundColor(context.getColor(R.color.tripMood_dark_blue))
         }
@@ -121,7 +124,7 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
 
             dialog.findViewById<View>(R.id.deleteLayout).setOnClickListener {
                 viewModel.deletePlan(plan = plan)
-                notifyDataSetChanged()
+                notifyItemRemoved(position)
             }
             dialog.findViewById<View>(R.id.privateLayout).setOnClickListener {
                 viewModel.changeToPersonal(plan = plan)
@@ -138,18 +141,17 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
                     setTitle(dialogContext.getString(R.string.inviteTitle))
                     setView(editTextLayout)
                     setCancelable(false)
-                    setPositiveButton(R.string.accept) { dialog, which ->
+                    setPositiveButton(R.string.accept) { _, _ ->
                         val text =
                             editTextLayout.findViewById<EditText>(R.id.alertDialogEditText).text.toString()
                         if (text.isNotEmpty()) {
-                            Log.d("QAQQQ", "AlertDialog$text")
                             viewModel.changeEmailToUserID(text)
                             viewModel.getDialogSelectedPlan(plan)
                         } else {
                             Toast.makeText(context, "沒輸入訊息", Toast.LENGTH_LONG).show()
                         }
                     }
-                    setNegativeButton(R.string.cancel) { dialog, which ->
+                    setNegativeButton(R.string.cancel) { _, _ ->
                     }
                     setOnCancelListener {
                         (editTextLayout.parent as ViewGroup).removeView(editTextLayout)

@@ -24,12 +24,12 @@ class InviteAdapter(
     class InviteVH(private var binding: ItemInviteNotificationBinding) : RecyclerView.ViewHolder(
         binding.root
     ) {
-
+        
         fun bind(invite: Invite, viewModel: NotificationViewModel) {
             val inviteName = invite.senderName
             val inviteTitle = invite.invitePlanTitle
 
-            binding.InviteMsg.text = "$inviteName \n邀請你一同參加 \n${inviteTitle}旅程"
+            binding.InviteMsg.text = itemView.context.getString(R.string.invite_msg_title, inviteName, inviteTitle)
 
             binding.notificationAcceptBtn.setOnClickListener {
                 viewModel.acceptInviteChangeStatus(inviteID = invite.id.toString())
