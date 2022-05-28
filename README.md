@@ -33,7 +33,7 @@ Password: !@#tripmoodguest
 
 ### 2. Add the schedule by searching
 
-<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/add_schedule_searching.gif?raw=true" height="500" style="border-radius:2%"></a>
+<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/add_schedule_time.gif?raw=true" height="500" style="border-radius:2%"></a>
 
 ### 3. Add the schedule by current location
 
@@ -50,7 +50,7 @@ Password: !@#tripmoodguest
 
 ### 6. Check friends current location
 
-<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/show_friend_location.gif?raw=true" height="500" style="border-radius:2%"></a>
+<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/show_friends_location.gif?raw=true" height="500" style="border-radius:2%"></a>
 
 ### 7. Check all schedules route 
 
@@ -58,7 +58,7 @@ Password: !@#tripmoodguest
 
 ### 8. Discover and collect public traval plans
 
-<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/search_favorite.gif?raw=true" height="500" style="border-radius:2%"></a>
+<a href="url"><img src = "https://github.com/SHIHES/TripMood/blob/develop/readme_assets/search_collect.gif?raw=true" height="500" style="border-radius:2%"></a>
 
 
 
