@@ -4,8 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 
-import kotlin.coroutines.suspendCoroutine
-
 interface TripMoodDataSource {
 
     suspend fun getPlans(): Result<List<Plan>>
@@ -56,22 +54,21 @@ interface TripMoodDataSource {
 
     suspend fun checkUserExist(userID: String): Result<User>
 
-    fun getCoWorkLivePlan(): MutableLiveData<List<Plan>>
+    fun getCoworkingLivePlan(): MutableLiveData<List<Plan>>
 
-    suspend fun getUserInfo(userID: String) : Result<User>
+    suspend fun getUserInfo(userID: String): Result<User>
 
-    fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>>
+    fun getLiveCoworkingLocation(): MutableLiveData<List<UserLocation>>
 
-    suspend fun sendMyLocation(userLocation: UserLocation ) : Result<Boolean>
+    suspend fun sendMyLocation(userLocation: UserLocation): Result<Boolean>
 
-    suspend fun updateMyLocation(lat:Double, lng: Double) : Result<Boolean>
+    suspend fun updateMyLocation(lat: Double, lng: Double): Result<Boolean>
 
-    suspend fun uploadImage(localUri: Uri) : Result<Uri>
+    suspend fun uploadImage(localUri: Uri): Result<Uri>
 
     suspend fun addFavoritePlan(plan: Plan): Result<Boolean>
 
     suspend fun cancelFavoritePlan(plan: Plan): Result<Boolean>
 
     fun getLiveFavoritePlan(): MutableLiveData<List<Plan>>
-
-    }
+}

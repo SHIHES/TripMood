@@ -7,6 +7,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'com.google.firebase.crashlytics'
+    id 'org.jlleitschuh.gradle.ktlint'
 }
 
 android {
@@ -41,6 +42,16 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    ktlint {
+        debug.set(true)
+        verbose.set(true)
+        android.set(false)
+        outputToConsole.set(true)
+        outputColorName.set("RED")
+        ignoreFailures.set(true)
+        enableExperimentalRules.set(true)
     }
 }
 
@@ -118,6 +129,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.8'
+
 
 
 

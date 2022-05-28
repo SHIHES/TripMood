@@ -101,6 +101,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="中正區羅斯福路二段45號"
+            android:maxLines="2"
+            android:ems="20"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
             app:layout_constraintTop_toTopOf="@+id/imageView5" />

@@ -3,14 +3,15 @@ package com.shihs.tripmood.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.home.childpage.ChildHomeViewModel
-import com.shihs.tripmood.user.child.UserChildFragment
 import com.shihs.tripmood.user.child.UserChildViewModel
-import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.util.UserPlanFilter
 
+
+/**
+ * Factory for all ViewModels which need [userPlanFilter].
+ */
 @Suppress("UNCHECKED_CAST")
-class UserPlanTypeViewModelFactory (
+class UserPlanTypeViewModelFactory(
     private val repository: TripMoodRepo,
     private val userPlanFilter: UserPlanFilter
 ) : ViewModelProvider.Factory {
@@ -18,7 +19,6 @@ class UserPlanTypeViewModelFactory (
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
-
                 isAssignableFrom(UserChildViewModel::class.java) ->
                     UserChildViewModel(repository, userPlanFilter)
 
@@ -26,5 +26,4 @@ class UserPlanTypeViewModelFactory (
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
-
 }

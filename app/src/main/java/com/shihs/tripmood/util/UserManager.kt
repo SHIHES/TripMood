@@ -1,9 +1,7 @@
 package com.shihs.tripmood.util
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.TripMoodApplication
-import com.shihs.tripmood.dataclass.User
 
 object UserManager {
 
@@ -11,7 +9,6 @@ object UserManager {
     private const val USER_UID = "user_uid"
     private const val USER_PHOTOURL = "user_photoUrl"
     private const val USER_NAME = "user_name"
-
 
     var userUID: String? = null
         get() = TripMoodApplication.instance
@@ -85,13 +82,9 @@ object UserManager {
     val isLoggedIn: Boolean
         get() = userUID != null
 
-
     fun clear() {
         userUID = null
         userPhotoUrl = null
         userName = null
     }
-
-
-
 }

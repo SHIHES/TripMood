@@ -9,8 +9,8 @@ import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Result
 import com.shihs.tripmood.dataclass.User
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.network.LoadApiStatus
+import com.shihs.tripmood.util.HomePlanFilter
 import com.shihs.tripmood.util.PlanStatusFilter
 import com.shihs.tripmood.util.UserManager
 import kotlinx.coroutines.*
@@ -22,19 +22,19 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _status = MutableLiveData<LoadApiStatus>()
+    private val _status = MutableLiveData<LoadApiStatus?>()
 
-    val status: LiveData<LoadApiStatus>
+    val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableLiveData<String?>()
 
-    val error: LiveData<String>
+    val error: LiveData<String?>
         get() = _error
 
-    private val _selectedPlan = MutableLiveData<Plan>()
+    private val _selectedPlan = MutableLiveData<Plan?>()
 
-    val selectedPlan: LiveData<Plan>
+    val selectedPlan: LiveData<Plan?>
         get() = _selectedPlan
 
     private var _plans = MutableLiveData<List<Plan>>()
@@ -44,101 +44,63 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     var livePlans = MutableLiveData<List<Plan>>()
 
-    var liveCoworkPlans = MutableLiveData<List<Plan>>()
+    var liveCoworkingPlans = MutableLiveData<List<Plan>>()
 
     var viewpagerPlans = MutableLiveData<List<Plan>>()
 
-    var inviteUser = MutableLiveData<User>()
+    var inviteUser = MutableLiveData<User?>()
 
-    var dialogSelectedPlan = Plan()
-
-    var coworkUserListInfo = mutableListOf<User>()
-
-//    val coworkTotalLiveData: MediatorLiveData<Pair<List<Plan>?, List<Plan>?>> = MediatorLiveData()
-
-
-
+    private var dialogSelectedPlan = Plan()
 
     fun navigateToDetail(plan: Plan) {
         _selectedPlan.value = plan
-        Log.d("QAQ", "${_selectedPlan.value}")
     }
 
     init {
-
-        Log.d("SS","ChildHomeViewModel $homePlanType")
-
         getLivePlansResult()
-        getCoworkPlansResult()
-
+        getCoworkingPlansResult()
     }
 
-    fun updatePlanStatus(plans: List<Plan>){
-
+    fun updatePlanStatus(plans: List<Plan>) {
         val calendar = Calendar.getInstance(Locale.getDefault()).timeInMillis
 
         coroutineScope.launch {
-
-            for (plan in plans){
-                if (calendar > plan.startDate!! && calendar < plan.endDate!!){
+            for (plan in plans) {
+                if (calendar > plan.startDate!! && calendar < plan.endDate!!) {
                     repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.ONGOING.code)
-                } else if (calendar < plan.startDate!!){
+                } else if (calendar < plan.startDate!!) {
                     repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.PLANNING.code)
-                } else{
+                } else {
                     repository.updatePlanStatus(planID = plan.id!!, PlanStatusFilter.END.code)
                 }
             }
         }
     }
 
-
-
     private fun getLivePlansResult() {
-
         livePlans = repository.getLivePlans()
-
-
-
     }
 
-    private fun getCoworkPlansResult(){
-            liveCoworkPlans = repository.getCoWorkLivePlan()
-        Log.d("QAQQQ","liveCoworkPlans ${liveCoworkPlans.value}")
+    private fun getCoworkingPlansResult() {
+        liveCoworkingPlans = repository.getCoworkingLivePlan()
     }
 
-    var userQueryCount = MutableLiveData(0)
-
-    fun getAllCoworkerInfo(coworkPlans: List<Plan>){
-
-        for (plan in coworkPlans){
-
-            for (userID in plan.coworkList!!){
+    fun getAllCoworkerInfo(coworkingPlans: List<Plan>) {
+        for (plan in coworkingPlans) {
+            for (userID in plan.coworkingList!!) {
                 getUserInfo(userID = userID)
-//                userQueryCount.value?.plus(1)
-//                Log.d("SS", " userQueryCount.value${userQueryCount.value}")
             }
         }
-//        if(realUserDataList.size == userQueryCount.value!!){
-//            Log.d("SS", " == realUserDataList.size${userQueryCount.value}")
-//        } else{
-//            Log.d("SS", "else realUserDataList.size${userQueryCount.value}")
-//        }
-
-
     }
 
-    fun planSorter(homePlanType: HomePlanFilter){
-
-        viewpagerPlans.value  = when (homePlanType) {
-
+    fun planSorter(homePlanType: HomePlanFilter) {
+        viewpagerPlans.value = when (homePlanType) {
             HomePlanFilter.INDIVIDUAL -> livePlans.value?.filter {
-                it.coworkList.isNullOrEmpty() &&
-                        it.status != PlanStatusFilter.END.code
+                it.coworkingList.isNullOrEmpty() &&
+                    it.status != PlanStatusFilter.END.code
             }
-            HomePlanFilter.COWORK -> liveCoworkPlans.value
-
+            HomePlanFilter.COWORK -> liveCoworkingPlans.value
         }
-
     }
 
     fun onPlanNavigated() {
@@ -146,32 +108,30 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
     }
 
     fun deletePlan(plan: Plan?) {
-
         coroutineScope.launch {
-                    _status.value = LoadApiStatus.LOADING
+            _status.value = LoadApiStatus.LOADING
 
-                    when (val result = plan?.id?.let { repository.deletePlan(planID = it) }) {
-                        is Result.Success -> {
-                            _error.value = null
-                            _status.value = LoadApiStatus.DONE
-                        }
-                        is Result.Fail -> {
-                            _error.value = result.error
-                            _status.value = LoadApiStatus.ERROR
-                        }
-                        is Result.Error -> {
-                            _error.value = result.exception.toString()
-                            _status.value = LoadApiStatus.ERROR
-                        }
-                        else -> {
-                            _status.value = LoadApiStatus.ERROR
-                        }
-                    }
+            when (val result = plan?.id?.let { repository.deletePlan(planID = it) }) {
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
         }
     }
 
-    fun changeToPersonal(plan: Plan){
-
+    fun changeToPersonal(plan: Plan) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -195,7 +155,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-    fun changeToPublic(plan: Plan){
+    fun changeToPublic(plan: Plan) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -219,8 +179,7 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-    fun inviteFriend(receiver: User){
-
+    fun inviteFriend(receiver: User) {
         val invite = Invite(
             invitePlanID = dialogSelectedPlan.id,
             invitePlanTitle = dialogSelectedPlan.title,
@@ -257,17 +216,13 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-
-
-    fun changeEmailToUserID(email: String){
+    fun changeEmailToUserID(email: String) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            Log.d("QAQQQ","changeEmailToUserID$email")
-
             when (val result = email.let { repository.useEmailFindUser(email = it) }) {
                 is Result.Success -> {
-                    inviteUser.value = result.data!!
+                    inviteUser.value = result.data
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -283,7 +238,6 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
                     _status.value = LoadApiStatus.ERROR
                 }
             }
-
         }
     }
 
@@ -293,17 +247,17 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
         }
     }
 
-    var coworkUser = MutableLiveData<User>()
+    var coworkingUser = MutableLiveData<User?>()
 
-    fun getUserInfo(userID: String) {
+    private fun getUserInfo(userID: String) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
             when (val result = repository.getUserInfo(userID = userID)) {
                 is Result.Success -> {
-                    coworkUser.value = result.data!!
+                    coworkingUser.value = result.data
 
-                    Log.d("SS","getUserInfo ${result.data}")
+                    Log.d("SS", "getUserInfo ${result.data}")
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -324,11 +278,8 @@ class ChildHomeViewModel(private val repository: TripMoodRepo, homePlanType: Hom
 
     var realUserDataList = mutableSetOf<User>()
 
-    fun saveCoworkUserInfo(user: User){
+    fun saveCoworkingUserInfo(user: User) {
         realUserDataList.add(user)
         Log.d("QAQ", "realUserDataList$realUserDataList")
     }
-
-
-
 }

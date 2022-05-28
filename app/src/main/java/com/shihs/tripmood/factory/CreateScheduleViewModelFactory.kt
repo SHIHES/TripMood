@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.shihs.tripmood.dataclass.Plan
 import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.dataclass.source.TripMoodRepo
-import com.shihs.tripmood.plan.MyPlanViewModel
 import com.shihs.tripmood.plan.createschedule.CreateScheduleViewModel
 import com.shihs.tripmood.plan.mygps.MyGPSViewModel
-
 
 /**
  * Factory for all ViewModels which need [plan], [schedule], [adapterPosition].
@@ -24,7 +22,6 @@ class CreateScheduleViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         with(modelClass) {
             when {
-
                 isAssignableFrom(CreateScheduleViewModel::class.java) ->
                     CreateScheduleViewModel(repository, plan, schedule, adapterPosition)
 
@@ -35,5 +32,4 @@ class CreateScheduleViewModelFactory(
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
-
 }

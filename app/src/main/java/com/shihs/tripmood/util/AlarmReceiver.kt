@@ -1,16 +1,16 @@
 package com.shihs.tripmood.util
 //
-//import android.app.NotificationManager
-//import android.app.PendingIntent
-//import android.content.BroadcastReceiver
-//import android.content.Context
-//import android.content.Intent
-//import androidx.core.app.NotificationCompat
-//import androidx.core.content.ContextCompat
-//import com.shihs.tripmood.MainActivity
-//import com.shihs.tripmood.R
+// import android.app.NotificationManager
+// import android.app.PendingIntent
+// import android.content.BroadcastReceiver
+// import android.content.Context
+// import android.content.Intent
+// import androidx.core.app.NotificationCompat
+// import androidx.core.content.ContextCompat
+// import com.shihs.tripmood.MainActivity
+// import com.shihs.tripmood.R
 //
-//class AlarmReceiver : BroadcastReceiver() {
+// class AlarmReceiver : BroadcastReceiver() {
 //    /**
 //     * sends notification when receives alarm
 //     * and then reschedule the reminder again
@@ -28,12 +28,12 @@ package com.shihs.tripmood.util
 //        // Remove this line if you don't want to reschedule the reminder
 //        ReminderManager.startReminder(context.applicationContext)
 //    }
-//}
+// }
 //
-//fun NotificationManager.sendReminderNotification(
+// fun NotificationManager.sendReminderNotification(
 //    applicationContext: Context,
 //    channelId: String,
-//) {
+// ) {
 //    val contentIntent = Intent(applicationContext, MainActivity::class.java)
 //    val pendingIntent = PendingIntent.getActivity(
 //        applicationContext,
@@ -53,6 +53,6 @@ package com.shihs.tripmood.util
 //        .setAutoCancel(true)
 //
 //    notify(NOTIFICATION_ID, builder.build())
-//}
+// }
 //
-//const val NOTIFICATION_ID = 1
+// const val NOTIFICATION_ID = 1

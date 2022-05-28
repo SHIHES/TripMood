@@ -1,8 +1,7 @@
 package com.shihs.tripmood.dataclass
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
@@ -11,4 +10,4 @@ data class User(
     var image: String? = null,
     var uid: String? = null,
     var favoritePlansID: List<String> = emptyList(),
-): Parcelable
+) : Parcelable

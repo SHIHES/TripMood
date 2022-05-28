@@ -18,7 +18,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     private var _publicPlans = MutableLiveData<List<Plan>>()
 
     val publicPlans: LiveData<List<Plan>>
@@ -34,7 +33,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val error: LiveData<String>
         get() = _error
 
-
     private val _selectedPlan = MutableLiveData<Plan>()
 
     val selectedPlan: LiveData<Plan>
@@ -45,8 +43,14 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val searchPlans: LiveData<List<Plan>>
         get() = _searchPlans
 
+    private var _userLikePlanLists = MutableLiveData<List<Plan>>()
+
+    val userLikePlanLists: LiveData<List<Plan>>
+        get() = _userLikePlanLists
+
     init {
         getLivePlansResult()
+        getLiveUserLikeList()
     }
 
     fun navigateToDetail(plan: Plan) {
@@ -55,10 +59,12 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     private fun getLivePlansResult() {
-
         _publicPlans = repository.getLivePublicPlan()
         Log.d("QAQ", "plansvalue ${_publicPlans.value}")
+    }
 
+    private fun getLiveUserLikeList() {
+        _userLikePlanLists = repository.getLiveFavoritePlan()
     }
 
     fun onPlanNavigated() {
@@ -66,7 +72,6 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     fun filterSearch(query: String?) {
-
         if (query.isNullOrBlank()) {
             _searchPlans.value = _publicPlans.value
         } else {
@@ -74,20 +79,22 @@ class SearchViewModel(private val repository: TripMoodRepo) : ViewModel() {
                 it.title!!.contains(query.toString())
             }
         }
-
     }
 
-    fun addFavoritePlan(plan: Plan) {  coroutineScope.launch {
-        repository.addFavoritePlan(plan)
-
+    fun addFavoritePlan(plan: Plan) {
+        coroutineScope.launch {
+            repository.addFavoritePlan(plan)
+        }
     }
 
+    fun cancelFavoritePlan(plan: Plan) {
+        coroutineScope.launch {
+            repository.cancelFavoritePlan(plan)
+        }
     }
 
-    fun cancelFavoritePlan(plan: Plan) { coroutineScope.launch {
-        repository.cancelFavoritePlan(plan)
+    fun checkPlanInLikeList() {
+        coroutineScope.launch {
+        }
     }
-
-    }
-
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.shihs.tripmood.dataclass.*
 import com.shihs.tripmood.dataclass.source.TripMoodDataSource
 
-class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
+class TripMoodLocalDataSource(val context: Context) : TripMoodDataSource {
     override suspend fun getPlans(): Result<List<Plan>> {
         TODO("Not yet implemented")
     }
@@ -103,7 +103,7 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getCoWorkLivePlan(): MutableLiveData<List<Plan>> {
+    override fun getCoworkingLivePlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
 
@@ -111,7 +111,7 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getLiveCoworkLocation(): MutableLiveData<List<UserLocation>> {
+    override fun getLiveCoworkingLocation(): MutableLiveData<List<UserLocation>> {
         TODO("Not yet implemented")
     }
 
@@ -140,6 +140,4 @@ class TripMoodLocalDataSource (val context: Context) : TripMoodDataSource {
     override fun getLiveFavoritePlan(): MutableLiveData<List<Plan>> {
         TODO("Not yet implemented")
     }
-
-
 }

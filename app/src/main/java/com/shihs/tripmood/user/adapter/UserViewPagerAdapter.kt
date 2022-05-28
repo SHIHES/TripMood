@@ -8,12 +8,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.shihs.tripmood.user.child.UserChildFragment
 import com.shihs.tripmood.util.UserPlanFilter
 
-class UserViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class UserViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(
+    fragmentManager,
+    lifecycle
+) {
 
     override fun getItemCount() = UserPlanFilter.values().size
 
     override fun createFragment(position: Int): Fragment {
-        Log.d("Steven", "createFragment${position}")
+        Log.d("Steven", "createFragment$position")
         return UserChildFragment(UserPlanFilter.values()[position])
     }
 }

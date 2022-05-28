@@ -1,12 +1,11 @@
 package com.shihs.tripmood.dataclass
 
 import android.os.Parcelable
-import com.google.firebase.firestore.GeoPoint
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class Location (
+data class Location(
     var latitude: Double? = null,
     var longitude: Double? = null,
     var name: String? = null,
@@ -15,4 +14,4 @@ data class Location (
     var image: String? = null,
     var icon: String? = null,
     var rating: Double? = null
-):Parcelable
+) : Parcelable

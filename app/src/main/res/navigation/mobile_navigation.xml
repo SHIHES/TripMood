@@ -22,13 +22,7 @@
         android:name="com.shihs.tripmood.user.UserFragment"
         android:label="@string/title_user"
         tools:layout="@layout/fragment_user" />
-    <dialog
-        android:id="@+id/planModeDialog"
-        android:name="com.shihs.tripmood.dialog.PlanModeDialog"
-        android:label="PlanModeDialog" />
-    <action
-        android:id="@+id/action_global_planModeDialog"
-        app:destination="@id/planModeDialog" />
+
     <action
         android:id="@+id/action_global_navigation_home"
         app:destination="@id/navigation_home"
@@ -189,7 +183,7 @@
         android:name="com.shihs.tripmood.chat.ChatFragment"
         android:label="ChatFragment" >
 
-        <argument android:name="myPlan"
+        <argument android:name="selectedPlan"
             app:argType="com.shihs.tripmood.dataclass.Plan"
             app:nullable="true"/>
 

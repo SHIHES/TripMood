@@ -1,7 +1,6 @@
 package com.shihs.tripmood.notification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,56 +13,49 @@ import com.shihs.tripmood.notification.adapter.InviteAdapter
 
 class NotificationFragment : Fragment() {
 
-
     lateinit var binding: FragmentNotificationBinding
 
     private val viewModel by viewModels<NotificationViewModel> { getVmFactory() }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = FragmentNotificationBinding.inflate(inflater, container, false)
 
-        val adapter = InviteAdapter(InviteAdapter.OnClickListener{
-
-        },viewModel)
+        val adapter = InviteAdapter(
+            InviteAdapter.OnClickListener {
+            },
+            viewModel
+        )
 
         val recyclerNotification = binding.notificationRV
 
         recyclerNotification.adapter = adapter
-        recyclerNotification.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerNotification.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
-        viewModel.receiveInvites.observe(viewLifecycleOwner){it?.let {
-            viewModel.getReplyInvite()
-            Log.d("QAQQQ", "receiveInvites$it")
-        }}
+        viewModel.receiveInvites.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.getReplyInvite()
+            }
+        }
 
-        viewModel.replyInvites.observe(viewLifecycleOwner){it?.let{
-            viewModel.addInvites()
-            Log.d("QAQQQ", "replyInvites$it")
-        }}
+        viewModel.replyInvites.observe(viewLifecycleOwner) {
+            it?.let {
+                viewModel.addInvites()
+            }
+        }
 
-        viewModel.allUserInvites.observe(viewLifecycleOwner){it?.let{
-            Log.d("QAQQQ", "allUserInvites$it")
-
-//            if(it.isNullOrEmpty()){
-//                    binding.noNotificationAnimation.visibility = View.VISIBLE
-//                    binding.noNotificationHint.visibility = View.VISIBLE
-//                } else {
-//                    binding.noNotificationAnimation.visibility = View.GONE
-//                    binding.noNotificationHint.visibility = View.GONE
-                    adapter.submitList(it)
-//            }
-
-        }}
-
-
-
-
+        viewModel.allUserInvites.observe(viewLifecycleOwner) {
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
 
         return binding.root
     }

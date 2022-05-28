@@ -1,17 +1,11 @@
 package com.shihs.tripmood.plan.mygps
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
-import com.shihs.tripmood.MainActivity
 import com.shihs.tripmood.PermissionsManager
 import com.shihs.tripmood.R
 
-
-
-//觀察Latlng livedata 畫出路線
 class MapPresenter(private val fragment: Fragment) {
 
     val ui = MutableLiveData(Ui.EMPTY)
@@ -20,9 +14,7 @@ class MapPresenter(private val fragment: Fragment) {
 
     private val permissionsManager = PermissionsManager(fragment, locationProvider)
 
-
     fun onViewCreated() {
-
         locationProvider.liveLocations.observe(fragment.viewLifecycleOwner) { locations ->
             val current = ui.value
             ui.value = current?.copy(userPath = locations)
@@ -38,7 +30,6 @@ class MapPresenter(private val fragment: Fragment) {
             val formattedDistance = fragment.getString(R.string.distance_value, distance)
             ui.value = current?.copy(formattedDistance = formattedDistance)
         }
-
     }
 
     fun onMapLoaded() {
