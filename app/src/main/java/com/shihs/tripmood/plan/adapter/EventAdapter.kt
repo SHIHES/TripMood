@@ -27,11 +27,10 @@ class EventAdapter(
         binding.root
     ) {
 
-        val dashline = binding.dashLine
+        val dashLine = binding.dashLine
         val cardView = binding.cardView
-        val locationAnimation = binding.locationAnimate
 
-        val fm1 = SimpleDateFormat("MM.dd h:mm a", Locale.getDefault())
+        private val fm1 = SimpleDateFormat("MM.dd h:mm a", Locale.getDefault())
 
         fun bind(item: Schedule, viewModel: MyPlanViewModel) {
             binding.timeTv.text = fm1.format(item.time)
@@ -39,12 +38,6 @@ class EventAdapter(
             binding.locationText.text = item.location?.name
 
             binding.locationAnimate.visibility = View.GONE
-
-//            if (viewModel.showAnimation(item, adapterPosition)){
-//                binding.locationAnimate.visibility = View.VISIBLE
-//            } else {
-//                binding.locationAnimate.visibility = View.GONE
-//            }
 
             itemView.let {
                 it.setOnClickListener {
@@ -55,7 +48,6 @@ class EventAdapter(
 
                 binding.hideDelete.setOnClickListener {
                     viewModel.findTimeRangeSchedule()
-
                     viewModel.scheulesDelete(item)
                 }
             }
@@ -73,13 +65,12 @@ class EventAdapter(
         val schedule = getItem(position)
 
         holder.bind(schedule, viewModel)
-
         holder.itemView.setOnClickListener { onClickListener.onClick(schedule = schedule) }
 
         if (position == currentList.size - 1) {
-            holder.dashline.visibility = View.INVISIBLE
+            holder.dashLine.visibility = View.INVISIBLE
         } else {
-            holder.dashline.visibility = View.VISIBLE
+            holder.dashLine.visibility = View.VISIBLE
         }
     }
 

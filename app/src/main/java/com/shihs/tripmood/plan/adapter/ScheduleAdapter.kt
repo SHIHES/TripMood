@@ -27,8 +27,9 @@ class ScheduleAdapter(
 
         fun bind(item: Schedule, onClickListener: OnClickListener, viewModel: MyPlanViewModel) {
             val fm1 = SimpleDateFormat("MM月dd日", Locale.getDefault())
+            val choseDay = adapterPosition.plus(1)
 
-            binding.daysTv.text = "Day ${adapterPosition.plus(1)}"
+            binding.daysTv.text = itemView.context.getString(R.string.schedule_theDay, choseDay)
             binding.dateTv.text = fm1.format(item.time).toString()
             binding.root.setOnClickListener {
                 Log.d("QAQ", "binding.root.setOnClickListener$item")

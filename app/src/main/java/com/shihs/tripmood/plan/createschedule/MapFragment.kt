@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -38,7 +37,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentScheduleMapBinding.inflate(inflater, container, false)
 
         binding.mapView.onCreate(savedInstanceState)
@@ -51,39 +50,35 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    fun setupBtn() {
+    private fun setupBtn() {
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateUp()
         }
         binding.addPlaceBtn.setOnClickListener {
-            if (selectedLocation == null) {
-                Toast.makeText(context, "請選擇添加地點", Toast.LENGTH_SHORT).show()
-            } else {
-                setFragmentResult("keyForRequest", bundleOf("bundleKey" to selectedLocation))
-
-                findNavController().navigateUp()
-            }
+            setFragmentResult("keyForRequest", bundleOf("bundleKey" to selectedLocation))
+    
+            findNavController().navigateUp()
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        var markerOptions = MarkerOptions()
-        var latLng = LatLng(23.69, 120.96)
+        val markerOptions = MarkerOptions()
+        val latLng = LatLng(23.69, 120.96)
         Log.d("QAQ", "latLng$latLng")
 
         markerOptions.title("HI")
         markerOptions.position(latLng)
 
-        var cameraUdpate = CameraUpdateFactory.newLatLngZoom(latLng, 8F)
-        map?.moveCamera(cameraUdpate)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 8F)
+        map?.moveCamera(cameraUpdate)
 
         map?.uiSettings?.setAllGesturesEnabled(true)
-        map?.uiSettings?.setCompassEnabled(true)
-        map?.uiSettings?.setZoomControlsEnabled(true)
+        map?.uiSettings?.isCompassEnabled = true
+        map?.uiSettings?.isZoomControlsEnabled = true
     }
 
-    fun setupAutoCompleteFragment() {
+    private fun setupAutoCompleteFragment() {
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
                 (activity as MainActivity).packageName,
@@ -125,15 +120,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     selectedLocation.address = place.address
                     selectedLocation.name = place.name
 
-                    var markerOptions = MarkerOptions()
+                    val markerOptions = MarkerOptions()
                     markerOptions.title(selectedLocation.name)
-                    var latLng = LatLng(selectedLocation?.latitude!!, selectedLocation?.longitude!!)
+                    
+                    val latLng = LatLng(
+                        selectedLocation.latitude ?: return,
+                        selectedLocation.longitude ?: return
+                    )
                     markerOptions.position(latLng)
-
                     map?.addMarker(markerOptions)
 
-                    var cameraUdpate = CameraUpdateFactory.newLatLngZoom(latLng, 15F)
-                    map?.animateCamera(cameraUdpate)
+                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15F)
+                    map?.animateCamera(cameraUpdate)
+                    
                 } else {
                     Log.d("QAQ", "onPlaceSelected error$place")
                 }

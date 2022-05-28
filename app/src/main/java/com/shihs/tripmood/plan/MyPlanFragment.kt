@@ -1,5 +1,6 @@
 package com.shihs.tripmood.plan
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -71,7 +72,7 @@ class MyPlanFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlanBinding.inflate(inflater, container, false)
 
         val recyclerPlanDays = binding.daysRv
@@ -175,7 +176,7 @@ class MyPlanFragment : Fragment() {
             }
         }
 
-        setUpBtn()
+        setupBtn()
         setView()
 
         (requireActivity() as MainActivity).hideToolBar()
@@ -183,6 +184,7 @@ class MyPlanFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     fun setView() {
         val title = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.title
         val endDate = MyPlanFragmentArgs.fromBundle(requireArguments()).myPlan?.endDate?.toDisplayDateFormat()
@@ -196,7 +198,7 @@ class MyPlanFragment : Fragment() {
             .into(binding.coworkLocationImage)
     }
 
-    fun setUpBtn() {
+    private fun setupBtn() {
         binding.addActivityBtn.setOnClickListener {
             onAddButtonClicked()
         }

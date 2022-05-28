@@ -12,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,15 +58,16 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     private val arg: MyGPSFragmentArgs by navArgs()
 
-    private val defaultLocation = LatLng(25.105497, 121.597366)
+    private val defaultLocation = LatLng(25.168927, 121.4440921)
 
     private lateinit var locationAdapter: LocationAdapter
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlanMygpsBinding.inflate(inflater, container, false)
 
         val info = (activity as MainActivity).applicationContext.packageManager
@@ -108,16 +108,16 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         viewModel.selectedLocation.observe(
-            viewLifecycleOwner,
-            Observer {
+            viewLifecycleOwner){
                 it?.let {
                     showInterestDialog(it)
                 }
             }
-        )
 
-        viewModel.nearbyLocation.observe(viewLifecycleOwner) {
+        viewModel.nearbyLocation.observe(
+            viewLifecycleOwner) {
             it?.let {
+                binding.recyclerInfo.visibility = View.VISIBLE
                 Log.d("SS", "nearbyLocation $it")
                 locationAdapter.submitList(it)
                 locationAdapter.notifyDataSetChanged()
@@ -146,7 +146,6 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
     private fun startTracking() {
         map?.clear()
-
         presenter.startTracking()
     }
 
@@ -154,7 +153,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
         presenter.stopTracking()
     }
 
-    fun setBtn() {
+    private fun setBtn() {
         binding.controlLayout.setOnClickListener {
             startTracking()
             showCurrentPlace()
@@ -169,26 +168,35 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(map: GoogleMap) {
         this.map = map
+    
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(defaultLocation, 13F)
+        map.moveCamera(cameraUpdate)
 
         presenter.ui.observe(this) { ui ->
             updateUI(ui)
         }
-        presenter.onMapLoaded()
-        map.uiSettings.isZoomControlsEnabled = true
-
-        map.uiSettings.isZoomControlsEnabled = true
-        map.uiSettings.isMyLocationButtonEnabled = true
-        map.uiSettings.setAllGesturesEnabled(true)
-        map.uiSettings.isCompassEnabled = true
-
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(defaultLocation, 13F)
-
-        map.moveCamera(cameraUpdate)
-
+    
         if (isLocationPermissionGranted()) {
         } else {
             requestLocationPermission()
         }
+        
+        presenter.onMapLoaded()
+        map.uiSettings.isZoomGesturesEnabled = true
+        map.uiSettings.isMyLocationButtonEnabled = true
+        map.uiSettings.setAllGesturesEnabled(true)
+        map.uiSettings.isCompassEnabled = true
+        
+        val bundle = this.arguments
+        val currentLocation = bundle?.getParcelable<Location>("bundle")
+        val latLng = LatLng(currentLocation?.latitude ?: return, currentLocation.longitude)
+        
+        Log.d("SS", "latLng $latLng")
+        
+
+
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -232,8 +240,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                 var i = 0
 
                 for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
-                    var result = com.shihs.tripmood.dataclass.Location()
-                    var place = placeLikelihood.place
+                    val result = com.shihs.tripmood.dataclass.Location()
+                    val place = placeLikelihood.place
 
                     Log.d("SS", "placeLikelihood isSuccessful ${placeLikelihood.place}")
 
@@ -241,7 +249,7 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
                     result.address = placeLikelihood.place.address
                     result.latitude = placeLikelihood.place.latLng?.latitude
                     result.longitude = placeLikelihood.place.latLng?.longitude
-                    result.type = placeLikelihood.place.types as List<String>?
+                    result.type = placeLikelihood.place.types as List<String>
                     result.icon = placeLikelihood.place.iconUrl
                     result.rating = placeLikelihood.place.rating
 
@@ -267,12 +275,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun showCurrentPlacePhoto(place: Place, result: com.shihs.tripmood.dataclass.Location) {
-        val photoMetadata = place.photoMetadatas?.get(0)
-
-        if (photoMetadata == null) {
-            return
-        }
-
+        val photoMetadata = place.photoMetadatas?.get(0) ?: return
+    
         val photoRequest = FetchPhotoRequest
             .builder(photoMetadata)
             .setMaxWidth(resources.getDimensionPixelSize(R.dimen.bitmap_height))
@@ -289,11 +293,13 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
 
     private fun addMarker(locations: List<com.shihs.tripmood.dataclass.Location>) {
         for (location in locations) {
-            val latlng = LatLng(location.latitude!!, location.longitude!!)
+            val latLng = LatLng(
+                location.latitude ?: return,
+                location.longitude ?: return)
 
             map?.addMarker(
                 MarkerOptions()
-                    .position(latlng)
+                    .position(latLng)
                     .title(location.name)
             )
         }
@@ -329,9 +335,8 @@ class MyGPSFragment : Fragment(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == ACCESS_FINE_LOCATION) {
-            if (grantResults.size > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 // 被拒絕惹
-                Toast.makeText(requireContext(), "QQQQQQQ", Toast.LENGTH_LONG).show()
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(
                         requireActivity(),
                         Manifest.permission.ACCESS_FINE_LOCATION

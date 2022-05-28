@@ -1,5 +1,6 @@
 package com.shihs.tripmood.plan.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,6 @@ import com.shihs.tripmood.dataclass.Schedule
 import com.shihs.tripmood.plan.ShowAllLocationViewModel
 import com.shihs.tripmood.util.CatalogFilter
 import java.text.SimpleDateFormat
-import java.util.*
 
 class MapScheduleAdapter(
     private val onClickListener: OnClickListener,
@@ -28,12 +28,13 @@ class MapScheduleAdapter(
 
         val layout = binding.daysMapInfoLayout
         val icon = binding.catalogIcon
-
+        
+        @SuppressLint("SimpleDateFormat")
         fun bind(item: Schedule, onClickListener: OnClickListener) {
             val fmt = SimpleDateFormat("HH:mm").format(item.time)
 
             binding.root.setOnClickListener { onClickListener.onClick(item) }
-            binding.daysInfoTv.text = "Day ${item.theDay}"
+            binding.daysInfoTv.text = itemView.context.getString(R.string.schedule_theDay, item.theDay)
             binding.daysTimeInfoTv.text = fmt
         }
     }
@@ -50,15 +51,15 @@ class MapScheduleAdapter(
         holder.bind(getItem(position), onClickListener)
 
         when (schedule.theDay) {
-            1 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day1))
-            2 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day2))
-            3 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day3))
-            4 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day4))
-            5 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day5))
-            6 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day6))
-            7 -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.day7))
+            1 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day1))
+            2 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day2))
+            3 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day3))
+            4 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day4))
+            5 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day5))
+            6 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day6))
+            7 -> holder.layout.setCardBackgroundColor(context.getColor(R.color.day7))
 
-            else -> holder.layout.setCardBackgroundColor(context.resources.getColor(R.color.black))
+            else -> holder.layout.setCardBackgroundColor(context.getColor(R.color.black))
         }
 
         when (schedule.catalog) {
@@ -77,7 +78,6 @@ class MapScheduleAdapter(
             CatalogFilter.ATTRACTION.value -> {
                 holder.icon.setImageResource(R.drawable.map)
             }
-
             else -> {
                 holder.icon.setImageResource(R.drawable.ask)
             }

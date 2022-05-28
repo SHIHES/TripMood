@@ -1,7 +1,6 @@
 package com.shihs.tripmood.notification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,7 @@ class NotificationFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNotificationBinding.inflate(inflater, container, false)
 
         val adapter = InviteAdapter(
@@ -43,29 +42,18 @@ class NotificationFragment : Fragment() {
         viewModel.receiveInvites.observe(viewLifecycleOwner) {
             it?.let {
                 viewModel.getReplyInvite()
-                Log.d("QAQQQ", "receiveInvites$it")
             }
         }
 
         viewModel.replyInvites.observe(viewLifecycleOwner) {
             it?.let {
                 viewModel.addInvites()
-                Log.d("QAQQQ", "replyInvites$it")
             }
         }
 
         viewModel.allUserInvites.observe(viewLifecycleOwner) {
             it?.let {
-                Log.d("QAQQQ", "allUserInvites$it")
-
-//            if(it.isNullOrEmpty()){
-//                    binding.noNotificationAnimation.visibility = View.VISIBLE
-//                    binding.noNotificationHint.visibility = View.VISIBLE
-//                } else {
-//                    binding.noNotificationAnimation.visibility = View.GONE
-//                    binding.noNotificationHint.visibility = View.GONE
                 adapter.submitList(it)
-//            }
             }
         }
 

@@ -33,7 +33,7 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
     val imageStatus: LiveData<LoadApiStatus>
         get() = _imageStatus
 
-    val imageUriCallback = MutableLiveData<Uri>()
+    val imageUriCallback = MutableLiveData<Uri?>()
 
     fun uploadImage(uri: Uri) {
         coroutineScope.launch {
@@ -41,7 +41,7 @@ class CreatePlanViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
             when (val result = repository.uploadImage(localUri = uri)) {
                 is Result.Success -> {
-                    imageUriCallback.value = result.data!!
+                    imageUriCallback.value = result.data
                     _imageStatus.value = LoadApiStatus.DONE
                 }
                 is Result.Fail -> {

@@ -1,6 +1,5 @@
 package com.shihs.tripmood.notification
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,24 +19,24 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _status = MutableLiveData<LoadApiStatus>()
+    private val _status = MutableLiveData<LoadApiStatus?>()
 
-    val status: LiveData<LoadApiStatus>
+    val status: LiveData<LoadApiStatus?>
         get() = _status
 
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableLiveData<String?>()
 
-    val error: LiveData<String>
+    val error: LiveData<String?>
         get() = _error
 
-    private val _receiveInvites = MutableLiveData<List<Invite>>()
+    private val _receiveInvites = MutableLiveData<List<Invite>?>()
 
-    val receiveInvites: LiveData<List<Invite>>
+    val receiveInvites: LiveData<List<Invite>?>
         get() = _receiveInvites
 
-    private val _replyInvites = MutableLiveData<List<Invite>>()
+    private val _replyInvites = MutableLiveData<List<Invite>?>()
 
-    val replyInvites: LiveData<List<Invite>>
+    val replyInvites: LiveData<List<Invite>?>
         get() = _replyInvites
 
     private val _allUserInvites = MutableLiveData<List<Invite>>()
@@ -45,17 +44,17 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
     val allUserInvites: LiveData<List<Invite>>
         get() = _allUserInvites
 
-    var allInvitesList = mutableListOf<Invite>()
+    private var allInvitesList = mutableListOf<Invite>()
 
-    var receiveInvitesList = mutableListOf<Invite>()
+    private var receiveInvitesList = mutableListOf<Invite>()
 
-    var replyInvitesList = mutableListOf<Invite>()
+    private var replyInvitesList = mutableListOf<Invite>()
 
     init {
         getReceiveInvite()
     }
 
-    fun getReceiveInvite() {
+    private fun getReceiveInvite() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -64,10 +63,7 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
             when (val result = repository.getReceiveInvite()) {
                 is Result.Success -> {
                     receiveInvitesList = result.data.toMutableList()
-                    _receiveInvites.value = result.data!!
-
-                    Log.d("QAQQQQQ", "receiveInvitesList ${_receiveInvites.value}")
-                    Log.d("QAQQQQQ", "receiveInvitesList $receiveInvitesList")
+                    _receiveInvites.value = result.data
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -95,9 +91,7 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
             when (val result = repository.getSendReply()) {
                 is Result.Success -> {
                     replyInvitesList = result.data.toMutableList()
-                    _replyInvites.value = result.data!!
-                    Log.d("QAQQQQQ", "receiveInvitesList ${_replyInvites.value}")
-                    Log.d("QAQQQQQ", "receiveInvitesList $replyInvitesList")
+                    _replyInvites.value = result.data
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -119,8 +113,6 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
     fun addInvites() {
         allInvitesList.clear()
 
-        Log.d("QAQQQQQ", "$receiveInvitesList, $replyInvitesList")
-
         allInvitesList = (receiveInvitesList + replyInvitesList).toMutableList()
 
         _allUserInvites.value = allInvitesList
@@ -132,7 +124,6 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
 
             when (val result = repository.acceptInviteChangeStatus(inviteID = inviteID)) {
                 is Result.Success -> {
-                    Log.d("QAQQQQQ", "acceptInviteChangeStatus ${result.data}")
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }
@@ -166,7 +157,6 @@ class NotificationViewModel(private val repository: TripMoodRepo) : ViewModel() 
                 )
             ) {
                 is Result.Success -> {
-                    Log.d("QAQQQQQ", "acceptInviteAddUserToPlan ${result.data}")
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                 }

@@ -61,7 +61,6 @@ class InviteAdapter(
         val notification = getItem(position)
 
         holder.bind(notification, viewModel)
-
         holder.itemView.setOnClickListener { onClickListener.onClick(notification) }
     }
 

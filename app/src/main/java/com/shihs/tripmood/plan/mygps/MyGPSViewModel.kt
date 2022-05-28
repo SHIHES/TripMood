@@ -15,14 +15,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.*
 
 class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Schedule?, arg3: Int?) : ViewModel() {
 
-    var argPlan = arg1
+    private var argPlan = arg1
 
-    var argSchedule = arg2
+    private var argSchedule = arg2
 
-    var argPosition = arg3?.plus(1)
+    private var argPosition = arg3?.plus(1)
 
     private var viewModelJob = Job()
 
@@ -33,9 +34,9 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
     val selectedLocation: LiveData<Location>
         get() = _selectedLocation
 
-    private val _nearbyLocation = MutableLiveData<List<Location>>()
+    private val _nearbyLocation = MutableLiveData<List<Location>?>()
 
-    val nearbyLocation: LiveData<List<Location>>
+    val nearbyLocation: LiveData<List<Location>?>
         get() = _nearbyLocation
 
     private val _status = MutableLiveData<LoadApiStatus>()
@@ -62,9 +63,9 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
     fun packageGPSSchedule(location: Location) {
         val schedule = Schedule()
 
-        val fmt = SimpleDateFormat("HH:mm")
-        val schedultTime = fmt.parse("12:00")?.time
-        val postTime = argSchedule?.time?.let { it -> schedultTime?.plus(it) }
+        val fmt = SimpleDateFormat("HH:mm", Locale.TAIWAN)
+        val scheduleTime = fmt.parse("12:00")?.time
+        val postTime = argSchedule?.time?.let { it -> scheduleTime?.plus(it) }
 
         schedule.theDay = argPosition!!
         schedule.planID = argPlan?.id
@@ -76,7 +77,7 @@ class MyGPSViewModel(private val repository: TripMoodRepo, arg1: Plan?, arg2: Sc
         postNewSchedule(schedule = schedule)
     }
 
-    fun postNewSchedule(schedule: Schedule) {
+    private fun postNewSchedule(schedule: Schedule) {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 

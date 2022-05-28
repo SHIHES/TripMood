@@ -26,9 +26,9 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val status: LiveData<LoadApiStatus>
         get() = _status
 
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableLiveData<String?>()
 
-    val error: LiveData<String>
+    val error: LiveData<String?>
         get() = _error
 
     private val _plan = MutableLiveData<Plan>().apply {
@@ -42,24 +42,24 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     val schedules: LiveData<List<Schedule>>
         get() = _schedules
 
-    private val _dayOfSchedule = MutableLiveData<List<Schedule>>()
+    private val _dayOfSchedule = MutableLiveData<List<Schedule>?>()
 
-    val dayOfSchedule: LiveData<List<Schedule>>
+    val dayOfSchedule: LiveData<List<Schedule>?>
         get() = _dayOfSchedule
 
-    private val _navigationToDetail = MutableLiveData<Schedule>()
+    private val _navigationToDetail = MutableLiveData<Schedule?>()
 
-    val navigationToDetail: LiveData<Schedule>
+    val navigationToDetail: LiveData<Schedule?>
         get() = _navigationToDetail
 
     var liveSchedules = MutableLiveData<List<Schedule>>()
 
     var adapterPosition = MutableLiveData(0)
 
-    private val _postitionControlSchedule = MutableLiveData<Schedule>()
+    private val _positionControlSchedule = MutableLiveData<Schedule>()
 
     val positionControlSchedule: LiveData<Schedule>
-        get() = _postitionControlSchedule
+        get() = _positionControlSchedule
 
     init {
         getLiveSchedule()
@@ -77,9 +77,8 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     fun daysCalculator() {
         try {
             var start = _plan.value?.startDate
-            var end = _plan.value?.endDate
-
-            var list = mutableListOf<Schedule>()
+            val end = _plan.value?.endDate
+            val list = mutableListOf<Schedule>()
 
             if (start != null && end != null) {
                 while (start <= end) {
@@ -96,15 +95,15 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
     }
 
     fun getPositionAndDate(position: Int) {
-        _postitionControlSchedule.value = _schedules.value!![position]
+        _positionControlSchedule.value = _schedules.value!![position]
     }
 
     fun findTimeRangeSchedule() {
         try {
-            val aDayOfSchedule = _postitionControlSchedule.value?.time?.plus(86400000)?.minus(1)
+            val aDayOfSchedule = _positionControlSchedule.value?.time?.plus(86400000)?.minus(1)
 
             _dayOfSchedule.value = liveSchedules.value?.filter {
-                it.time in _postitionControlSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
+                it.time in _positionControlSchedule.value?.time!!.plus(1)..aDayOfSchedule!!
             }?.sortedBy {
                 it.time
             }
@@ -133,7 +132,7 @@ class MyPlanViewModel(private val repository: TripMoodRepo, arguments: Plan?) : 
         val calendar = Calendar.getInstance(Locale.TAIWAN).timeInMillis
 
         // 判斷data不為空
-        if (!_dayOfSchedule.value!!.isNullOrEmpty()) {
+        if (_dayOfSchedule.value!!.isNotEmpty()) {
             // 判斷list大小大於1個
             if (_dayOfSchedule.value?.size!! > 1) {
                 // 判斷list的最後一個位置

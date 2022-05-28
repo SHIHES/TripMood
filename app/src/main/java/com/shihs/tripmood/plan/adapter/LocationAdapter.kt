@@ -45,13 +45,12 @@ class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapte
             }
         }
     }
-
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationVH {
-        val locationVH = LocationVH(
+    
+        return LocationVH(
             ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
-
-        return locationVH
     }
 
     override fun onBindViewHolder(holder: LocationVH, position: Int) {
@@ -76,7 +75,7 @@ class LocationAdapter(private val onClickListener: OnClickListener) : ListAdapte
     }
 
     abstract class DoubleClickListener : View.OnClickListener {
-        var lastClickTime: Long = 0
+        private var lastClickTime: Long = 0
         override fun onClick(v: View?) {
             val clickTime = System.currentTimeMillis()
             if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {

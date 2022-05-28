@@ -69,8 +69,8 @@ class LoginFragment : Fragment() {
 
         binding.johnBtn.setOnClickListener {
             UserManager.userUID = "8787878787"
-            UserManager.userName = "皮卡皮卡!"
-            UserManager.userPhotoUrl = "https://browsecat.net/sites/default/files/the-professor-money-heist-wallpapers-87259-579206-1832331.png"
+            UserManager.userName = "安卓寶寶一號"
+            UserManager.userPhotoUrl = "https://i.pinimg.com/originals/18/5e/c9/185ec9129c26838e77a4c14942c47a14.jpg"
             findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
         }
 

@@ -35,9 +35,9 @@ class CreateScheduleFragment : Fragment() {
         )
     }
 
-    val arg: CreateScheduleFragmentArgs by navArgs()
+    private val arg: CreateScheduleFragmentArgs by navArgs()
 
-    var catalog = ""
+    private var catalog = ""
 
     private var locationResult: Location? = null
 
@@ -45,10 +45,10 @@ class CreateScheduleFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentScheduleCreateBinding.inflate(inflater, container, false)
 
-        val item = listOf<String>("美食", "住宿", "交通", "逛街", "景點")
+        val item = resources.getStringArray(R.array.schedule_catalog)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_schedule_catalog_list, item)
 
         (binding.catalogEditText as? AutoCompleteTextView)?.setAdapter(arrayAdapter)
@@ -61,9 +61,9 @@ class CreateScheduleFragment : Fragment() {
         val argSchedule = arg.selectedSchedule
         var argLocation = arg.selectedSchedule.let { it?.location }
 
-        binding.scheduleDayTv.text = "Day $argPosition"
+        binding.scheduleDayTv.text = resources.getString(R.string.schedule_theDay, argPosition)
 
-        val fmt = SimpleDateFormat("yyyy.MM.dd")
+        val fmt = SimpleDateFormat("yyyy.MM.dd", Locale.TAIWAN)
 
         binding.scheduleDateTv.text = fmt.format(argSchedule?.time)
 
@@ -80,7 +80,7 @@ class CreateScheduleFragment : Fragment() {
 
         setFragmentResultListener("keyForRequest") { requestKey, bundle ->
             if (bundle.get("bundleKey") == null) {
-                Toast.makeText(requireContext(), "沒選擇任何景點", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "沒選擇任何景點", Toast.LENGTH_SHORT).show()
             } else {
                 locationResult = bundle.get("bundleKey") as Location?
 
@@ -105,10 +105,10 @@ class CreateScheduleFragment : Fragment() {
                 val title = binding.titleEditText.text.toString()
                 val content = binding.contentEditText.text.toString()
                 val cost = binding.costEditText.text.toString()
-                val fmt = SimpleDateFormat("HH:mm")
+                val fmt = SimpleDateFormat("HH:mm", Locale.TAIWAN)
                 val notification = binding.notificationSwitch.isChecked
-                val schedultTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
-                val postTime = arg.selectedSchedule?.time?.let { it -> schedultTime?.plus(it) }
+                val scheduleTime = fmt.parse(binding.scheduleTimeTv.text.toString())?.time
+                val postTime = arg.selectedSchedule?.time?.let { scheduleTime?.plus(it) }
                 val planId = arg.myPlan?.id
 
                 val postSchedule = Schedule(
@@ -122,8 +122,6 @@ class CreateScheduleFragment : Fragment() {
                     catalog = catalog,
                     theDay = arg.selectedPosition.plus(1)
                 )
-
-                Log.d("QAQ", "schedultTime$schedultTime")
 
                 viewModel.postNewSchedule(postSchedule)
 

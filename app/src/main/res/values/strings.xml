@@ -45,4 +45,14 @@
 
     <string name="invite_msg_title">%1$s邀請你一同參加 \n%2$s旅程</string>
 
+    <string name="schedule_theDay">Day %d </string>
+
+    <string-array name="schedule_catalog">
+        <item>美食</item>
+        <item>住宿</item>
+        <item>交通</item>
+        <item>逛街</item>
+        <item>景點</item>
+    </string-array>
+
 </resources>

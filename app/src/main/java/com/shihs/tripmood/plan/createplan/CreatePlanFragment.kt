@@ -1,9 +1,9 @@
 package com.shihs.tripmood.plan.createplan
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,15 +29,15 @@ class CreatePlanFragment : Fragment() {
 
     private val viewModel by viewModels<CreatePlanViewModel> { getVmFactory() }
 
-    lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: ProgressDialog
 
-    var postPlan = Plan()
+    private var postPlan = Plan()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPlanCreateBinding.inflate(inflater, container, false)
 
         progressDialog = ProgressDialog(requireContext())
@@ -79,6 +79,7 @@ class CreatePlanFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setCalendarBtn() {
         val constraintsBuilder = CalendarConstraints.Builder()
         val startDatePicker = MaterialDatePicker.Builder.dateRangePicker()
@@ -87,7 +88,7 @@ class CreatePlanFragment : Fragment() {
             .build()
 
         binding.startDateBtn.setOnClickListener {
-            val fmt = SimpleDateFormat("yyyy/MM/dd")
+            val fmt = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
             val planDateRange = binding.startDateBtn
 
             startDatePicker.show(childFragmentManager, "tag")
@@ -105,10 +106,10 @@ class CreatePlanFragment : Fragment() {
         binding.createBtn.setOnClickListener {
             postPlan.title = binding.planET.text.toString()
 
-            if (!postPlan.title.isNullOrEmpty() &&
-                !postPlan.image.isNullOrEmpty() &&
-                postPlan.startDate != null &&
-                postPlan.endDate != null
+            if (!postPlan.title.isNullOrEmpty()
+                    && postPlan.image.isNotEmpty()
+                    && postPlan.startDate != null
+                    && postPlan.endDate != null
             ) {
                 viewModel.postNewPlan(plan = postPlan)
                 findNavController().navigate(
@@ -129,24 +130,22 @@ class CreatePlanFragment : Fragment() {
 
     private fun selectImage() {
         val intent = Intent().apply {
-            setType("image/*")
-            setAction(Intent.ACTION_GET_CONTENT)
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
         }
-        startActivityForResult(intent, SELECED_IMAGE)
+        startActivityForResult(intent, SELECTED_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 100 && data != null && data.data != null) {
-            val imageUri = data.data!!
-
-            viewModel.uploadImage(imageUri)
-
-            Log.d("SSSSS", "get uri $imageUri")
+            val imageUri = data.data
+    
+            imageUri?.let { viewModel.uploadImage(it) }
         }
     }
 
     companion object {
 
-        private const val SELECED_IMAGE = 100
+        private const val SELECTED_IMAGE = 100
     }
 }

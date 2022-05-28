@@ -31,7 +31,7 @@
             android:id="@+id/controlLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/quantum_lightgreen"
+            android:background="@color/tripMood_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -41,9 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:letterSpacing="0.1"
                 android:padding="8dp"
                 android:text="取得附近景點"
-                android:letterSpacing="0.1"
+                android:textColor="@color/white"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -65,14 +66,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
         tools:itemCount="2"
         tools:listitem="@layout/item_place_info" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/gpsBackButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:backgroundTint="@color/quantum_brown"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/tripMood_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="@dimen/View_margin"
@@ -80,12 +82,12 @@
 
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
-            app:tint="@color/white"
-            android:scaleType="center"/>
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:tint="@color/white" />
 
 
     </com.google.android.material.card.MaterialCardView>
