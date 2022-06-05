@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="160dp"
     android:layout_height="200dp"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/View_margin"
     android:background="@color/quantum_brown">
 
     <androidx.constraintlayout.widget.ConstraintLayout

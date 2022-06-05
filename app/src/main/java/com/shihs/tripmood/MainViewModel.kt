@@ -1,6 +1,7 @@
 package com.shihs.tripmood
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +13,7 @@ import com.shihs.tripmood.network.LoadApiStatus
 import com.shihs.tripmood.util.CurrentFragmentType
 import com.shihs.tripmood.util.Logger
 import com.shihs.tripmood.util.UserManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
 
@@ -92,6 +90,7 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
     }
 
     fun updateUserLocation(location: Location?) {
+        
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
@@ -125,49 +124,5 @@ class MainViewModel(private val repository: TripMoodRepo) : ViewModel() {
             }
         }
     }
-
-//    fun checkUser() {
-//        if (user.value == null) {
-//            UserManager.userToken?.let {
-//                getUserProfile(it)
-//            }
-//        }
-//    }
-
-//    private fun getUserProfile(token: String) {
-//
-//        coroutineScope.launch {
-//
-//            _status.value = LoadApiStatus.LOADING
-//
-//            val result = repository.getUserProfile(token)
-//
-//            _user.value = when (result) {
-//
-//                is Result.Success -> {
-//                    _error.value = null
-//                    _status.value = LoadApiStatus.DONE
-//                    result.data
-//                }
-//                is Result.Fail -> {
-//                    _error.value = result.error
-//                    _status.value = LoadApiStatus.ERROR
-//                    if (result.error.contains("Invalid Access Token", true)) {
-//                        UserManager.clear()
-//                    }
-//                    null
-//                }
-//                is Result.Error -> {
-//                    _error.value = result.exception.toString()
-//                    _status.value = LoadApiStatus.ERROR
-//                    null
-//                }
-//                else -> {
-//                    _error.value = "error get profile"
-//                    _status.value = LoadApiStatus.ERROR
-//                    null
-//                }
-//            }
-//        }
-//    }
+    
 }

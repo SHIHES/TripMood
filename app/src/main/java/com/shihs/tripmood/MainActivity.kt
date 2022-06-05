@@ -15,6 +15,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -30,6 +31,7 @@ import com.shihs.tripmood.ext.getVmFactory
 import com.shihs.tripmood.service.UserLocatedService
 import com.shihs.tripmood.util.CurrentFragmentType
 import com.shihs.tripmood.util.UserManager.isLoggedIn
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -201,8 +203,10 @@ class MainActivity : AppCompatActivity() {
         mContext = this
 
         tripMoodBroadcastReceiver = TripMoodBroadcastReceiver()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        
         setContentView(binding.root)
 
         val navView: NavigationBarView = binding.bottomNavigationView
@@ -255,6 +259,7 @@ class MainActivity : AppCompatActivity() {
         setupNavController()
 
         if (isLoggedIn) getLocationPermission()
+        
     }
 
     private fun setBtn() {

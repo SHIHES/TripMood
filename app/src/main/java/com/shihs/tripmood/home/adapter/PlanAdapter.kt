@@ -125,17 +125,17 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
             dialog.findViewById<View>(R.id.deleteLayout).setOnClickListener {
                 viewModel.deletePlan(plan = plan)
                 notifyItemRemoved(position)
+                dialog.dismiss()
             }
             dialog.findViewById<View>(R.id.privateLayout).setOnClickListener {
                 viewModel.changeToPersonal(plan = plan)
+                dialog.dismiss()
             }
             dialog.findViewById<View>(R.id.publicLayout).setOnClickListener {
                 viewModel.changeToPublic(plan = plan)
+                dialog.dismiss()
             }
-            dialog.findViewById<View>(R.id.friendListLayout).setOnClickListener {
-            }
-            dialog.findViewById<View>(R.id.editLayout).setOnClickListener {
-            }
+            
             dialog.findViewById<View>(R.id.inviteFriendLayout).setOnClickListener {
                 AlertDialog.Builder(dialogContext).apply {
                     setTitle(dialogContext.getString(R.string.inviteTitle))
@@ -147,11 +147,13 @@ class PlanAdapter(private val onClickListener: OnClickListener, val viewModel: C
                         if (text.isNotEmpty()) {
                             viewModel.changeEmailToUserID(text)
                             viewModel.getDialogSelectedPlan(plan)
+                            dialog.dismiss()
                         } else {
                             Toast.makeText(context, "沒輸入訊息", Toast.LENGTH_LONG).show()
                         }
                     }
                     setNegativeButton(R.string.cancel) { _, _ ->
+                        dialog.dismiss()
                     }
                     setOnCancelListener {
                         (editTextLayout.parent as ViewGroup).removeView(editTextLayout)

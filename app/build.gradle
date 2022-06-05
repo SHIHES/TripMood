@@ -17,8 +17,8 @@ android {
         applicationId "com.shihs.tripmood"
         minSdk 30
         targetSdk 32
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -126,9 +126,13 @@ dependencies {
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    //Firebase storage
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.8'
+
+
+
 
 
 
