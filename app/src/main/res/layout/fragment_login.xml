@@ -55,11 +55,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-        <Button
+    <Button
         android:id="@+id/johnBtn"
+        android:visibility="invisible"
         android:layout_width="10dp"
         android:layout_height="wrap_content"
-        android:text="J"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

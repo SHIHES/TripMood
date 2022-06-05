@@ -11,7 +11,7 @@ import kotlin.properties.Delegates
  */
 class TripMoodApplication : Application() {
 
-    // Depends on the flavor,
+
     val repository: TripMoodRepo
         get() = ServiceLocator.provideRepository(this)
 

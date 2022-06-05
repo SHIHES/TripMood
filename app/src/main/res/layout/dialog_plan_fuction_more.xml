@@ -46,23 +46,7 @@
             android:layout_marginLeft="30dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/friendListLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_people_24"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="查看旅程好友"
-            android:textSize="20sp"
-            android:layout_marginLeft="30dp"/>
-    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/inviteFriendLayout"
@@ -82,23 +66,6 @@
             android:layout_marginLeft="30dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/editLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_edit_24"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="編輯旅程"
-            android:textSize="20sp"
-            android:layout_marginLeft="30dp"/>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/deleteLayout"
