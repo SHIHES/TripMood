@@ -112,12 +112,14 @@ class CreatePlanFragment : Fragment() {
                     && postPlan.endDate != null
             ) {
                 viewModel.postNewPlan(plan = postPlan)
+                findNavController().popBackStack()
                 findNavController().navigate(
                     MobileNavigationDirections.actionGlobalMyPlanFragment(
                         DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom,
                         postPlan
                     )
                 )
+
             } else {
                 Toast.makeText(requireContext(), "還有訊息沒填哦!", Toast.LENGTH_SHORT).show()
             }

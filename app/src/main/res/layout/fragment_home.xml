@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/tripMood_dark_blue"
+        app:tabIndicatorColor="@color/tripMood_blue"
         app:tabTextAppearance="@style/TabLayoutText"
         app:tabTextColor="@color/tripMood_light_white">
 

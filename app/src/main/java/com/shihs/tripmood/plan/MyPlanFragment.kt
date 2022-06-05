@@ -93,18 +93,21 @@ class MyPlanFragment : Fragment() {
                 binding.chatBtn.visibility = View.VISIBLE
                 binding.mapWholeSchedule.visibility = View.VISIBLE
                 binding.friendsLocation.visibility = View.VISIBLE
+                binding.addActivityBtn.visibility = View.VISIBLE
             }
 
             DetailPageFilter.FROM_OTHERS.navigateFrom -> {
                 binding.chatBtn.visibility = View.INVISIBLE
                 binding.mapWholeSchedule.visibility = View.VISIBLE
                 binding.friendsLocation.visibility = View.INVISIBLE
+                binding.addActivityBtn.visibility = View.INVISIBLE
             }
 
             DetailPageFilter.FROM_MYPLAN_SINGLE.navigateFrom -> {
                 binding.chatBtn.visibility = View.INVISIBLE
                 binding.mapWholeSchedule.visibility = View.VISIBLE
                 binding.friendsLocation.visibility = View.INVISIBLE
+                binding.addActivityBtn.visibility = View.VISIBLE
             }
         }
 
